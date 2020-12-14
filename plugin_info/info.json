@@ -1,0 +1,16 @@
+{
+	"id" : "terrarium",
+	"name" : "Terrarium",
+	"description" : "Ce plugin permet de gérer un terrarium ( éclairage, chauffage et suivi de consommation )",
+	"licence" : "AGPL",
+	"author" : "PhilippeJ",
+	"require" : "3.2",
+	"category" : "wellness",
+	"hasDependency" : false,
+	"hasOwnDeamon" : false,
+	"maxDependancyInstallTime" : 0,
+    "changelog": "https:\/\/github.com\/PhilippeJ-code\/terrarium\/blob\/master\/docs\/#language#\/changelog.md",
+    "documentation": "https:\/\/github.com\/PhilippeJ-code\/terrarium\/blob\/master\/docs\/#language#\/index.md",
+	"language" : ["fr_FR"],
+	"compatibility" : ["rpi","mobile","v4"]
+}

@@ -1,0 +1,582 @@
+<div class="eqLogic eqLogic-widget allowResize allowReorderCmd #custom_layout# #eqLogic_class#" data-eqType="#eqType#"
+  data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#"
+  data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#"
+  style="width: #width#;height: #height#;#style#">
+
+  <div class="classTerrariumContenu#uid#" style="display: block;">
+
+    <img class="classTerrariumStatutJour#uid#" style="display: none;" src="plugins/terrarium/resources/jour.svg">
+    <img class="classTerrariumStatutNuit#uid#" style="display: none;" src="plugins/terrarium/resources/nuit.svg">
+
+    <img class="classTerrariumLockCsg#uid#" style="display: none;" src="plugins/terrarium/resources/lock.svg">
+    <img class="classTerrariumUnlockCsg#uid#" style="display: none;" src="plugins/terrarium/resources/unlock.svg">
+
+    <img class="classTerrariumMode#uid#" style="display: none;" src="plugins/terrarium/resources/flamme.svg">
+
+    <div class="classTerrariumTemperature#uid#">
+      <span id="idTerrariumTemperature#uid#"></span>
+    </div>
+
+    <div class="classTerrariumConsigne#uid#">
+      <img id="idTerrariumPlus#uid#" src="plugins/terrarium/resources/plus.svg">
+      <br />
+      <span id="idTerrariumConsigne#uid#"></span>
+      <br />
+      <img id="idTerrariumMoins#uid#" src="plugins/terrarium/resources/moins.svg">
+    </div>
+
+    <img class="classTerrariumLockEcl#uid#" style="display: none;" src="plugins/terrarium/resources/lum_lock.svg">
+    <img class="classTerrariumUnlockEcl#uid#" style="display: none;" src="plugins/terrarium/resources/lum_unlock.svg">
+
+    <img class="classTerrariumHisto#uid#" src="plugins/terrarium/resources/histo.svg">
+
+  </div>
+
+  <div class="classConsosValeurs#uid#" style="display: none;">
+    <div id="idConsoJour#uid#" class="classConsosValeurJour#uid# history cursor" data-cmd_id="#idHistoJour#">
+    </div>
+    <div id="idConsoSemaine#uid#" class="classConsosValeurSemaine#uid# history cursor" data-cmd_id="#idHistoSemaine#">
+    </div>
+    <div id="idConsoMois#uid#" class="classConsosValeurMois#uid# history cursor" data-cmd_id="#idHistoMois#">
+    </div>
+    <div id="idConsoAnnee#uid#" class="classConsosValeurAnnee#uid# history cursor" data-cmd_id="#idHistoAnnee#">
+    </div>
+    <div class="classConsosKwH#uid#">
+      <span>KwH</span>
+    </div>
+    <div class="classConsosLabelJ#uid#">
+      <span>J</span>
+    </div>
+    <div class="classConsosLabelS#uid#">
+      <span>S</span>
+    </div>
+    <div class="classConsosLabelM#uid#">
+      <span>M</span>
+    </div>
+    <div class="classConsosLabelA#uid#">
+      <span>A</span>
+    </div>
+
+    <img class="classTerrariumPrecedent#uid#" src="plugins/terrarium/resources/previous.svg">
+
+  </div>
+
+</div>
+
+<style>
+  .classTerrariumContenu#uid# {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: #27313A;
+    border: 1px solid #000000;
+    border-radius: 8px;
+    color: #ffffff;
+  }
+
+  .classTerrariumStatutJour#uid# {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 5px;
+    left: 5px;
+    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
+  }
+
+  .classTerrariumStatutNuit#uid# {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 5px;
+    left: 5px;
+    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
+  }
+
+  .classTerrariumMode#uid# {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    left: 5px;
+    bottom: 5px;
+    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
+  }
+
+  .classTerrariumTemperature#uid# {
+    position: absolute;
+    width: 100%;
+    height: 30px;
+    top: 0px;
+    left: 0px;
+    text-align: right;
+    font-size: 30px;
+  }
+
+  .classTerrariumLockCsg#uid# {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 35px;
+    right: 5px;
+    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
+  }
+
+  .classTerrariumLockCsg#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
+  .classTerrariumUnlockCsg#uid# {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 35px;
+    right: 5px;
+    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
+  }
+
+  .classTerrariumUnlockCsg#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
+  .classTerrariumConsigne#uid# {
+    position: relative;
+    width: 100%;
+    height: 140px;
+    top: 60px;
+  }
+
+  #idTerrariumPlus#uid# {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
+  }
+
+  #idTerrariumMoins#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
+  #idTerrariumConsigne#uid# {
+    position: absolute;
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    font-size: 40px;
+    top: 0px;
+    bottom: 0px;
+    margin: auto;
+  }
+
+  #idTerrariumMoins#uid# {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
+  }
+
+  #idTerrariumPlus#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
+  .classTerrariumLockEcl#uid# {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    bottom: 5px;
+    left: 50px;
+    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
+  }
+
+  .classTerrariumLockEcl#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
+  .classTerrariumUnlockEcl#uid# {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    bottom: 5px;
+    left: 50px;
+    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
+  }
+
+  .classTerrariumUnlockEcl#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
+  .classTerrariumHisto#uid# {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    right: 5px;
+    bottom: 5px;
+    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
+  }
+
+  .classTerrariumHisto#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
+  .classConsosValeurs#uid# {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    position: relative;
+    background-color: #27313A;
+    border: 1px solid #000000;
+    border-radius: 8px;
+    right: 0px;
+    left: 0px;
+    margin: auto;
+    font-size: 22px;
+    color: #ffffff;
+  }
+
+  .classConsosValeurJour#uid# {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+  }
+
+  .classConsosValeurSemaine#uid# {
+    position: absolute;
+    left: 10px;
+    top: 60px;
+  }
+
+  .classConsosValeurMois#uid# {
+    position: absolute;
+    left: 10px;
+    top: 110px;
+  }
+
+  .classConsosValeurAnnee#uid# {
+    position: absolute;
+    left: 10px;
+    top: 160px;
+  }
+
+  .classConsosKwH#uid# {
+    position: absolute;
+    top: 200px;
+    right: 10px;
+  }
+
+  .classConsosLabelJ#uid# {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-weight: normal;
+    font-size: 18px;
+  }
+
+  .classConsosLabelS#uid# {
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    font-weight: normal;
+    font-size: 18px;
+  }
+
+  .classConsosLabelM#uid# {
+    position: absolute;
+    top: 110px;
+    right: 10px;
+    font-weight: normal;
+    font-size: 18px;
+  }
+
+  .classConsosLabelA#uid# {
+    position: absolute;
+    top: 160px;
+    right: 10px;
+    font-weight: normal;
+    font-size: 18px;
+  }
+
+  .classConsosChiffre#uid# {
+    background-color: #000000;
+    border: 1px solid #7F7F7F;
+    border-radius: 3px;
+    margin-left: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+
+  .classConsosDecimale#uid# {
+    background-color: #FA4628;
+    border: 1px solid #7F7F7F;
+    border-radius: 3px;
+    margin-left: 6px;
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+
+  .classConsosLabel#uid# {
+    background-color: #000000;
+    border: 1px solid #7F7F7F;
+    border-radius: 3px;
+    margin-left: 20px;
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+
+  .classTerrariumPrecedent#uid# {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    left: 5px;
+    bottom: 5px;
+    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
+  }
+
+  .classTerrariumPrecedent#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+</style>
+
+<script type="text/javascript">
+
+  $(document).change(function (e) {
+    if (e.target.dataset.eqlogic_uid === "#uid#") {
+      initDisplay#uid#();
+    }
+  });
+
+  $(document).ready(function () {
+    initDisplay#uid#();
+  });
+
+  function initDisplay#uid#()
+  {
+
+    let consoJour = "#consoJour#";
+    let spanConsoJour = $('#idConsoJour#uid#');
+    spanConsoJour.empty();
+    spanConsoJour.append(genererCompteur#uid#(consoJour));
+
+    let consoSemaine = "#consoSemaine#";
+    let spanConsoSemaine = $('#idConsoSemaine#uid#');
+    spanConsoSemaine.empty();
+    spanConsoSemaine.append(genererCompteur#uid#(consoSemaine));
+
+    let consoMois = "#consoMois#";
+    let spanConsoMois = $('#idConsoMois#uid#');
+    spanConsoMois.empty();
+    spanConsoMois.append(genererCompteur#uid#(consoMois));
+
+    let consoAnnee = "#consoAnnee#";
+    let spanConsoAnnee = $('#idConsoAnnee#uid#');
+    spanConsoAnnee.empty();
+    spanConsoAnnee.append(genererCompteur#uid#(consoAnnee));
+
+    $('body').on('cmd::update', function (_event, _options) {
+      $(_options).each(function () {
+        switch (this.cmd_id) {
+          case "#idTemperature#":
+            jeedom.cmd.update['#idTemperature#']({ display_value: this.value });
+            break;
+          case "#idConsigne#":
+            jeedom.cmd.update['#idConsigne#']({ display_value: this.value });
+            break;
+          case "#idStatut#":
+            jeedom.cmd.update['#idStatut#']({ display_value: this.value });
+            break;
+          case "#idMode#":
+            jeedom.cmd.update['#idMode#']({ display_value: this.value });
+            break;
+          case "#idEtatVerrouEclairage#":
+            jeedom.cmd.update['#idEtatVerrouEclairage#']({ display_value: this.value });
+            break;
+          case "#idEtatVerrouConsignes#":
+            jeedom.cmd.update['#idEtatVerrouConsignes#']({ display_value: this.value });
+            break;
+          case "#idConsoJour#":
+            $('#idConsoJour#uid#').empty().append(genererCompteur#uid#(this.value));
+            break;
+          case "#idConsoSemaine#":
+            $('#idConsoSemaine#uid#').empty().append(genererCompteur#uid#(this.value));
+            break;
+          case "#idConsoMois#":
+            $('#idConsoMois#uid#').empty().append(genererCompteur#uid#(this.value));
+            break;
+          case "#idConsoAnnee#":
+            $('#idConsoAnnee#uid#').empty().append(genererCompteur#uid#(this.value));
+            break;
+        }
+      });
+    });
+
+    jeedom.cmd.update['#idStatut#'] = function (_options) {
+      if (_options.display_value == "Jour") {
+        $('.classTerrariumStatutJour#uid#').show();
+        $('.classTerrariumStatutNuitl#uid#').hide();
+      }
+      else {
+        $('.classTerrariumStatutJour#uid#').hide();
+        $('.classTerrariumStatutNuit#uid#').show();
+      }
+    }
+    jeedom.cmd.update['#idStatut#']({ display_value: '#statut#' });
+
+    jeedom.cmd.update['#idTemperature#'] = function (_options) {
+      $('#idTerrariumTemperature#uid#').html(Math.round(_options.display_value * 10) / 10 + '°');
+    }
+    jeedom.cmd.update['#idTemperature#']({ display_value: '#temperature#' });
+
+    jeedom.cmd.update['#idConsigne#'] = function (_options) {
+      $('#idTerrariumConsigne#uid#').html(Math.round(_options.display_value * 10) / 10 + '°');
+    }
+    jeedom.cmd.update['#idConsigne#']({ display_value: '#consigne#' });
+
+    jeedom.cmd.update['#idStatut#'] = function (_options) {
+      $('#idTerrariumStatut#uid#').html(_options.display_value + ' ');
+    }
+    jeedom.cmd.update['#idStatut#']({ display_value: '#statut#' });
+
+    jeedom.cmd.update['#idMode#'] = function (_options) {
+      if (_options.display_value == "Chauffe") {
+        $('.classTerrariumMode#uid#').show();
+      }
+      else {
+        $('.classTerrariumMode#uid#').hide();
+      }
+    }
+    jeedom.cmd.update['#idMode#']({ display_value: '#mode#' });
+
+
+    $('#idTerrariumMoins#uid#').on('click', function () {
+      var min = ('#minValue#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne#');
+      var stepConsigne = (isNaN(parseFloat('#stepConsigne#'))) ? 0.5 : parseFloat('#stepConsigne#');
+      if (parseFloat($('#idTerrariumConsigne#uid#').html()) >= min + stepConsigne) {
+        jeedom.cmd.update['#idConsigne#']({ display_value: parseFloat($('#idTerrariumConsigne#uid#').html()) - stepConsigne });
+        jeedom.cmd.execute({
+          id: '#idThermostat#', value:
+            { slider: $('#idTerrariumConsigne#uid#').html().replace("°", "").replace(" ", "") }
+        });
+      } else if (parseFloat($('#idTerrariumConsigne#uid#').html()) > min) {
+        jeedom.cmd.update['#idConsigne#']({ display_value: min });
+        jeedom.cmd.execute({
+          id: '#idThermostat#', value:
+            { slider: $('#idTerrariumConsigne#uid#').html().replace("°", "").replace(" ", "") }
+        });
+      }
+    });
+
+    $('#idTerrariumPlus#uid#').on('click', function () {
+      var max = ('#maxConsigne#' == '') ? Number.MAX_VALUE : parseFloat('#maxConsigne#');
+      var stepConsigne = (isNaN(parseFloat('#stepConsigne#'))) ? 0.5 : parseFloat('#stepConsigne#');
+      if (parseFloat($('#idTerrariumConsigne#uid#').html()) <= max - stepConsigne) {
+        jeedom.cmd.update['#idConsigne#']({ display_value: parseFloat($('#idTerrariumConsigne#uid#').html()) + stepConsigne });
+        jeedom.cmd.execute({
+          id: '#idThermostat#', value:
+            { slider: $('#idTerrariumConsigne#uid#').html().replace("°", "").replace(" ", "") }
+        });
+      } else if (parseFloat($('#idTerrariumConsigne#uid#').html()) < max) {
+        jeedom.cmd.update['#idConsigne#']({ display_value: max });
+        jeedom.cmd.execute({
+          id: '#idThermostat#', value:
+            { slider: $('#idTerrariumConsigne#uid#').html().replace("°", "").replace(" ", "") }
+        });
+      }
+    });
+
+    jeedom.cmd.update['#idEtatVerrouConsignes#'] = function (_options) {
+      if (_options.display_value == "1") {
+        $('.classTerrariumLockCsg#uid#').show();
+        $('.classTerrariumUnlockCsg#uid#').hide();
+      }
+      else {
+        $('.classTerrariumLockCsg#uid#').hide();
+        $('.classTerrariumUnlockCsg#uid#').show();
+      }
+    }
+    jeedom.cmd.update['#idEtatVerrouConsignes#']({ display_value: '#etatVerrouConsignes#' });
+
+    $('.classTerrariumLockCsg#uid#').on('click', function () {
+      jeedom.cmd.execute({
+        id: '#idOffVerrouConsignes#'
+      });
+    });
+
+    $('.classTerrariumUnlockCsg#uid#').on('click', function () {
+      jeedom.cmd.execute({
+        id: '#idOnVerrouConsignes#'
+      });
+    });
+
+    jeedom.cmd.update['#idEtatVerrouEclairage#'] = function (_options) {
+      if (_options.display_value == "1") {
+        $('.classTerrariumLockEcl#uid#').show();
+        $('.classTerrariumUnlockEcl#uid#').hide();
+      }
+      else {
+        $('.classTerrariumLockEcl#uid#').hide();
+        $('.classTerrariumUnlockEcl#uid#').show();
+      }
+    }
+    jeedom.cmd.update['#idEtatVerrouEclairage#']({ display_value: '#etatVerrouEclairage#' });
+
+    $('.classTerrariumLockEcl#uid#').on('click', function () {
+      jeedom.cmd.execute({
+        id: '#idOffVerrouEclairage#'
+      });
+    });
+
+    $('.classTerrariumUnlockEcl#uid#').on('click', function () {
+      jeedom.cmd.execute({
+        id: '#idOnVerrouEclairage#'
+      });
+    });
+
+    function genererCompteur#uid#(valeur, type)
+    {
+      let val = Math.trunc(valeur * 10 + 0.5);
+      let mille = Math.trunc(val / 10000);
+      val = val - mille * 10000;
+      let cent = Math.trunc(val / 1000);
+      val = val - cent * 1000;
+      let dix = Math.trunc(val / 100);
+      val = val - dix * 100;
+      let un = Math.trunc(val / 10);
+      val = val - un * 10;
+      let dixieme = val;
+
+      return genererChiffre#uid#(mille) +
+        genererChiffre#uid#(cent) +
+          genererChiffre#uid#(dix) +
+            genererChiffre#uid#(un) +
+              genererDecimale#uid#(dixieme);
+
+    }
+
+    function genererChiffre#uid#(chiffre)
+    {
+      return '<span class="classConsosChiffre#uid#">' + chiffre + '</span>';
+    }
+
+    function genererDecimale#uid#(chiffre)
+    {
+      return '<span class="classConsosDecimale#uid#">' + chiffre + '</span>';
+    }
+
+    $('.classTerrariumHisto#uid#').on('click', function () {
+      $('.classTerrariumContenu#uid#').hide();
+      $('.classConsosValeurs#uid#').show();
+    });
+
+    $('.classTerrariumPrecedent#uid#').on('click', function () {
+      $('.classTerrariumContenu#uid#').show();
+      $('.classConsosValeurs#uid#').hide();
+    });
+
+  }
+
+</script>
