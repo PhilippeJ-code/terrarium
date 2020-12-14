@@ -13,12 +13,12 @@
     Cet onglet permet de choisir les dates de "lever et coucher du soleil" dans le terrarium, ce sont les
     déclencheurs qui permettent de passer en mode "Jour" et en mode "Nuit".
 
-![Horaire](../images/horaire.png "Horaire")
+![Horaire](../images/Horaire.png "Horaire")
 
 ## 3. Onglet "Consignes"
 
     Cet onglet permet de choisir les températures mini et maxi de la consigne, ainsi que les actions qui seront effectuées
     lors du passage en mode jour ou en mode nuit.
 
-![Consignes](../images/consignes.png "Consignes")
+![Consignes](../images/Consignes.png "Consignes")
 
