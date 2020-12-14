@@ -3,6 +3,8 @@
     Ce plugin permet de domotiser un terrarium.
       Eclairage, chauffage et historisation des consommations ( jour, semaine, mois et année ).
 
+    On pourrait faire la même chose en utilisant des scénarios, le plugin thermostat et le plugin agenda ou autres mais ça me semblait un bon exercice pour faire connaissane avec la programmation d'un plugin et pour que ce soit didactique j'ai ajouté un max de commentaires dans la programmation.
+
 ## 1. Configuration du plugin
 
     Rien de particulier dans la configuration ce de plugin, le cron est indispensable au bon
@@ -20,5 +22,52 @@
     Cet onglet permet de choisir les températures mini et maxi de la consigne, ainsi que les actions qui seront effectuées
     lors du passage en mode jour ou en mode nuit.
 
+     NB Le plugin permet de bloquer les actions de consigne. Si le Gecko reçoit des amis pour la nuit, on peut bloquer la consigne
+     sans que le plugin n'interfère.
+
 ![Consignes](../images/Consignes.png "Consignes")
+
+## 4. Onglet "Eclairage"
+
+    Cet onglet permet de choisir les actions d'éclairage qui seront effectuées lors du passage en mode jour ou en mode nuit. Ces actions pourront être répètées périodiquement grâce à un cron de répétition. 
+    
+      NB Le plugin permet de bloquer les actions d'éclairage
+
+![Eclairage](../images/Eclairage.png "Eclairage")
+
+## 5. Onglet "Chauffage"
+
+    Cet onglet permet de choisir les actions qui seront effectuées lors du du démarrage ou de l'arrêt du chauffage. Pour effectuer le contrôle du chauffage, nous avons besoin de la température intérieure du terrarium, des hysteresis min/max pour le déclenchement et l'arrêt du chauffage et d'un cron de répétition pour répèter les actions périodiquement en cas de problème de transmission par exemple.
+
+![Chauffage](../images/Chauffage.png "Chauffage")
+
+## 6. Onglet "Consommation"
+
+    Si le chauffage du terrarium est commandé par un matériel qui remonte la consommation en KwH, on peut utiliser cette information pour historiser les consommations ( jour, semaine, mois et année ) du terrarium.
+
+        NB J'ai pris soin de la base de données de Jeedom en gérant l'historisation de façon à n'avoir qu'une seule donnée historisée par jour, semaine, mois et année. Ceci explique les commandes consoJour, consoSemaine, consoMois, consoAnnee qui mémorisent les consommations instantanées et les commandes histoJour, histoSemaine, histoMois et histoAnnee qui permettent l'historisation "optimisée".
+
+![Consommation](../images/Consommation.png "Consommation")
+
+## 7. Et le widget
+
+    Le plugin a son propre widget, en voici la première version
+
+![Widget](../images/Widget.png "Widget")
+
+    On peut voir un soleil en haut à droite pour le mode "Jour", une lune pour le mode "Nuit"
+    La température intérieure en haut à droite avec un cadenas qui empêche ou pas les changements de consigne par le plugin.
+    La consigne au centre avec possiblité de la modifier avec les flêches haut bas.
+    Une flamme pour indiquer que la chauffe est active.
+    Une ampoule barrée ou non qui empêche ou pas les changements de température par le plugin.
+    Et en bas à droite, une icone qui permet d'afficher les consommations instantanées.
+
+![WidgetConsos](../images/WidgetConsos.png "WidgetConsos")
+
+
+
+
+
+
+
 
