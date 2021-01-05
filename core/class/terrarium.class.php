@@ -26,40 +26,33 @@
       //
       public static function cron()
       {
-
+ 
           // Pour chacun des équipements
           //
           foreach (terrarium::byType('terrarium', true) as $terrarium) {
-
-              // Mémo de la température initiale du terrarium
-              //
-              $temperature = $terrarium->getCmd(null, 'temperature')->execCmd();
-              if (!is_numeric($temperature)) {
-                  $terrarium->getCmd(null, 'temperature')->event(jeedom::evaluateExpression($terrarium->getConfiguration('temperature_terrarium')));
+              if (!$terrarium->getIsEnable() == 1) {
+                  return;
               }
 
-              // Mémo de la consigne initiale du terrarium
-              //
-              $consigne = $terrarium->getCmd(null, 'consigne')->execCmd();
-              if (!is_numeric($consigne)) {
-                switch ($terrarium->getCmd(null, 'status')->execCmd()) {
-                    case __('Jour', __FILE__):
-                    $terrarium->actionsConsignesJour();
-                    break;
-                    case __('Nuit', __FILE__):
-                    $terrarium->actionsConsignesNuit();
-                    break;
-                }
-              }
-
-              // Première utilisation, jour par défaut
+              // Première utilisation ou redémarrage on initialise
               //
               $statut = $terrarium->getCmd(null, 'status')->execCmd();
-              if (($statut != __('Jour', __FILE__)) && ($statut !=  __('Nuit', __FILE__))) {                
+              if (($statut != __('Jour', __FILE__)) && ($statut !=  __('Nuit', __FILE__))) {
+                  log::add('terrarium', 'debug', 'Initialisation du terrarium');
                   $terrarium->getCmd(null, 'etat_verrou_eclairage')->event(0);
                   $terrarium->getCmd(null, 'etat_verrou_consignes')->event(0);
-                  $terrarium->jour();
+
+                  $now = time();
+                  $heure = date("H", $now);
+
+                  if (($heure > 21) || ($heure < 6)) {
+                      $terrarium->nuit();
+                  } else {
+                      $terrarium->jour();
+                  }
+
                   $terrarium->temperature();
+                  $terrarium->save();
               }
 
               // Est-il temps de passer en mode jour ?
@@ -279,9 +272,52 @@
           $consigne_min = $consigne - $this->getConfiguration('hysteresis_min', 1);
           $consigne_max = $consigne + $this->getConfiguration('hysteresis_max', 1);
 
-          if ($temperature <= $consigne_min) {
+          $mode = $this->getCache('mode', '');
+          if ($mode === 'chauffe') {
+              $diff = $temperature - $consigne_max;
+              if ($diff > 0) {
+                  log::add('terrarium', 'debug', 'Inertie Max : ' . $diff);
+              }
+          }
+          
+          $oldTemperature = $this->getCache('oldTemperature', -99);
+          $this->setCache('oldTemperature', $temperature);
+          $oldNow = $this->getCache('oldNow', 0);
+          $now = time();
+          $this->setCache('oldNow', $now);
+          if (($oldTemperature != -99) && ($now != $oldNow)) {
+              if ($oldTemperature > $temperature) {
+                  $deltaBaisseMinute = (($oldTemperature - $temperature) * 60) / ($now - $oldNow);
+                  $nombreBaisses = $this->getCache('nombreBaisses', 0) + 1;
+                  $totalBaisses = $this->getCache('totalBaisses', 0) + $deltaBaisseMinute;
+                  if ($nombreBaisses > 100) {                    
+                    log::add('terrarium', 'debug', 'Moyenne Baisse : ' . $totalBaisses/$nombreBaisses);
+                    $this->setCache('moyenneBaisse', $totalBaisses/$nombreBaisses);
+                    $nombreBaisses = 0;
+                    $totalBaisses = 0;
+                  }
+                  $this->setCache('nombreBaisses', $nombreBaisses);
+                  $this->setCache('totalBaisses', $totalBaisses);
+              } elseif ($oldTemperature < $temperature) {
+                  $deltaHausseMinute = (($temperature - $oldTemperature) * 60) / ($now - $oldNow);
+                  $nombreHausses = $this->getCache('nombreHausses', 0) + 1;
+                  $totalHausses = $this->getCache('totalHausses', 0) + $deltaHausseMinute;
+                  if ($nombreHausses > 100) {
+                    log::add('terrarium', 'debug', 'Moyenne Hausse : ' . $totalHausses/$nombreHausses);
+                    $this->setCache('moyenneHausse', $totalHausses/$nombreHausses);
+                    $nombreHausses = 0;
+                    $totalHausses = 0;
+                  }
+                  $this->setCache('nombreHausses', $nombreHausses);
+                  $this->setCache('totalHausses', $totalHausses);
+              }
+          }
+
+          $moyenneBaisse = $this->getCache('moyenneBaisse', 0);
+          $moyenneHausse = $this->getCache('moyenneHausse', 0);
+          if ($temperature <= $consigne_min + $moyenneBaisse / 2) {
               $this->chauffe();
-          } elseif ($temperature >= $consigne_max) {
+          } elseif ($temperature >= $consigne_max - $moyenneHausse / 2) {
               $this->pasDeChauffe();
           }
       }
@@ -357,32 +393,33 @@
           $terrarium->consommation();
       }
 
-      // Gestion de la température
+      // Gestion de la consommation
       //
       public function consommation()
       {
-          // On récupère la valeur précédente
+
+          // On récupère la valeur de consommation précédente
           //
           $oldConsommation = $this->getConfiguration('oldConsommation', -1);
           $consommation = jeedom::evaluateExpression($this->getConfiguration('cmdConsommation'));
           if (!is_numeric($consommation)) {
               return;
           }
-          $this->setConfiguration('oldConsommation', $consommation)->save();
+          $this->setConfiguration('oldConsommation', $consommation);
  
           // Si première fois, pas de cumul
           //
           if ($oldConsommation == -1) {
+              $this->save();
               return;
           }
          
-          // Mémo de la consommation
-          //
-          $this->getCmd(null, 'consommation')->event(jeedom::evaluateExpression($this->getConfiguration('cmdConsommation')));
-
           // Différence entre les deux valeurs
           //
           $diff = $consommation - $oldConsommation;
+          if ($diff < 0) {
+              return;
+          }
 
           // Une demi heure avant minuit pour avoir la bonne date en historisation
           //
@@ -392,65 +429,63 @@
           //
           $jour = date("d", $plusTard);
           $oldJour = $this->getConfiguration('oldJour', 0);
-          log::add('consos', 'debug', 'Jour : ' . $oldJour . ' ' .$jour);
           if ($jour != $oldJour) {
-              $cmd = $this->getCmd(null, 'consoJour');
-              $this->checkAndUpdateCmd('histoJour', $cmd->execCmd());
-              $this->checkAndUpdateCmd('consoJour', 0);
-              $this->setConfiguration('oldJour', $jour)->save();
+              $this->checkAndUpdateCmd('histoJour', $this->getConfiguration('consoJour', 0));
+              $this->setConfiguration('consoJour', 0);
+              $this->setConfiguration('oldJour', $jour);
           }
        
           // Historisation de la semaine si nécessaire
           //
           $jourSemaine = date("N", $plusTard);
           $oldJourSemaine = $this->getConfiguration('oldJourSemaine', 0);
-          log::add('consos', 'debug', 'Semaine : ' . $oldJourSemaine . ' ' .$jourSemaine);
           if ($jourSemaine != $oldJourSemaine) {
               if ($jourSemaine == 1) {
-                  $cmd = $this->getCmd(null, 'consoSemaine');
-                  $this->checkAndUpdateCmd('histoSemaine', $cmd->execCmd());
-                  $this->checkAndUpdateCmd('consoSemaine', 0);
+                  $this->checkAndUpdateCmd('histoSemaine', $this->getConfiguration('consoSemaine', 0));
+                  $this->setConfiguration('consoSemaine', 0);
               }
-              $this->setConfiguration('oldJourSemaine', $jourSemaine)->save();
+              $this->setConfiguration('oldJourSemaine', $jourSemaine);
           }
        
           // Historisation du mois si nécessaire
           //
           $mois = date("m", $plusTard);
           $oldMois = $this->getConfiguration('oldMois', 0);
-          log::add('consos', 'debug', 'Mois : ' . $oldMois . ' ' .$mois);
           if ($mois != $oldMois) {
-              $cmd = $this->getCmd(null, 'consoMois');
-              $this->checkAndUpdateCmd('histoMois', $cmd->execCmd());
-              $this->checkAndUpdateCmd('consoMois', 0);
-              $this->setConfiguration('oldMois', $mois)->save();
+              $this->checkAndUpdateCmd('histoMois', $this->getConfiguration('consoMois', 0));
+              $this->setConfiguration('consoMois', 0);
+              $this->setConfiguration('oldMois', $mois);
           }
        
           // Historisation de l'année si nécessaire
           //
           $annee = date("Y", $plusTard);
           $oldAnnee = $this->getConfiguration('oldAnnee', 0);
-          log::add('consos', 'debug', 'Jour : ' . $oldAnnee . ' ' .$annee);
           if ($annee != $oldAnnee) {
-              $cmd = $this->getCmd(null, 'consoAnnee');
-              $this->checkAndUpdateCmd('histoAnnee', $cmd->execCmd());
-              $this->checkAndUpdateCmd('consoAnnee', 0);
-              $this->setConfiguration('oldAnnee', $annee)->save();
+              $this->checkAndUpdateCmd('histoAnnee', $this->getConfiguration('consoAnnee', 0));
+              $this->setConfiguration('consoAnnee', 0);
+              $this->setConfiguration('oldAnnee', $annee);
           }
        
           // Et j'ajoute la consommation instantanée
           //
-          $cmd = $this->getCmd(null, 'consoJour');
-          $this->checkAndUpdateCmd('consoJour', $cmd->execCmd()+$diff);
+          $conso = $this->getConfiguration('consoJour', 0) + $diff;
+          $this->setConfiguration('consoJour', $conso);
+          $this->checkAndUpdateCmd('consoJour', $conso);
 
-          $cmd = $this->getCmd(null, 'consoSemaine');
-          $this->checkAndUpdateCmd('consoSemaine', $cmd->execCmd()+$diff);
+          $conso = $this->getConfiguration('consoSemaine', 0) + $diff;
+          $this->setConfiguration('consoSemaine', $conso);
+          $this->checkAndUpdateCmd('consoSemaine', $conso);
 
-          $cmd = $this->getCmd(null, 'consoMois');
-          $this->checkAndUpdateCmd('consoMois', $cmd->execCmd()+$diff);
+          $conso = $this->getConfiguration('consoMois', 0) + $diff;
+          $this->setConfiguration('consoMois', $conso);
+          $this->checkAndUpdateCmd('consoMois', $conso);
 
-          $cmd = $this->getCmd(null, 'consoAnnee');
-          $this->checkAndUpdateCmd('consoAnnee', $cmd->execCmd()+$diff);
+          $conso = $this->getConfiguration('consoAnnee', 0) + $diff;
+          $this->setConfiguration('consoAnnee', $conso);
+          $this->checkAndUpdateCmd('consoAnnee', $conso);
+
+          $this->save();
       }
       
       // Fonction exécutée automatiquement avant la création de l'équipement
@@ -521,6 +556,36 @@
           $status->setOrder(1);
           $status->save();
 
+          $lock = $this->getCmd(null, 'statut_jour');
+          if (!is_object($lock)) {
+              $lock = new terrariumCmd();
+              $lock->setName('Statut Jour');
+              $lock->setIsVisible(1);
+              $lock->setIsHistorized(0);
+          }
+          $lock->setEqLogic_id($this->getId());
+          $lock->setType('action');
+          $lock->setSubType('other');
+          $lock->setLogicalId('statut_jour');
+          $lock->setValue($status->getId());
+          $lock->setOrder(2);
+          $lock->save();
+  
+          $unlock = $this->getCmd(null, 'statut_nuit');
+          if (!is_object($unlock)) {
+              $unlock = new terrariumCmd();
+              $unlock->setName('Statut Nuit');
+              $unlock->setIsVisible(1);
+              $unlock->setIsHistorized(0);
+          }
+          $unlock->setEqLogic_id($this->getId());
+          $unlock->setType('action');
+          $unlock->setSubType('other');
+          $unlock->setLogicalId('statut_nuit');
+          $unlock->setValue($status->getId());
+          $unlock->setOrder(3);
+          $unlock->save();
+  
           // Gestion éclairage verrouillé ou pas
           //
           //   L'état, le on et le off
@@ -536,7 +601,7 @@
           $etatVerrouEclairage->setType('info');
           $etatVerrouEclairage->setSubType('binary');
           $etatVerrouEclairage->setLogicalId('etat_verrou_eclairage');
-          $etatVerrouEclairage->setOrder(2);
+          $etatVerrouEclairage->setOrder(4);
           $etatVerrouEclairage->save();
   
           $lock = $this->getCmd(null, 'on_verrou_eclairage');
@@ -551,7 +616,7 @@
           $lock->setSubType('other');
           $lock->setLogicalId('on_verrou_eclairage');
           $lock->setValue($etatVerrouEclairage->getId());
-          $lock->setOrder(3);
+          $lock->setOrder(5);
           $lock->save();
   
           $unlock = $this->getCmd(null, 'off_verrou_eclairage');
@@ -566,7 +631,7 @@
           $unlock->setSubType('other');
           $unlock->setLogicalId('off_verrou_eclairage');
           $unlock->setValue($etatVerrouEclairage->getId());
-          $unlock->setOrder(4);
+          $unlock->setOrder(6);
           $unlock->save();
   
           // Gestion consignes verrouillé ou pas
@@ -584,7 +649,7 @@
           $etatVerrouConsignes->setType('info');
           $etatVerrouConsignes->setSubType('binary');
           $etatVerrouConsignes->setLogicalId('etat_verrou_consignes');
-          $etatVerrouConsignes->setOrder(5);
+          $etatVerrouConsignes->setOrder(7);
           $etatVerrouConsignes->save();
   
           $lock = $this->getCmd(null, 'on_verrou_consignes');
@@ -599,7 +664,7 @@
           $lock->setSubType('other');
           $lock->setLogicalId('on_verrou_consignes');
           $lock->setValue($etatVerrouConsignes->getId());
-          $lock->setOrder(6);
+          $lock->setOrder(8);
           $lock->save();
   
           $unlock = $this->getCmd(null, 'off_verrou_consignes');
@@ -614,7 +679,7 @@
           $unlock->setSubType('other');
           $unlock->setLogicalId('off_verrou_consignes');
           $unlock->setValue($etatVerrouConsignes->getId());
-          $unlock->setOrder(7);
+          $unlock->setOrder(9);
           $unlock->save();
   
           // Mode chauffage
@@ -631,7 +696,7 @@
           $mode->setLogicalId('mode');
           $mode->setType('info');
           $mode->setSubType('string');
-          $mode->setOrder(8);
+          $mode->setOrder(10);
           $mode->save();
 
           $consigne = $this->getCmd(null, 'consigne');
@@ -649,7 +714,7 @@
           $consigne->setLogicalId('consigne');
           $consigne->setConfiguration('minValue', $this->getConfiguration('consigne_min'));
           $consigne->setConfiguration('maxValue', $this->getConfiguration('consigne_max'));
-          $consigne->setOrder(9);
+          $consigne->setOrder(11);
           $consigne->save();
   
           $thermostat = $this->getCmd(null, 'thermostat');
@@ -667,7 +732,7 @@
           $thermostat->setValue($consigne->getId());
           $thermostat->setConfiguration('minValue', $this->getConfiguration('consigne_min'));
           $thermostat->setConfiguration('maxValue', $this->getConfiguration('consigne_max'));
-          $thermostat->setOrder(10);
+          $thermostat->setOrder(12);
           $thermostat->save();
 
           $temperature = $this->getCmd(null, 'temperature');
@@ -682,24 +747,24 @@
           $temperature->setSubType('numeric');
           $temperature->setLogicalId('temperature');
           $temperature->setUnite('°C');
-          $temperature->setOrder(11);
+          $temperature->setOrder(13);
           $temperature->save();
 
           $obj = $this->getCmd(null, 'consoJour');
           if (!is_object($obj)) {
-              $obj = new consosCmd();
+              $obj = new terrariumCmd();
               $obj->setName(__('ConsoJour', __FILE__));
           }
           $obj->setEqLogic_id($this->getId());
           $obj->setLogicalId('consoJour');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(12);
+          $obj->setOrder(14);
           $obj->save();
 
           $obj = $this->getCmd(null, 'histoJour');
           if (!is_object($obj)) {
-              $obj = new consosCmd();
+              $obj = new terrariumCmd();
               $obj->setName(__('HistoJour', __FILE__));
               $obj->setIsVisible(0);
               $obj->setIsHistorized(1);
@@ -708,24 +773,24 @@
           $obj->setLogicalId('histoJour');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(13);
+          $obj->setOrder(15);
           $obj->save();
 
           $obj = $this->getCmd(null, 'consoSemaine');
           if (!is_object($obj)) {
-              $obj = new consosCmd();
+              $obj = new terrariumCmd();
               $obj->setName(__('ConsoSemaine', __FILE__));
           }
           $obj->setEqLogic_id($this->getId());
           $obj->setLogicalId('consoSemaine');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(14);
+          $obj->setOrder(16);
           $obj->save();
 
           $obj = $this->getCmd(null, 'histoSemaine');
           if (!is_object($obj)) {
-              $obj = new consosCmd();
+              $obj = new terrariumCmd();
               $obj->setName(__('HistoSemaine', __FILE__));
               $obj->setIsVisible(0);
               $obj->setIsHistorized(1);
@@ -734,24 +799,24 @@
           $obj->setLogicalId('histoSemaine');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(15);
+          $obj->setOrder(17);
           $obj->save();
 
           $obj = $this->getCmd(null, 'consoMois');
           if (!is_object($obj)) {
-              $obj = new consosCmd();
+              $obj = new terrariumCmd();
               $obj->setName(__('ConsoMois', __FILE__));
           }
           $obj->setEqLogic_id($this->getId());
           $obj->setLogicalId('consoMois');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(16);
+          $obj->setOrder(18);
           $obj->save();
 
           $obj = $this->getCmd(null, 'histoMois');
           if (!is_object($obj)) {
-              $obj = new consosCmd();
+              $obj = new terrariumCmd();
               $obj->setName(__('HistoMois', __FILE__));
               $obj->setIsVisible(0);
               $obj->setIsHistorized(1);
@@ -760,24 +825,24 @@
           $obj->setLogicalId('histoMois');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(17);
+          $obj->setOrder(19);
           $obj->save();
 
           $obj = $this->getCmd(null, 'consoAnnee');
           if (!is_object($obj)) {
-              $obj = new consosCmd();
+              $obj = new terrariumCmd();
               $obj->setName(__('ConsoAnnee', __FILE__));
           }
           $obj->setEqLogic_id($this->getId());
           $obj->setLogicalId('consoAnnee');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(18);
+          $obj->setOrder(20);
           $obj->save();
 
           $obj = $this->getCmd(null, 'histoAnnee');
           if (!is_object($obj)) {
-              $obj = new consosCmd();
+              $obj = new terrariumCmd();
               $obj->setName(__('HistoAnnee', __FILE__));
               $obj->setIsVisible(0);
               $obj->setIsHistorized(1);
@@ -786,50 +851,70 @@
           $obj->setLogicalId('histoAnnee');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(19);
+          $obj->setOrder(21);
           $obj->save();
 
-          // On écoute les événements qui interviennent dans la gestion du chauffage
-          //
-          //   La température du terrarium
-          //   La consigne de température
-          //
-          $listener = listener::byClassAndFunction('terrarium', 'onTemperature', array('terrarium_id' => intval($this->getId())));
-          if (!is_object($listener)) {
-              $listener = new listener();
-          }
-          $listener->setClass('terrarium');
-          $listener->setFunction('onTemperature');
-          $listener->setOption(array('terrarium_id' => intval($this->getId())));
-          $listener->emptyEvent();
-          $cmd_id = $this->getConfiguration('temperature_terrarium');
-          $listener->addEvent($cmd_id);
-          $listener->addEvent($consigne->getId());
-          $listener->save();
+          if ($this->getIsEnable() == 1) {
 
-          // On écoute les événements qui interviennent dans la consommation
-          //
-          //
-          $listener = listener::byClassAndFunction('terrarium', 'onConsommation', array('terrarium_id' => intval($this->getId())));
-          if (!is_object($listener)) {
-              $listener = new listener();
+              // On écoute les événements qui interviennent dans la gestion du chauffage
+              //
+              //   La température du terrarium
+              //   La consigne de température
+              //
+              $listener = listener::byClassAndFunction('terrarium', 'onTemperature', array('terrarium_id' => intval($this->getId())));
+              if (!is_object($listener)) {
+                  $listener = new listener();
+              }
+              $listener->setClass('terrarium');
+              $listener->setFunction('onTemperature');
+              $listener->setOption(array('terrarium_id' => intval($this->getId())));
+              $listener->emptyEvent();
+              $cmd_id = $this->getConfiguration('temperature_terrarium');
+              $listener->addEvent($cmd_id);
+              $listener->addEvent($consigne->getId());
+              $listener->save();
+
+              // On écoute les événements qui interviennent dans la consommation
+              //
+              //
+              $listener = listener::byClassAndFunction('terrarium', 'onConsommation', array('terrarium_id' => intval($this->getId())));
+              if (!is_object($listener)) {
+                  $listener = new listener();
+              }
+              $listener->setClass('terrarium');
+              $listener->setFunction('onConsommation');
+              $listener->setOption(array('terrarium_id' => intval($this->getId())));
+              $listener->emptyEvent();
+              $cmd_id = $this->getConfiguration('cmdConsommation');
+              $listener->addEvent($cmd_id);
+              $listener->save();
+          } else {
+              // On supprime les écoutes
+              //
+              $listener = listener::byClassAndFunction('terrarium', 'onTemperature', array('terrarium_id' => intval($this->getId())));
+              if (is_object($listener)) {
+                  $listener->remove();
+              }
+
+              $listener = listener::byClassAndFunction('terrarium', 'onConsommation', array('terrarium_id' => intval($this->getId())));
+              if (is_object($listener)) {
+                  $listener->remove();
+              }
           }
-          $listener->setClass('terrarium');
-          $listener->setFunction('onConsommation');
-          $listener->setOption(array('terrarium_id' => intval($this->getId())));
-          $listener->emptyEvent();
-          $cmd_id = $this->getConfiguration('cmdConsommation');
-          $listener->addEvent($cmd_id);
-          $listener->save();
       }
 
       // Fonction exécutée automatiquement avant la suppression de l'équipement
       //
       public function preRemove()
       {
-          // On supprime l'écoute
+          // On supprime les écoutes
           //
           $listener = listener::byClassAndFunction('terrarium', 'onTemperature', array('terrarium_id' => intval($this->getId())));
+          if (is_object($listener)) {
+              $listener->remove();
+          }
+
+          $listener = listener::byClassAndFunction('terrarium', 'onConsommation', array('terrarium_id' => intval($this->getId())));
           if (is_object($listener)) {
               $listener->remove();
           }
@@ -854,6 +939,12 @@
           $obj = $this->getCmd(null, 'status');
           $replace["#statut#"] = $obj->execCmd();
           $replace["#idStatut#"] = $obj->getId();
+
+          $obj = $this->getCmd(null, 'statut_jour');
+          $replace["#idStatutJour#"] = $obj->getId();
+
+          $obj = $this->getCmd(null, 'statut_nuit');
+          $replace["#idStatutNuit#"] = $obj->getId();
 
           $obj = $this->getCmd(null, 'mode');
           $replace["#mode#"] = $obj->execCmd();
@@ -941,6 +1032,12 @@
               $etatVerrouConsignes->event(1);
           } elseif ($this->getLogicalId() == 'off_verrou_consignes') {
               $etatVerrouConsignes->event(0);
+          }
+
+          if ($this->getLogicalId() == 'statut_jour') {
+              $eqLogic->jour();
+          } elseif ($this->getLogicalId() == 'statut_nuit') {
+              $eqLogic->nuit();
           }
 
           if ($this->getLogicalId() == 'thermostat') {
