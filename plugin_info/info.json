@@ -1,10 +1,10 @@
 {
 	"id" : "terrarium",
 	"name" : "Terrarium",
-	"description" : "Ce plugin permet de gérer un terrarium ( éclairage, chauffage et suivi de consommation )",
+	"description" : "Ce plugin permet de gérer un terrarium ( éclairage, chauffage, humidité et suivi de consommation )",
 	"licence" : "AGPL",
 	"author" : "PhilippeJ",
-	"require" : "3.2",
+	"require" : "4.0",
 	"category" : "wellness",
 	"hasDependency" : false,
 	"hasOwnDeamon" : false,
