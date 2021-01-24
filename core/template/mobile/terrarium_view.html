@@ -8,25 +8,40 @@
     <img class="classTerrariumStatutJour#uid#" src="plugins/terrarium/resources/jour.svg">
     <img class="classTerrariumStatutNuit#uid#" src="plugins/terrarium/resources/nuit.svg">
 
-    <img class="classTerrariumLockCsg#uid#" src="plugins/terrarium/resources/lock.svg">
-    <img class="classTerrariumUnlockCsg#uid#" src="plugins/terrarium/resources/unlock.svg">
-
     <img class="classTerrariumMode#uid#" src="plugins/terrarium/resources/flamme.svg">
 
-    <div class="classTerrariumTemperature#uid# history cursor" data-cmd_id="#idTemperature#">
-      <span id="idTerrariumTemperature#uid#"></span>
-    </div>
-
-    <div class="classTerrariumConsigne#uid#">
-      <img id="idTerrariumPlus#uid#" src="plugins/terrarium/resources/plus.svg">
-      <br />
-      <span id="idTerrariumConsigne#uid#"></span>
-      <br />
-      <img id="idTerrariumMoins#uid#" src="plugins/terrarium/resources/moins.svg">
-    </div>
+    <img class="classTerrariumModeHum#uid#" src="plugins/terrarium/resources/humidite.svg">
 
     <img class="classTerrariumLockEcl#uid#" src="plugins/terrarium/resources/lum_lock.svg">
     <img class="classTerrariumUnlockEcl#uid#" src="plugins/terrarium/resources/lum_unlock.svg">
+
+    <img class="classTerrariumLockCsg#uid#" src="plugins/terrarium/resources/lock.svg">
+    <img class="classTerrariumUnlockCsg#uid#" src="plugins/terrarium/resources/unlock.svg">
+
+    <div class="classFlex#uid#">
+      <div class="classTerrariumConsigne#uid#">
+        <img id="idTerrariumPlus#uid#" src="plugins/terrarium/resources/plus.svg">
+        <br />
+        <span id="idTerrariumConsigne#uid#"></span>
+        <br />
+        <img id="idTerrariumMoins#uid#" src="plugins/terrarium/resources/moins.svg">
+        <div class="classTerrariumTemperature#uid# history cursor" data-cmd_id="#idTemperature#">
+          <span id="idTerrariumTemperature#uid#"></span>
+        </div>
+      </div>
+
+      <div class="classTerrariumConsigneHum#uid#">
+        <img id="idTerrariumPlusHum#uid#" src="plugins/terrarium/resources/plus.svg">
+        <br />
+        <span id="idTerrariumConsigneHum#uid#"></span>
+        <br />
+        <img id="idTerrariumMoinsHum#uid#" src="plugins/terrarium/resources/moins.svg">
+        <div class="classTerrariumHumidite#uid# history cursor" data-cmd_id="#idHumidite#">
+          <span id="idTerrariumHumidite#uid#"></span>
+        </div>
+      </div>
+
+    </div>
 
     <img class="classTerrariumHisto#uid#" src="plugins/terrarium/resources/histo.svg">
 
@@ -76,8 +91,8 @@
 
   .classTerrariumStatutJour#uid# {
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     top: 5px;
     left: 5px;
     filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
@@ -89,8 +104,8 @@
 
   .classTerrariumStatutNuit#uid# {
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     top: 5px;
     left: 5px;
     filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
@@ -102,29 +117,49 @@
 
   .classTerrariumMode#uid# {
     position: absolute;
-    width: 30px;
-    height: 30px;
-    left: 5px;
-    bottom: 5px;
+    width: 25px;
+    height: 25px;
+    left: 40px;
+    top: 5px;
+    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
+  }
+
+  .classTerrariumModeHum#uid# {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    left: 75px;
+    top: 5px;
     filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
   }
 
   .classTerrariumTemperature#uid# {
     position: absolute;
-    width: 50%;
-    height: 30px;
-    top: 0px;
-    right: 0px;
-    text-align: right;
-    font-size: 30px;
-    color: #c0c0c0
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    font-size: 20px;
+    bottom: 0px;
+    padding-top: 5px;
+    color: cyan;
+  }
+
+  .classTerrariumHumidite#uid# {
+    position: absolute;
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    font-size: 20px;
+    bottom: 0px;
+    padding-top: 5px;
+    color: cyan;
   }
 
   .classTerrariumLockCsg#uid# {
     position: absolute;
-    width: 30px;
-    height: 30px;
-    top: 35px;
+    width: 25px;
+    height: 25px;
+    top: 5px;
     right: 5px;
     filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
   }
@@ -135,9 +170,9 @@
 
   .classTerrariumUnlockCsg#uid# {
     position: absolute;
-    width: 30px;
-    height: 30px;
-    top: 35px;
+    width: 25px;
+    height: 25px;
+    top: 5px;
     right: 5px;
     filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
   }
@@ -148,8 +183,9 @@
 
   .classTerrariumConsigne#uid# {
     position: relative;
-    width: 100%;
-    height: 140px;
+    width: 50%;
+    height: 160px;
+    left: 0px;
     top: 60px;
   }
 
@@ -161,18 +197,19 @@
     left: 0px;
     right: 0px;
     margin: auto;
-    filter: invert(99%) sepia(0%) saturate(241%) hue-rotate(184deg) brightness(80%) contrast(87%);  }
+    filter: invert(99%) sepia(0%) saturate(241%) hue-rotate(184deg) brightness(80%) contrast(87%);
+  }
 
-  #idTerrariumMoins#uid#:hover {
+  #idTerrariumPlus#uid#:hover {
     filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
   }
 
   #idTerrariumConsigne#uid# {
     position: absolute;
     width: 100%;
-    height: 60px;
+    height: 30px;
     text-align: center;
-    font-size: 40px;
+    font-size: 30px;
     top: 0px;
     bottom: 0px;
     margin: auto;
@@ -186,18 +223,122 @@
     left: 0px;
     right: 0px;
     margin: auto;
-    filter: invert(99%) sepia(0%) saturate(241%) hue-rotate(184deg) brightness(80%) contrast(87%);  }
+    filter: invert(99%) sepia(0%) saturate(241%) hue-rotate(184deg) brightness(80%) contrast(87%);
+  }
+
+  #idTerrariumMoins#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
+  .classFlex#uid# {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .classTerrariumConsigne#uid# {
+    position: relative;
+    width: 50%;
+    height: 140px;
+    left: 0px;
+    top: 60px;
+  }
+
+  #idTerrariumPlus#uid# {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    filter: invert(99%) sepia(0%) saturate(241%) hue-rotate(184deg) brightness(80%) contrast(87%);
+  }
 
   #idTerrariumPlus#uid#:hover {
     filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
   }
 
+  #idTerrariumConsigne#uid# {
+    position: absolute;
+    width: 100%;
+    height: 30px;
+    text-align: center;
+    font-size: 30px;
+    top: 0px;
+    bottom: 0px;
+    margin: auto;
+  }
+
+  #idTerrariumMoins#uid# {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    filter: invert(99%) sepia(0%) saturate(241%) hue-rotate(184deg) brightness(80%) contrast(87%);
+  }
+
+  #idTerrariumMoins#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
+  .classTerrariumConsigneHum#uid# {
+    position: relative;
+    width: 50%;
+    height: 140px;
+    right: 0px;
+    top: 60px;
+  }
+
+  #idTerrariumPlusHum#uid# {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    filter: invert(99%) sepia(0%) saturate(241%) hue-rotate(184deg) brightness(80%) contrast(87%);
+  }
+
+  #idTerrariumPlusHum#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
+  #idTerrariumConsigneHum#uid# {
+    position: absolute;
+    width: 100%;
+    height: 30px;
+    text-align: center;
+    font-size: 30px;
+    top: 0px;
+    bottom: 0px;
+    margin: auto;
+  }
+
+  #idTerrariumMoinsHum#uid# {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    filter: invert(99%) sepia(0%) saturate(241%) hue-rotate(184deg) brightness(80%) contrast(87%);
+  }
+
+  #idTerrariumMoinsHum#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
   .classTerrariumLockEcl#uid# {
     position: absolute;
-    width: 30px;
-    height: 30px;
-    bottom: 5px;
-    left: 50px;
+    width: 25px;
+    height: 25px;
+    top: 5px;
+    right: 40px;
     filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
   }
 
@@ -207,10 +348,10 @@
 
   .classTerrariumUnlockEcl#uid# {
     position: absolute;
-    width: 30px;
-    height: 30px;
-    bottom: 5px;
-    left: 50px;
+    width: 25px;
+    height: 25px;
+    top: 5px;
+    right: 40px;
     filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
   }
 
@@ -220,8 +361,8 @@
 
   .classTerrariumHisto#uid# {
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     right: 5px;
     bottom: 5px;
     filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
@@ -337,9 +478,9 @@
 
   .classTerrariumPrecedent#uid# {
     position: absolute;
-    width: 30px;
-    height: 30px;
-    left: 5px;
+    width: 25px;
+    height: 25px;
+    right: 5px;
     bottom: 5px;
     filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
   }
@@ -390,14 +531,20 @@
           case "#idTemperature#":
             jeedom.cmd.update['#idTemperature#']({ display_value: this.value });
             break;
+          case "#idHumidite#":
+            jeedom.cmd.update['#idHumidite#']({ display_value: this.value });
+            break;
           case "#idConsigne#":
             jeedom.cmd.update['#idConsigne#']({ display_value: this.value });
             break;
           case "#idStatut#":
             jeedom.cmd.update['#idStatut#']({ display_value: this.value });
             break;
-          case "#idMode#":
+            case "#idMode#":
             jeedom.cmd.update['#idMode#']({ display_value: this.value });
+            break;
+            case "#idMode_hum#":
+            jeedom.cmd.update['#idMode_hum#']({ display_value: this.value });
             break;
           case "#idEtatVerrouEclairage#":
             jeedom.cmd.update['#idEtatVerrouEclairage#']({ display_value: this.value });
@@ -438,10 +585,20 @@
     }
     jeedom.cmd.update['#idTemperature#']({ display_value: '#temperature#' });
 
+    jeedom.cmd.update['#idHumidite#'] = function (_options) {
+      $('#idTerrariumHumidite#uid#').html(Math.round(_options.display_value * 10) / 10 + '%');
+    }
+    jeedom.cmd.update['#idHumidite#']({ display_value: '#humidite#' });
+
     jeedom.cmd.update['#idConsigne#'] = function (_options) {
       $('#idTerrariumConsigne#uid#').html(Math.round(_options.display_value * 10) / 10 + '°');
     }
     jeedom.cmd.update['#idConsigne#']({ display_value: '#consigne#' });
+
+    jeedom.cmd.update['#idConsigne_hum#'] = function (_options) {
+      $('#idTerrariumConsigneHum#uid#').html(Math.round(_options.display_value * 10) / 10 + '%');
+    }
+    jeedom.cmd.update['#idConsigne_hum#']({ display_value: '#consigne_hum#' });
 
     jeedom.cmd.update['#idMode#'] = function (_options) {
       if (_options.display_value == "Chauffe") {
@@ -452,6 +609,16 @@
       }
     }
     jeedom.cmd.update['#idMode#']({ display_value: '#mode#' });
+
+    jeedom.cmd.update['#idMode_hum#'] = function (_options) {
+      if (_options.display_value == "Humidifie") {
+        $('.classTerrariumModeHum#uid#').show();
+      }
+      else {
+        $('.classTerrariumModeHum#uid#').hide();
+      }
+    }
+    jeedom.cmd.update['#idMode_hum#']({ display_value: '#mode_hum#' });
 
     $('#idTerrariumMoins#uid#').on('click', function () {
       var min = ('#minValue#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne#');
@@ -485,6 +652,42 @@
         jeedom.cmd.execute({
           id: '#idThermostat#', value:
             { slider: $('#idTerrariumConsigne#uid#').html().replace("°", "").replace(" ", "") }
+        });
+      }
+    });
+
+    $('#idTerrariumMoinsHum#uid#').on('click', function () {
+      var min = ('#minConsigne_hum#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne_hum#');
+      var stepConsigne = (isNaN(parseFloat('#stepConsigne_hum#'))) ? 1 : parseFloat('#stepConsigne_hum#');
+      if (parseFloat($('#idTerrariumConsigneHum#uid#').html()) >= min + stepConsigne) {
+        jeedom.cmd.update['#idConsigne_hum#']({ display_value: parseFloat($('#idTerrariumConsigneHum#uid#').html()) - stepConsigne });
+        jeedom.cmd.execute({
+          id: '#idThermostat_hum#', value:
+            { slider: $('#idTerrariumConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
+        });
+      } else if (parseFloat($('#idTerrariumConsigneHum#uid#').html()) > min) {
+        jeedom.cmd.update['#idConsigne_hum#']({ display_value: min });
+        jeedom.cmd.execute({
+          id: '#idThermostat_hum#', value:
+            { slider: $('#idTerrariumConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
+        });
+      }
+    });
+
+    $('#idTerrariumPlusHum#uid#').on('click', function () {
+      var max = ('#maxConsigne_hum#' == '') ? Number.MAX_VALUE : parseFloat('#maxConsigne_hum#');
+      var stepConsigne = (isNaN(parseFloat('#stepConsigne_hum#'))) ? 0.5 : parseFloat('#stepConsigne_hum#');
+      if (parseFloat($('#idTerrariumConsigneHum#uid#').html()) <= max - stepConsigne) {
+        jeedom.cmd.update['#idConsigne_hum#']({ display_value: parseFloat($('#idTerrariumConsigneHum#uid#').html()) + stepConsigne });
+        jeedom.cmd.execute({
+          id: '#idThermostat_hum#', value:
+            { slider: $('#idTerrariumConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
+        });
+      } else if (parseFloat($('#idTerrariumConsigneHum#uid#').html()) < max) {
+        jeedom.cmd.update['#idConsigne_hum#']({ display_value: max });
+        jeedom.cmd.execute({
+          id: '#idThermostat_hum#', value:
+            { slider: $('#idTerrariumConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
         });
       }
     });
@@ -591,7 +794,7 @@
     });
     $('.classTerrariumContenu#uid#').show();
     $('.classConsosValeurs#uid#').hide();
- 
+
   }
 
 </script>

@@ -21,6 +21,8 @@ $("#div_csg_jour").sortable({ axis: "y", cursor: "move", items: ".csg_jour", pla
 $("#div_csg_nuit").sortable({ axis: "y", cursor: "move", items: ".csg_nuit", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
 $("#div_chf_oui").sortable({ axis: "y", cursor: "move", items: ".chf_oui", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
 $("#div_chf_non").sortable({ axis: "y", cursor: "move", items: ".chf_non", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
+$("#div_hum_oui").sortable({ axis: "y", cursor: "move", items: ".hum_oui", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
+$("#div_hum_non").sortable({ axis: "y", cursor: "move", items: ".hum_non", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
 
 $("#table_cmd").sortable({ axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
 /*
@@ -128,6 +130,8 @@ function saveEqLogic(_eqLogic) {
     _eqLogic.configuration.csg_nuit_conf = $('#div_csg_nuit .csg_nuit').getValues('.expressionAttr');
     _eqLogic.configuration.chf_oui_conf = $('#div_chf_oui .chf_oui').getValues('.expressionAttr');
     _eqLogic.configuration.chf_non_conf = $('#div_chf_non .chf_non').getValues('.expressionAttr');
+    _eqLogic.configuration.hum_oui_conf = $('#div_hum_oui .hum_oui').getValues('.expressionAttr');
+    _eqLogic.configuration.hum_non_conf = $('#div_hum_non .hum_non').getValues('.expressionAttr');
     return _eqLogic;
 }
 
@@ -138,6 +142,8 @@ function printEqLogic(_eqLogic) {
     $('#div_csg_nuit').empty();
     $('#div_chf_oui').empty();
     $('#div_chf_non').empty();
+    $('#div_hum_oui').empty();
+    $('#div_hum_non').empty();
     if (isset(_eqLogic.configuration)) {
         if (isset(_eqLogic.configuration.ecl_jour_conf)) {
             for (var i in _eqLogic.configuration.ecl_jour_conf) {
@@ -167,6 +173,16 @@ function printEqLogic(_eqLogic) {
         if (isset(_eqLogic.configuration.chf_non_conf)) {
             for (var i in _eqLogic.configuration.chf_non_conf) {
                 addAction(_eqLogic.configuration.chf_non_conf[i], 'chf_non');
+            }
+        }
+        if (isset(_eqLogic.configuration.hum_oui_conf)) {
+            for (var i in _eqLogic.configuration.hum_oui_conf) {
+                addAction(_eqLogic.configuration.hum_oui_conf[i], 'hum_oui');
+            }
+        }
+        if (isset(_eqLogic.configuration.hum_non_conf)) {
+            for (var i in _eqLogic.configuration.hum_non_conf) {
+                addAction(_eqLogic.configuration.hum_non_conf[i], 'hum_non');
             }
         }
     }

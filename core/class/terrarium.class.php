@@ -52,6 +52,7 @@
                   }
 
                   $terrarium->temperature();
+                  $terrarium->humidite();
                   $terrarium->save();
               }
 
@@ -115,6 +116,26 @@
                           $terrarium->actionsPasDeChauffage();
                           break;
                       }
+                      }
+                  } catch (Exception $e) {
+                      log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
+                  }
+              }
+
+              // Est-il temps de répéter les actions d'humidité ?
+              //
+              if ($terrarium->getConfiguration('cron_repetition_humidite') != '') {
+                  try {
+                      $c = new Cron\CronExpression(checkAndFixCron($terrarium->getConfiguration('cron_repetition_humidite')), new Cron\FieldFactory);
+                      if ($c->isDue()) {
+                          switch ($terrarium->getCmd(null, 'mode_hum')->execCmd()) {
+                        case __('Humidifie', __FILE__):
+                        $terrarium->actionsHumidite();
+                        break;
+                        case __('Stoppé', __FILE__):
+                        $terrarium->actionsPasHumidite();
+                        break;
+                    }
                       }
                   } catch (Exception $e) {
                       log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
@@ -290,11 +311,11 @@
                   $deltaBaisseMinute = (($oldTemperature - $temperature) * 60) / ($now - $oldNow);
                   $nombreBaisses = $this->getCache('nombreBaisses', 0) + 1;
                   $totalBaisses = $this->getCache('totalBaisses', 0) + $deltaBaisseMinute;
-                  if ($nombreBaisses > 100) {                    
-                    log::add('terrarium', 'debug', 'Moyenne Baisse : ' . $totalBaisses/$nombreBaisses);
-                    $this->setCache('moyenneBaisse', $totalBaisses/$nombreBaisses);
-                    $nombreBaisses = 0;
-                    $totalBaisses = 0;
+                  if ($nombreBaisses > 100) {
+                      log::add('terrarium', 'debug', 'Moyenne Baisse : ' . $totalBaisses/$nombreBaisses);
+                      $this->setCache('moyenneBaisse', $totalBaisses/$nombreBaisses);
+                      $nombreBaisses = 0;
+                      $totalBaisses = 0;
                   }
                   $this->setCache('nombreBaisses', $nombreBaisses);
                   $this->setCache('totalBaisses', $totalBaisses);
@@ -303,10 +324,10 @@
                   $nombreHausses = $this->getCache('nombreHausses', 0) + 1;
                   $totalHausses = $this->getCache('totalHausses', 0) + $deltaHausseMinute;
                   if ($nombreHausses > 100) {
-                    log::add('terrarium', 'debug', 'Moyenne Hausse : ' . $totalHausses/$nombreHausses);
-                    $this->setCache('moyenneHausse', $totalHausses/$nombreHausses);
-                    $nombreHausses = 0;
-                    $totalHausses = 0;
+                      log::add('terrarium', 'debug', 'Moyenne Hausse : ' . $totalHausses/$nombreHausses);
+                      $this->setCache('moyenneHausse', $totalHausses/$nombreHausses);
+                      $nombreHausses = 0;
+                      $totalHausses = 0;
                   }
                   $this->setCache('nombreHausses', $nombreHausses);
                   $this->setCache('totalHausses', $totalHausses);
@@ -359,11 +380,115 @@
           $this->actionsPasDeChauffage();
       }
 
-      // Actions chauffage nuit
+      // On n'exécute les actions on ne chauffe plus
       //
       public function actionsPasDeChauffage()
       {
           foreach ($this->getConfiguration('chf_non_conf') as $action) {
+              try {
+                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                  if (!is_object($cmd)) {
+                      continue;
+                  }
+                  $options = array();
+                  if (isset($action['options'])) {
+                      $options = $action['options'];
+                  }
+                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
+              } catch (Exception $e) {
+                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
+              }
+          }
+      }
+
+      // Sur événement changement de l'humidité du terrarium
+      //
+      public static function onHumidite($_options)
+      {
+          $terrarium = terrarium::byId($_options['terrarium_id']);
+          if (!is_object($terrarium)) {
+              return;
+          }
+          // Gestion de la température
+          //
+          $terrarium->humidite();
+      }
+        
+      // Gestion de l'humidité
+      //
+      public function humidite()
+      {
+          // Mémo de l'humidité du terrarium
+          //
+          $this->getCmd(null, 'humidite')->event(jeedom::evaluateExpression($this->getConfiguration('humidite_terrarium')));
+
+          $humidite = $this->getCmd(null, 'humidite')->execCmd();
+          if (!is_numeric($humidite)) {
+              return;
+          }
+
+          $consigne_hum = $this->getCmd(null, 'consigne_hum')->execCmd();
+          if (!is_numeric($consigne_hum)) {
+              return;
+          }
+        
+          log::add('terrarium', 'debug', 'onHumidite ' . $consigne_hum);
+
+          $consigne_hum_min = $consigne_hum - $this->getConfiguration('hysteresis_min_hum', 1);
+          $consigne_hum_max = $consigne_hum + $this->getConfiguration('hysteresis_max_hum', 1);
+ 
+          log::add('terrarium', 'debug', 'onHumidite Min ' . $consigne_hum_min);
+          log::add('terrarium', 'debug', 'onHumidite Max ' . $consigne_hum_max);
+
+          if ($humidite <= $consigne_hum_min) {
+              $this->humidifie();
+          } elseif ($humidite >= $consigne_hum_max) {
+              $this->pasHumidifie();
+          }
+      }
+
+      // On humidifie
+      //
+      public function humidifie()
+      {
+          $this->getCmd(null, 'mode_hum')->event(__('Humidifie', __FILE__));
+          $this->actionsHumidite();
+      }
+
+      // On exécute les actions humidité
+      //
+      public function actionsHumidite()
+      {
+          foreach ($this->getConfiguration('hum_oui_conf') as $action) {
+              try {
+                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                  if (!is_object($cmd)) {
+                      continue;
+                  }
+                  $options = array();
+                  if (isset($action['options'])) {
+                      $options = $action['options'];
+                  }
+                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
+              } catch (Exception $e) {
+                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
+              }
+          }
+      }
+
+      // On n'humidife plus
+      //
+      public function pasHumidifie()
+      {
+          $this->getCmd(null, 'mode_hum')->event(__('Stoppé', __FILE__));
+          $this->actionsPasHumidite();
+      }
+
+      // On exécute les actions pas humidité
+      //
+      public function actionsPasHumidite()
+      {
+          foreach ($this->getConfiguration('hum_non_conf') as $action) {
               try {
                   $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
                   if (!is_object($cmd)) {
@@ -519,22 +644,37 @@
       //
       public function preSave()
       {
-          if ($this->getConfiguration('consigne_min') === '') {
-              $this->setConfiguration('consigne_min', 20);
-          }
-          if ($this->getConfiguration('consigne_max') === '') {
-              $this->setConfiguration('consigne_max', 30);
-          }
-          if ($this->getConfiguration('consigne_min') > $this->getConfiguration('consigne_max')) {
-              throw new Exception(__('La température de consigne minimale ne peut être supérieure à la consigne maximale', __FILE__));
-          }
-          if ($this->getConfiguration('hysteresis_min') === '') {
-              $this->setConfiguration('hysteresis_min', 0.5);
-          }
-          if ($this->getConfiguration('hysteresis_max') === '') {
-              $this->setConfiguration('hysteresis_max', 1);
-          }
-      }
+        if ($this->getConfiguration('consigne_min') === '') {
+            $this->setConfiguration('consigne_min', 20);
+        }
+        if ($this->getConfiguration('consigne_max') === '') {
+            $this->setConfiguration('consigne_max', 30);
+        }
+        if ($this->getConfiguration('consigne_min') > $this->getConfiguration('consigne_max')) {
+            throw new Exception(__('La température de consigne minimale ne peut être supérieure à la consigne maximale', __FILE__));
+        }
+        if ($this->getConfiguration('consigne_hum_min') === '') {
+            $this->setConfiguration('consigne_hum_min', 0);
+        }
+        if ($this->getConfiguration('consigne_hum_max') === '') {
+            $this->setConfiguration('consigne_hum_max', 100);
+        }
+        if ($this->getConfiguration('consigne_hum_min') > $this->getConfiguration('consigne_hum_max')) {
+            throw new Exception(__('Humidité de consigne minimale ne peut être supérieure à la consigne maximale', __FILE__));
+        }
+        if ($this->getConfiguration('hysteresis_min') === '') {
+            $this->setConfiguration('hysteresis_min', 0.5);
+        }
+        if ($this->getConfiguration('hysteresis_max') === '') {
+            $this->setConfiguration('hysteresis_max', 1);
+        }
+        if ($this->getConfiguration('hysteresis_hum_min') === '') {
+            $this->setConfiguration('hysteresis_hum_min', 1);
+        }
+        if ($this->getConfiguration('hysteresis_hum_max') === '') {
+            $this->setConfiguration('hysteresis_hum_max', 1);
+        }
+  }
 
       // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
       //
@@ -699,10 +839,26 @@
           $mode->setOrder(10);
           $mode->save();
 
+          // Mode humidité
+          //
+          $mode_hum = $this->getCmd(null, 'mode_hum');
+          if (!is_object($mode_hum)) {
+              $mode_hum = new terrariumCmd();
+              $mode_hum->setIsVisible(1);
+              $mode_hum->setName(__('Mode Humidité', __FILE__));
+              $mode_hum->setIsVisible(1);
+              $mode_hum->setIsHistorized(0);
+          }
+          $mode_hum->setEqLogic_id($this->getId());
+          $mode_hum->setLogicalId('mode_hum');
+          $mode_hum->setType('info');
+          $mode_hum->setSubType('string');
+          $mode_hum->setOrder(11);
+          $mode_hum->save();
+
           $consigne = $this->getCmd(null, 'consigne');
           if (!is_object($consigne)) {
               $consigne = new terrariumCmd();
-              $consigne->setIsVisible(0);
               $consigne->setUnite('°C');
               $consigne->setName(__('Consigne', __FILE__));
               $consigne->setIsVisible(1);
@@ -714,7 +870,7 @@
           $consigne->setLogicalId('consigne');
           $consigne->setConfiguration('minValue', $this->getConfiguration('consigne_min'));
           $consigne->setConfiguration('maxValue', $this->getConfiguration('consigne_max'));
-          $consigne->setOrder(11);
+          $consigne->setOrder(12);
           $consigne->save();
   
           $thermostat = $this->getCmd(null, 'thermostat');
@@ -732,8 +888,43 @@
           $thermostat->setValue($consigne->getId());
           $thermostat->setConfiguration('minValue', $this->getConfiguration('consigne_min'));
           $thermostat->setConfiguration('maxValue', $this->getConfiguration('consigne_max'));
-          $thermostat->setOrder(12);
+          $thermostat->setOrder(13);
           $thermostat->save();
+
+          $consigne_hum = $this->getCmd(null, 'consigne_hum');
+          if (!is_object($consigne_hum)) {
+              $consigne_hum = new terrariumCmd();
+              $consigne_hum->setUnite('%');
+              $consigne_hum->setName(__('Consigne humidité', __FILE__));
+              $consigne_hum->setIsVisible(1);
+              $consigne_hum->setIsHistorized(0);
+          }
+          $consigne_hum->setEqLogic_id($this->getId());
+          $consigne_hum->setType('info');
+          $consigne_hum->setSubType('numeric');
+          $consigne_hum->setLogicalId('consigne_hum');
+          $consigne_hum->setConfiguration('minValue', $this->getConfiguration('consigne_hum_min'));
+          $consigne_hum->setConfiguration('maxValue', $this->getConfiguration('consigne_hum_max'));
+          $consigne_hum->setOrder(14);
+          $consigne_hum->save();
+  
+          $thermostat_hum = $this->getCmd(null, 'thermostat_hum');
+          if (!is_object($thermostat_hum)) {
+              $thermostat_hum = new terrariumCmd();
+              $thermostat_hum->setUnite('%');
+              $thermostat_hum->setName(__('Thermostat Humidité', __FILE__));
+              $thermostat_hum->setIsVisible(1);
+              $thermostat_hum->setIsHistorized(0);
+          }
+          $thermostat_hum->setEqLogic_id($this->getId());
+          $thermostat_hum->setType('action');
+          $thermostat_hum->setSubType('slider');
+          $thermostat_hum->setLogicalId('thermostat_hum');
+          $thermostat_hum->setValue($consigne_hum->getId());
+          $thermostat_hum->setConfiguration('minValue', $this->getConfiguration('consigne_hum_min'));
+          $thermostat_hum->setConfiguration('maxValue', $this->getConfiguration('consigne_hum_max'));
+          $thermostat_hum->setOrder(15);
+          $thermostat_hum->save();
 
           $temperature = $this->getCmd(null, 'temperature');
           if (!is_object($temperature)) {
@@ -747,8 +938,23 @@
           $temperature->setSubType('numeric');
           $temperature->setLogicalId('temperature');
           $temperature->setUnite('°C');
-          $temperature->setOrder(13);
+          $temperature->setOrder(16);
           $temperature->save();
+
+          $humidite = $this->getCmd(null, 'humidite');
+          if (!is_object($humidite)) {
+              $humidite = new terrariumCmd();
+              $humidite->setName(__('Humidité', __FILE__));
+              $humidite->setIsVisible(1);
+              $humidite->setIsHistorized(0);
+          }
+          $humidite->setEqLogic_id($this->getId());
+          $humidite->setType('info');
+          $humidite->setSubType('numeric');
+          $humidite->setLogicalId('humidité');
+          $humidite->setUnite('%');
+          $humidite->setOrder(17);
+          $humidite->save();
 
           $obj = $this->getCmd(null, 'consoJour');
           if (!is_object($obj)) {
@@ -759,7 +965,7 @@
           $obj->setLogicalId('consoJour');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(14);
+          $obj->setOrder(18);
           $obj->save();
 
           $obj = $this->getCmd(null, 'histoJour');
@@ -773,7 +979,7 @@
           $obj->setLogicalId('histoJour');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(15);
+          $obj->setOrder(19);
           $obj->save();
 
           $obj = $this->getCmd(null, 'consoSemaine');
@@ -785,7 +991,7 @@
           $obj->setLogicalId('consoSemaine');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(16);
+          $obj->setOrder(20);
           $obj->save();
 
           $obj = $this->getCmd(null, 'histoSemaine');
@@ -799,7 +1005,7 @@
           $obj->setLogicalId('histoSemaine');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(17);
+          $obj->setOrder(21);
           $obj->save();
 
           $obj = $this->getCmd(null, 'consoMois');
@@ -811,7 +1017,7 @@
           $obj->setLogicalId('consoMois');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(18);
+          $obj->setOrder(22);
           $obj->save();
 
           $obj = $this->getCmd(null, 'histoMois');
@@ -825,7 +1031,7 @@
           $obj->setLogicalId('histoMois');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(19);
+          $obj->setOrder(23);
           $obj->save();
 
           $obj = $this->getCmd(null, 'consoAnnee');
@@ -837,7 +1043,7 @@
           $obj->setLogicalId('consoAnnee');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(20);
+          $obj->setOrder(24);
           $obj->save();
 
           $obj = $this->getCmd(null, 'histoAnnee');
@@ -851,7 +1057,7 @@
           $obj->setLogicalId('histoAnnee');
           $obj->setType('info');
           $obj->setSubType('numeric');
-          $obj->setOrder(21);
+          $obj->setOrder(25);
           $obj->save();
 
           if ($this->getIsEnable() == 1) {
@@ -860,6 +1066,8 @@
               //
               //   La température du terrarium
               //   La consigne de température
+              //   L'humidité du terrarium
+              //   La consigne d'humidité
               //
               $listener = listener::byClassAndFunction('terrarium', 'onTemperature', array('terrarium_id' => intval($this->getId())));
               if (!is_object($listener)) {
@@ -872,6 +1080,19 @@
               $cmd_id = $this->getConfiguration('temperature_terrarium');
               $listener->addEvent($cmd_id);
               $listener->addEvent($consigne->getId());
+              $listener->save();
+
+              $listener = listener::byClassAndFunction('terrarium', 'onHumidite', array('terrarium_id' => intval($this->getId())));
+              if (!is_object($listener)) {
+                  $listener = new listener();
+              }
+              $listener->setClass('terrarium');
+              $listener->setFunction('onHumidite');
+              $listener->setOption(array('terrarium_id' => intval($this->getId())));
+              $listener->emptyEvent();
+              $cmd_id = $this->getConfiguration('humidite_terrarium');
+              $listener->addEvent($cmd_id);
+              $listener->addEvent($consigne_hum->getId());
               $listener->save();
 
               // On écoute les événements qui interviennent dans la consommation
@@ -896,6 +1117,11 @@
                   $listener->remove();
               }
 
+              $listener = listener::byClassAndFunction('terrarium', 'onHumidite', array('terrarium_id' => intval($this->getId())));
+              if (is_object($listener)) {
+                  $listener->remove();
+              }
+
               $listener = listener::byClassAndFunction('terrarium', 'onConsommation', array('terrarium_id' => intval($this->getId())));
               if (is_object($listener)) {
                   $listener->remove();
@@ -914,6 +1140,11 @@
               $listener->remove();
           }
 
+          $listener = listener::byClassAndFunction('terrarium', 'onHumidite', array('terrarium_id' => intval($this->getId())));
+          if (is_object($listener)) {
+              $listener->remove();
+          }
+
           $listener = listener::byClassAndFunction('terrarium', 'onConsommation', array('terrarium_id' => intval($this->getId())));
           if (is_object($listener)) {
               $listener->remove();
@@ -925,9 +1156,9 @@
       public function postRemove()
       {
       }
+
       // Permet de modifier l'affichage du widget (également utilisable par les commandes)
       //
-      
       public function toHtml($_version = 'dashboard')
       {
           $replace = $this->preToHtml($_version);
@@ -949,6 +1180,10 @@
           $obj = $this->getCmd(null, 'mode');
           $replace["#mode#"] = $obj->execCmd();
           $replace["#idMode#"] = $obj->getId();
+
+          $obj = $this->getCmd(null, 'mode_hum');
+          $replace["#mode_hum#"] = $obj->execCmd();
+          $replace["#idMode_hum#"] = $obj->getId();
 
           $obj = $this->getCmd(null, 'etat_verrou_eclairage');
           $replace["#etatVerrouEclairage#"] = $obj->execCmd();
@@ -981,8 +1216,22 @@
           $replace["#maxConsigne#"] = $obj->getConfiguration('maxValue');
           $replace["#stepConsigne#"] = 0.5;
 
+          $obj = $this->getCmd(null, 'humidite');
+          $replace["#humidite#"] = $obj->execCmd();
+          $replace["#idHumidite#"] = $obj->getId();
+
+          $obj = $this->getCmd(null, 'consigne_hum');
+          $replace["#consigne_hum#"] = $obj->execCmd();
+          $replace["#idConsigne_hum#"] = $obj->getId();
+          $replace["#minConsigne_hum#"] = $obj->getConfiguration('minValue');
+          $replace["#maxConsigne_hum#"] = $obj->getConfiguration('maxValue');
+          $replace["#stepConsigne_hum#"] = 1;
+
           $obj = $this->getCmd(null, 'thermostat');
           $replace["#idThermostat#"] = $obj->getId();
+
+          $obj = $this->getCmd(null, 'thermostat_hum');
+          $replace["#idThermostat_hum#"] = $obj->getId();
 
           $obj = $this->getCmd(null, 'consoJour');
           $replace["#consoJour#"] = round($obj->execCmd(), 2);
@@ -1045,6 +1294,12 @@
                   return;
               }
               $eqLogic->getCmd(null, 'consigne')->event($_options['slider']);
+          }
+          if ($this->getLogicalId() == 'thermostat_hum') {
+              if (!isset($_options['slider']) || $_options['slider'] == '' || !is_numeric(intval($_options['slider']))) {
+                  return;
+              }
+              $eqLogic->getCmd(null, 'consigne_hum')->event($_options['slider']);
           }
       }
   }

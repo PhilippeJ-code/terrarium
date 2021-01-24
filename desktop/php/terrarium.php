@@ -65,8 +65,10 @@
           {{Consignes}}</a></li>
       <li role="presentation"><a href="#eclairagetab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
           {{Eclairage}}</a></li>
-      <li role="presentation"><a href="#chauffagetab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
+          <li role="presentation"><a href="#chauffagetab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
           {{Chauffage}}</a></li>
+          <li role="presentation"><a href="#humiditetab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
+          {{Humidité}}</a></li>
       <li role="presentation"><a href="#consommationtab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
           {{Consommation}}</a></li>
       <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i
@@ -196,6 +198,22 @@
               <div class="col-sm-2">
                 <input type="text" class="eqLogicAttr form-control tooltips" data-l1key="configuration"
                   data-l2key="consigne_max" placeholder="30" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label">{{Consigne humidité min (%)}}</label>
+              <div class="col-sm-2">
+                <input type="text" class="eqLogicAttr form-control tooltips" data-l1key="configuration"
+                  data-l2key="consigne_hum_min" placeholder="0" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label">{{Consigne humidité max (%)}}</label>
+              <div class="col-sm-2">
+                <input type="text" class="eqLogicAttr form-control tooltips" data-l1key="configuration"
+                  data-l2key="consigne_hum_max" placeholder="100" />
               </div>
             </div>
 
@@ -374,6 +392,98 @@
                       action}}</a>
                   </legend>
                   <div id="div_chf_non">
+
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+
+          </fieldset>
+        </form>
+      </div>
+
+      <!--
+
+        Onglet Humidité
+
+      -->
+      <div role="tabpanel" class="tab-pane" id="humiditetab">
+        <form class="form-horizontal">
+          <fieldset>
+            <br /><br />
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label">{{Humidité terrarium}}</label>
+              <div class="col-sm-4">
+                <div class="input-group">
+                  <input type="text" class="eqLogicAttr form-control tooltips roundedLeft" data-l1key="configuration"
+                    data-l2key="humidite_terrarium" data-concat="1" />
+                  <span class="input-group-btn">
+                    <a class="btn btn-default listCmdInfo roundedRight"><i class="fas fa-list-alt"></i></a>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label">{{Hystéresis min (%)}}</label>
+              <div class="col-sm-2">
+                <input type="text" class="eqLogicAttr form-control tooltips" data-l1key="configuration"
+                  data-l2key="hysteresis_min_hum" placeholder="1" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label">{{Hystéresis max (%)}}</label>
+              <div class="col-sm-2">
+                <input type="text" class="eqLogicAttr form-control tooltips" data-l1key="configuration"
+                  data-l2key="hysteresis_max_hum" placeholder="1" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label">{{Cron répétition}}
+                <sup><i class="fas fa-question-circle tooltips"
+                    title="{{Pour pallier à une erreur de transmission}}"></i></sup>
+              </label>
+              <div class="col-sm-2">
+                <div class="input-group">
+                  <input type="text" class="eqLogicAttr form-control" data-l1key="configuration"
+                    data-l2key="cron_repetition_humidite" />
+                  <span class="input-group-btn">
+                    <a class="btn btn-default btn-sm cursor jeeHelper" data-helper="cron"><i
+                        class="fas fa-question-circle"></i></a>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <form class="form-horizontal">
+              <fieldset>
+                <div>
+                  <legend>
+                    {{Actions démarrage humidité ?}}
+                    <a class="btn btn-primary btn-xs pull-right addAction" data-type="hum_oui"
+                      style="position: relative; top : 5px;"><i class="fas fa-plus-circle"></i> {{Ajouter une
+                      action}}</a>
+                  </legend>
+                  <div id="div_hum_oui">
+
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+
+            <form class="form-horizontal">
+              <fieldset>
+                <div>
+                  <legend>
+                    {{Actions arrêt humidité ?}}
+                    <a class="btn btn-primary btn-xs pull-right addAction" data-type="hum_non"
+                      style="position: relative; top : 5px;"><i class="fas fa-plus-circle"></i> {{Ajouter une
+                      action}}</a>
+                  </legend>
+                  <div id="div_hum_non">
 
                   </div>
                 </div>

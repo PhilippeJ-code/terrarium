@@ -41,7 +41,13 @@
 
 ![Chauffage](../images/Chauffage.png "Chauffage")
 
-## 6. Onglet "Consommation"
+## 6. Onglet "Humidité"
+
+    Cet onglet permet de choisir les actions qui seront effectuées lors du du démarrage ou de l'arrêt de la gestion de l'humidité. Pour effectuer le contrôle de l'humidité, nous avons besoin de l'humidité intérieure du terrarium, des hysteresis min/max et d'un cron de répétition pour répèter les actions périodiquement en cas de problème de transmission par exemple.
+
+![Humidite](../images/Humidite.png "Humidite")
+
+## 7. Onglet "Consommation"
 
     Si le chauffage du terrarium est commandé par un matériel qui remonte la consommation en KwH, on peut utiliser cette information pour historiser les consommations ( jour, semaine, mois et année ) du terrarium.
 
@@ -49,18 +55,21 @@
 
 ![Consommation](../images/Consommation.png "Consommation")
 
-## 7. Et le widget
+## 8. Et le widget
 
     Le plugin a son propre widget, en voici la première version
 
 ![Widget](../images/Widget.png "Widget")
 
     On peut voir un soleil en haut à droite pour le mode "Jour", une lune pour le mode "Nuit"
-    La température intérieure en haut à droite avec un cadenas qui empêche ou pas les changements de consigne par le plugin.
-    La consigne au centre avec possiblité de la modifier avec les flêches haut bas.
     Une flamme pour indiquer que la chauffe est active.
+    Un nuage pour indiquer que l'augmentation de l'humidité est active.
     Une ampoule barrée ou non qui empêche ou pas les changements de température par le plugin.
-    Et en bas à droite, une icone qui permet d'afficher les consommations instantanées.
+    Un cadenas qui empêche ou pas les changements de consigne par le plugin.
+
+    La température de consigne modifiable au moyen des flêches, avec en cyan la température mesurée.
+    Le taux d'humidité de consigne modifiable au moyen des flêches, avec en cyan le taux mesuré. 
+    Et en bas à droite, une icone qui permet d'afficher les consommations instantanées de chauffe.
 
 ![WidgetConsos](../images/WidgetConsos.png "WidgetConsos")
 
