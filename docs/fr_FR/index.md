@@ -7,7 +7,7 @@
 
 ## 1. Configuration du plugin
 
-    Rien de particulier dans la configuration ce de plugin, le cron est indispensable au bon
+    Rien de particulier dans la configuration ce plugin, le cron est indispensable au bon
     déroulement du plugin, merci de ne pas le désactiver.
 
 ## 2. Onglet "Horaire"
@@ -61,14 +61,18 @@
 
 ![Widget](../images/Widget.png "Widget")
 
-    On peut voir un soleil en haut à droite pour le mode "Jour", une lune pour le mode "Nuit"
-    Une flamme pour indiquer que la chauffe est active.
-    Un nuage pour indiquer que l'augmentation de l'humidité est active.
-    Une ampoule barrée ou non qui empêche ou pas les changements de température par le plugin.
+    On peut voir un soleil en haut à droite pour le mode "Jour", une lune pour le mode "Nuit".
+    Une ampoule barrée ou non qui empêche ou pas les changements d'éclairage par le plugin.
     Un cadenas qui empêche ou pas les changements de consigne par le plugin.
 
-    La température de consigne modifiable au moyen des flêches, avec en cyan la température mesurée.
-    Le taux d'humidité de consigne modifiable au moyen des flêches, avec en cyan le taux mesuré. 
+    Un pavé sous-titré "Chauffage" qui donne la consigne d'humidité, l'humidité actuelle,
+    une icone "flamme" pour indiquer que la chauffe est active.
+
+    Un pavé sous-titré "Humidité" qui donne la consigne de température, la température actuelle,
+    une icone "nuage" pour indiquer que l'humidification est active.
+    
+    Les consignes sont modifiables au moyen des flêches.
+
     Et en bas à droite, une icone qui permet d'afficher les consommations instantanées de chauffe.
 
 ![WidgetConsos](../images/WidgetConsos.png "WidgetConsos")

@@ -11,3 +11,7 @@
 # 24-01-2021
 
     Gestion de l'humidité du terrarium
+
+# 28-01-2021
+
+    Refonte du widget

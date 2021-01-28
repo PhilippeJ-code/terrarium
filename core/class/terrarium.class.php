@@ -432,14 +432,9 @@
               return;
           }
         
-          log::add('terrarium', 'debug', 'onHumidite ' . $consigne_hum);
-
           $consigne_hum_min = $consigne_hum - $this->getConfiguration('hysteresis_min_hum', 1);
           $consigne_hum_max = $consigne_hum + $this->getConfiguration('hysteresis_max_hum', 1);
  
-          log::add('terrarium', 'debug', 'onHumidite Min ' . $consigne_hum_min);
-          log::add('terrarium', 'debug', 'onHumidite Max ' . $consigne_hum_max);
-
           if ($humidite <= $consigne_hum_min) {
               $this->humidifie();
           } elseif ($humidite >= $consigne_hum_max) {

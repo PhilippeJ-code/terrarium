@@ -3,231 +3,100 @@
   data-translate-category="#translate_category#" data-category="#category#" data-tags="#tags#"
   style="width: #width#;height: #height#;#style#">
 
-  <div class="classTerrariumContenu#uid#">
-
-    <img class="classTerrariumStatutJour#uid#" src="plugins/terrarium/resources/jour.svg">
-    <img class="classTerrariumStatutNuit#uid#" src="plugins/terrarium/resources/nuit.svg">
-
-    <img class="classTerrariumMode#uid#" src="plugins/terrarium/resources/flamme.svg">
-
-    <img class="classTerrariumModeHum#uid#" src="plugins/terrarium/resources/humidite.svg">
-
-    <img class="classTerrariumLockEcl#uid#" src="plugins/terrarium/resources/lum_lock.svg">
-    <img class="classTerrariumUnlockEcl#uid#" src="plugins/terrarium/resources/lum_unlock.svg">
-
-    <img class="classTerrariumLockCsg#uid#" src="plugins/terrarium/resources/lock.svg">
-    <img class="classTerrariumUnlockCsg#uid#" src="plugins/terrarium/resources/unlock.svg">
+  <div class="classContenant#uid#" id="idResume#uid#">
 
     <div class="classFlex#uid#">
-      <div class="classTerrariumConsigne#uid#">
-        <img id="idTerrariumPlus#uid#" src="plugins/terrarium/resources/plus.svg">
-        <br />
-        <span id="idTerrariumConsigne#uid#"></span>
-        <br />
-        <img id="idTerrariumMoins#uid#" src="plugins/terrarium/resources/moins.svg">
-        <div class="classTerrariumTemperature#uid# history cursor" data-cmd_id="#idTemperature#">
-          <span id="idTerrariumTemperature#uid#"></span>
-        </div>
-      </div>
 
-      <div class="classTerrariumConsigneHum#uid#">
-        <img id="idTerrariumPlusHum#uid#" src="plugins/terrarium/resources/plus.svg">
-        <br />
-        <span id="idTerrariumConsigneHum#uid#"></span>
-        <br />
-        <img id="idTerrariumMoinsHum#uid#" src="plugins/terrarium/resources/moins.svg">
-        <div class="classTerrariumHumidite#uid# history cursor" data-cmd_id="#idHumidite#">
-          <span id="idTerrariumHumidite#uid#"></span>
-        </div>
+      <div class="classTuile#uid#">
+        <img class="classStatut#uid# cursor" id="idStatutJour#uid#" src="plugins/terrarium/resources/jour.svg">
+        <img class="classStatut#uid# cursor" id="idStatutNuit#uid#" src="plugins/terrarium/resources/nuit.svg">
+
+        <span id="idStatutActuel#uid#"></span></br>
+
+        <img class="classEcl#uid# cursor" id="idLockEcl#uid#" src="plugins/terrarium/resources/lum_lock.svg">
+        <img class="classEcl#uid# cursor" id="idUnlockEcl#uid#" src="plugins/terrarium/resources/lum_unlock.svg">
+
+        <img class="classCsg#uid# cursor" id="idLockCsg#uid#" src="plugins/terrarium/resources/lock.svg">
+        <img class="classCsg#uid# cursor" id="idUnlockCsg#uid#" src="plugins/terrarium/resources/unlock.svg">
       </div>
 
     </div>
 
-    <img class="classTerrariumHisto#uid#" src="plugins/terrarium/resources/histo.svg">
+    <div class="classFlex#uid#">
+
+      <div class="classDemiTuile#uid#">
+        <img class="classMode#uid#" id="idMode#uid#" src="plugins/terrarium/resources/flamme.svg">
+
+        <div class="classTemperature#uid#" data-cmd_id="#idTemperature#">
+          <span id="idTemperature#uid#"></span>
+        </div>
+
+        <div class="classConsigne#uid#">
+
+          <img id="idPlus#uid#" class="classFleches#uid#" src="plugins/terrarium/resources/plus.svg">
+          <span id="idConsigne#uid#" class="classValeurConsigne#uid#"></span>
+          <img id="idMoins#uid#" class="classFleches#uid#" src="plugins/terrarium/resources/moins.svg">
+
+        </div>
+
+        <span class="classLibelleTuile#uid#">Chauffage</span>
+
+      </div>
+
+      <div class="classDemiTuile#uid#">
+        <img class="classModeHum#uid#" id="idModeHum#uid#" src="plugins/terrarium/resources/humidite.svg">
+
+        <div class="classHumidite#uid#" data-cmd_id="#idHumidite#">
+          <span id="idHumidite#uid#"></span>
+        </div>
+
+        <div class="classConsigne#uid#">
+          <img id="idPlusHum#uid#" class="classFleches#uid# cursor" src="plugins/terrarium/resources/plus.svg">
+          <span id="idConsigneHum#uid#" class="classValeurConsigne#uid#"></span>
+          <img id="idMoinsHum#uid#" class="classFleches#uid# cursor" src="plugins/terrarium/resources/moins.svg">
+        </div>
+
+        <span class="classLibelleTuile#uid#">Humidité</span>
+
+      </div>
+
+    </div>
+
+    <img class="classHisto#uid#" src="plugins/terrarium/resources/histo.svg">
 
   </div>
 
-  <div class="classConsosValeurs#uid#">
-    <div id="idConsoJour#uid#" class="classConsosValeurJour#uid# history cursor" data-cmd_id="#idHistoJour#">
-    </div>
-    <div id="idConsoSemaine#uid#" class="classConsosValeurSemaine#uid# history cursor" data-cmd_id="#idHistoSemaine#">
-    </div>
-    <div id="idConsoMois#uid#" class="classConsosValeurMois#uid# history cursor" data-cmd_id="#idHistoMois#">
-    </div>
-    <div id="idConsoAnnee#uid#" class="classConsosValeurAnnee#uid# history cursor" data-cmd_id="#idHistoAnnee#">
-    </div>
-    <div class="classConsosKwH#uid#">
-      <span>KwH</span>
-    </div>
-    <div class="classConsosLabelJ#uid#">
-      <span>J</span>
-    </div>
-    <div class="classConsosLabelS#uid#">
-      <span>S</span>
-    </div>
-    <div class="classConsosLabelM#uid#">
-      <span>M</span>
-    </div>
-    <div class="classConsosLabelA#uid#">
-      <span>A</span>
-    </div>
+  <div class="classContenant#uid#" id="idConsommations#uid#">
 
-    <img class="classTerrariumPrecedent#uid#" src="plugins/terrarium/resources/previous.svg">
+    </br></br>
+    <span class="classTitre#uid#">Consommations (KwH)</span></br></br>
+
+    <span class="classSousTitre#uid#">Jour</span><span class="classValeur#uid# history cursor"
+      id="idConsoJour#uid#" data-cmd_id="#idHistoJour#"></span></br>
+
+    <span class="classSousTitre#uid#">Semaine</span><span class="classValeur#uid# history cursor"
+      id="idConsoSemaine#uid#" data-cmd_id="#idHistoSemaine#"></span></br>
+
+    <span class="classSousTitre#uid#">Mois</span><span class="classValeur#uid# history cursor"
+      id="idConsoMois#uid#" data-cmd_id="#idHistoMois#"></span></br>
+
+    <span class="classSousTitre#uid#">Année</span><span class="classValeur#uid# history cursor"
+      id="idConsoAnnee#uid#" data-cmd_id="#idHistoAnnee#"></span>
+
+    <img class="classPrecedent#uid# cursor" src="plugins/terrarium/resources/previous.svg">
 
   </div>
 
 </div>
 
 <style>
-  .classTerrariumContenu#uid# {
+  .classContenant#uid# {
     width: 100%;
     height: 100%;
-    position: relative;
-    background-color: #27313A;
+    background-color: #ffffff;
     border: 1px solid #000000;
     border-radius: 8px;
-    color: #ffffff;
-  }
-
-  .classTerrariumStatutJour#uid# {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    top: 5px;
-    left: 5px;
-    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
-  }
-
-  .classTerrariumStatutJour#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
-
-  .classTerrariumStatutNuit#uid# {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    top: 5px;
-    left: 5px;
-    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
-  }
-
-  .classTerrariumStatutNuit#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
-
-  .classTerrariumMode#uid# {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    left: 40px;
-    top: 5px;
-    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
-  }
-
-  .classTerrariumModeHum#uid# {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    left: 75px;
-    top: 5px;
-    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
-  }
-
-  .classTerrariumTemperature#uid# {
-    position: absolute;
-    width: 100%;
-    height: 20px;
-    text-align: center;
-    font-size: 20px;
-    bottom: 0px;
-    padding-top: 5px;
-    color: cyan;
-  }
-
-  .classTerrariumHumidite#uid# {
-    position: absolute;
-    width: 100%;
-    height: 20px;
-    text-align: center;
-    font-size: 20px;
-    bottom: 0px;
-    padding-top: 5px;
-    color: cyan;
-  }
-
-  .classTerrariumLockCsg#uid# {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    top: 5px;
-    right: 5px;
-    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
-  }
-
-  .classTerrariumLockCsg#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
-
-  .classTerrariumUnlockCsg#uid# {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    top: 5px;
-    right: 5px;
-    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
-  }
-
-  .classTerrariumUnlockCsg#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
-
-  .classTerrariumConsigne#uid# {
-    position: relative;
-    width: 50%;
-    height: 160px;
-    left: 0px;
-    top: 60px;
-  }
-
-  #idTerrariumPlus#uid# {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    margin: auto;
-    filter: invert(99%) sepia(0%) saturate(241%) hue-rotate(184deg) brightness(80%) contrast(87%);
-  }
-
-  #idTerrariumPlus#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
-
-  #idTerrariumConsigne#uid# {
-    position: absolute;
-    width: 100%;
-    height: 30px;
-    text-align: center;
-    font-size: 30px;
-    top: 0px;
-    bottom: 0px;
-    margin: auto;
-  }
-
-  #idTerrariumMoins#uid# {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    margin: auto;
-    filter: invert(99%) sepia(0%) saturate(241%) hue-rotate(184deg) brightness(80%) contrast(87%);
-  }
-
-  #idTerrariumMoins#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+    color: #000000;
   }
 
   .classFlex#uid# {
@@ -235,259 +104,206 @@
     justify-content: space-around;
   }
 
-  .classTerrariumConsigne#uid# {
+  .classTuile#uid# {
+    width: 96%;
+    height: 40px;
     position: relative;
-    width: 50%;
-    height: 140px;
-    left: 0px;
-    top: 60px;
-  }
-
-  #idTerrariumPlus#uid# {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    margin: auto;
-    filter: invert(99%) sepia(0%) saturate(241%) hue-rotate(184deg) brightness(80%) contrast(87%);
-  }
-
-  #idTerrariumPlus#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
-
-  #idTerrariumConsigne#uid# {
-    position: absolute;
-    width: 100%;
-    height: 30px;
-    text-align: center;
-    font-size: 30px;
-    top: 0px;
-    bottom: 0px;
-    margin: auto;
-  }
-
-  #idTerrariumMoins#uid# {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    margin: auto;
-    filter: invert(99%) sepia(0%) saturate(241%) hue-rotate(184deg) brightness(80%) contrast(87%);
-  }
-
-  #idTerrariumMoins#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
-
-  .classTerrariumConsigneHum#uid# {
-    position: relative;
-    width: 50%;
-    height: 140px;
-    right: 0px;
-    top: 60px;
-  }
-
-  #idTerrariumPlusHum#uid# {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    margin: auto;
-    filter: invert(99%) sepia(0%) saturate(241%) hue-rotate(184deg) brightness(80%) contrast(87%);
-  }
-
-  #idTerrariumPlusHum#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
-
-  #idTerrariumConsigneHum#uid# {
-    position: absolute;
-    width: 100%;
-    height: 30px;
-    text-align: center;
-    font-size: 30px;
-    top: 0px;
-    bottom: 0px;
-    margin: auto;
-  }
-
-  #idTerrariumMoinsHum#uid# {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    margin: auto;
-    filter: invert(99%) sepia(0%) saturate(241%) hue-rotate(184deg) brightness(80%) contrast(87%);
-  }
-
-  #idTerrariumMoinsHum#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
-
-  .classTerrariumLockEcl#uid# {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    top: 5px;
-    right: 40px;
-    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
-  }
-
-  .classTerrariumLockEcl#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
-
-  .classTerrariumUnlockEcl#uid# {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    top: 5px;
-    right: 40px;
-    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
-  }
-
-  .classTerrariumUnlockEcl#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
-
-  .classTerrariumHisto#uid# {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    right: 5px;
-    bottom: 5px;
-    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
-  }
-
-  .classTerrariumHisto#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
-
-  .classConsosValeurs#uid# {
-    width: 100%;
-    height: 100%;
-    top: 0px;
-    position: relative;
-    background-color: #27313A;
-    border: 1px solid #000000;
+    margin-top: 8px;
+    background-color: #FFFFFF;
+    border: 1px solid #808080;
     border-radius: 8px;
-    right: 0px;
-    left: 0px;
-    margin: auto;
-    font-size: 22px;
-    color: #ffffff;
+    color: #000000;
   }
 
-  .classConsosValeurJour#uid# {
+  .classDemiTuile#uid# {
+    width: 46%;
+    height: 150px;
+    margin-top: 8px;
+    position: relative;
+    background-color: #FFFFFF;
+    border: 1px solid #808080;
+    border-radius: 8px;
+    color: #000000;
+  }
+
+  .classLibelleTuile#uid# {
     position: absolute;
-    left: 10px;
-    top: 10px;
-  }
-
-  .classConsosValeurSemaine#uid# {
-    position: absolute;
-    left: 10px;
-    top: 60px;
-  }
-
-  .classConsosValeurMois#uid# {
-    position: absolute;
-    left: 10px;
-    top: 110px;
-  }
-
-  .classConsosValeurAnnee#uid# {
-    position: absolute;
-    left: 10px;
-    top: 160px;
-  }
-
-  .classConsosKwH#uid# {
-    position: absolute;
-    top: 200px;
-    right: 10px;
-  }
-
-  .classConsosLabelJ#uid# {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-weight: normal;
-    font-size: 18px;
-  }
-
-  .classConsosLabelS#uid# {
-    position: absolute;
-    top: 60px;
-    right: 10px;
-    font-weight: normal;
-    font-size: 18px;
-  }
-
-  .classConsosLabelM#uid# {
-    position: absolute;
-    top: 110px;
-    right: 10px;
-    font-weight: normal;
-    font-size: 18px;
-  }
-
-  .classConsosLabelA#uid# {
-    position: absolute;
-    top: 160px;
-    right: 10px;
-    font-weight: normal;
-    font-size: 18px;
-  }
-
-  .classConsosChiffre#uid# {
-    background-color: #000000;
-    border: 1px solid #7F7F7F;
-    border-radius: 3px;
-    margin-left: 3px;
-    padding-left: 3px;
-    padding-right: 3px;
-  }
-
-  .classConsosDecimale#uid# {
-    background-color: #FA4628;
-    border: 1px solid #7F7F7F;
-    border-radius: 3px;
-    margin-left: 6px;
-    padding-left: 3px;
-    padding-right: 3px;
-  }
-
-  .classConsosLabel#uid# {
-    background-color: #000000;
-    border: 1px solid #7F7F7F;
-    border-radius: 3px;
-    margin-left: 20px;
-    padding-left: 3px;
-    padding-right: 3px;
-  }
-
-  .classTerrariumPrecedent#uid# {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    right: 5px;
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    color: #808080;
     bottom: 5px;
-    filter: invert(94%) sepia(0%) saturate(7500%) hue-rotate(139deg) brightness(108%) contrast(106%);
   }
 
-  .classTerrariumPrecedent#uid#:hover {
+  #idStatutActuel#uid# {
+    position: absolute;
+    width: 70%;
+    top: 10px;
+    left: 30px;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .classStatut#uid# {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 3px;
+    top: 3px;
+    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+  }
+
+  .classStatut#uid#:hover {
     filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
   }
+
+  .classMode#uid# {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 3px;
+    top: 3px;
+    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+  }
+
+  .classModeHum#uid# {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 3px;
+    top: 3px;
+    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+  }
+
+  .classTemperature#uid# {
+    position: absolute;
+    height: 30px;
+    top: 5px;
+    right: 5px;
+    text-align: right;
+    font-size: 18px;
+    color: #808080;
+  }
+
+  .classHumidite#uid# {
+    position: absolute;
+    height: 30px;
+    top: 5px;
+    right: 5px;
+    text-align: right;
+    font-size: 18px;
+    color: #808080;
+  }
+
+  .classCsg#uid# {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 3px;
+    right: 3px;
+    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+  }
+
+  .classCsg#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
+  .classConsigne#uid# {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 130px;
+    top: 5px;
+  }
+
+  .classFleches#uid# {
+    width: 50px;
+    height: 50px;
+    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+  }
+
+  .classFleches#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
+  .classValeurConsigne#uid# {
+    width: 100%;
+    height: 30px;
+    text-align: center;
+    font-size: 30px;
+    margin-top: -8px;
+  }
+
+  .classEcl#uid# {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 3px;
+    right: 26px;
+    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+  }
+
+  .classEcl#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
+  .classHisto#uid# {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: 3px;
+    bottom: 3px;
+    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+  }
+
+  .classHisto#uid#:hover {
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
+  .classTitre#uid# {
+    position: absolute;
+    width: 96%;
+    left: 2%;
+    text-align: left;
+    font-size: 14px;
+    background-color: #E0E0E0;
+    color: #808080;
+  }
+
+  .classSousTitre#uid# {
+    position: absolute;
+    width: 100%;
+    left: 20px;
+    text-align: left;
+    font-size: 14px;
+    color: #000000;
+  }
+
+  .classValeur#uid# {
+    position: absolute;
+    width: 100%;
+    right: 10px;
+    text-align: right;
+    font-size: 14px;
+    color: #808080;
+  }
+
+  .classPrecedent#uid# {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 5px;
+    top: 3px;
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+  }
+
+  .classPrecedent#uid#:hover {
+    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+  }
+
 </style>
 
 <script type="text/javascript">
@@ -505,26 +321,6 @@
   function initDisplay#uid#()
   {
 
-    let consoJour = "#consoJour#";
-    let spanConsoJour = $('#idConsoJour#uid#');
-    spanConsoJour.empty();
-    spanConsoJour.append(genererCompteur#uid#(consoJour));
-
-    let consoSemaine = "#consoSemaine#";
-    let spanConsoSemaine = $('#idConsoSemaine#uid#');
-    spanConsoSemaine.empty();
-    spanConsoSemaine.append(genererCompteur#uid#(consoSemaine));
-
-    let consoMois = "#consoMois#";
-    let spanConsoMois = $('#idConsoMois#uid#');
-    spanConsoMois.empty();
-    spanConsoMois.append(genererCompteur#uid#(consoMois));
-
-    let consoAnnee = "#consoAnnee#";
-    let spanConsoAnnee = $('#idConsoAnnee#uid#');
-    spanConsoAnnee.empty();
-    spanConsoAnnee.append(genererCompteur#uid#(consoAnnee));
-
     $('body').on('cmd::update', function (_event, _options) {
       $(_options).each(function () {
         switch (this.cmd_id) {
@@ -540,10 +336,10 @@
           case "#idStatut#":
             jeedom.cmd.update['#idStatut#']({ display_value: this.value });
             break;
-            case "#idMode#":
+          case "#idMode#":
             jeedom.cmd.update['#idMode#']({ display_value: this.value });
             break;
-            case "#idMode_hum#":
+          case "#idMode_hum#":
             jeedom.cmd.update['#idMode_hum#']({ display_value: this.value });
             break;
           case "#idEtatVerrouEclairage#":
@@ -553,164 +349,187 @@
             jeedom.cmd.update['#idEtatVerrouConsignes#']({ display_value: this.value });
             break;
           case "#idConsoJour#":
-            $('#idConsoJour#uid#').empty().append(genererCompteur#uid#(this.value));
+            jeedom.cmd.update['#idConsoJour#']({ display_value: this.value });
             break;
           case "#idConsoSemaine#":
-            $('#idConsoSemaine#uid#').empty().append(genererCompteur#uid#(this.value));
+            jeedom.cmd.update['#idConsoSemaine#']({ display_value: this.value });
             break;
           case "#idConsoMois#":
-            $('#idConsoMois#uid#').empty().append(genererCompteur#uid#(this.value));
+            jeedom.cmd.update['#idConsoMois#']({ display_value: this.value });
             break;
           case "#idConsoAnnee#":
-            $('#idConsoAnnee#uid#').empty().append(genererCompteur#uid#(this.value));
+            jeedom.cmd.update['#idConsoAnnee#']({ display_value: this.value });
             break;
         }
       });
     });
 
     jeedom.cmd.update['#idStatut#'] = function (_options) {
+
       if (_options.display_value == "Jour") {
-        $('.classTerrariumStatutJour#uid#').show();
-        $('.classTerrariumStatutNuit#uid#').hide();
+        $('#idStatutJour#uid#').show();
+        $('#idStatutNuit#uid#').hide();
+        $('#idStatutActuel#uid#').html('Mode jour');
       }
       else {
-        $('.classTerrariumStatutJour#uid#').hide();
-        $('.classTerrariumStatutNuit#uid#').show();
+        $('#idStatutJour#uid#').hide();
+        $('#idStatutNuit#uid#').show();
+        $('#idStatutActuel#uid#').html('Mode nuit');
       }
     }
     jeedom.cmd.update['#idStatut#']({ display_value: '#statut#' });
 
     jeedom.cmd.update['#idTemperature#'] = function (_options) {
-      $('#idTerrariumTemperature#uid#').html(Math.round(_options.display_value * 10) / 10 + '°');
+      $('#idTemperature#uid#').html(Math.round(_options.display_value * 10) / 10 + '°');
     }
     jeedom.cmd.update['#idTemperature#']({ display_value: '#temperature#' });
 
     jeedom.cmd.update['#idHumidite#'] = function (_options) {
-      $('#idTerrariumHumidite#uid#').html(Math.round(_options.display_value * 10) / 10 + '%');
+      $('#idHumidite#uid#').html(Math.round(_options.display_value * 10) / 10 + '%');
     }
     jeedom.cmd.update['#idHumidite#']({ display_value: '#humidite#' });
 
     jeedom.cmd.update['#idConsigne#'] = function (_options) {
-      $('#idTerrariumConsigne#uid#').html(Math.round(_options.display_value * 10) / 10 + '°');
+      $('#idConsigne#uid#').html(Math.round(_options.display_value * 10) / 10 + '°');
     }
     jeedom.cmd.update['#idConsigne#']({ display_value: '#consigne#' });
 
     jeedom.cmd.update['#idConsigne_hum#'] = function (_options) {
-      $('#idTerrariumConsigneHum#uid#').html(Math.round(_options.display_value * 10) / 10 + '%');
+      $('#idConsigneHum#uid#').html(Math.round(_options.display_value * 10) / 10 + '%');
     }
     jeedom.cmd.update['#idConsigne_hum#']({ display_value: '#consigne_hum#' });
 
+    jeedom.cmd.update['#idConsoJour#'] = function (_options) {
+      $('#idConsoJour#uid#').html(_options.display_value);
+    }
+    jeedom.cmd.update['#idConsoJour#']({ display_value: '#consoJour#' });
+
+    jeedom.cmd.update['#idConsoSemaine#'] = function (_options) {
+      $('#idConsoSemaine#uid#').html(_options.display_value);
+    }
+    jeedom.cmd.update['#idConsoSemaine#']({ display_value: '#consoSemaine#' });
+
+    jeedom.cmd.update['#idConsoMois#'] = function (_options) {
+      $('#idConsoMois#uid#').html(_options.display_value);
+    }
+    jeedom.cmd.update['#idConsoMois#']({ display_value: '#consoMois#' });
+
+    jeedom.cmd.update['#idConsoAnnee#'] = function (_options) {
+      $('#idConsoAnnee#uid#').html(_options.display_value);
+    }
+    jeedom.cmd.update['#idConsoAnnee#']({ display_value: '#consoAnnee#' });
+
     jeedom.cmd.update['#idMode#'] = function (_options) {
       if (_options.display_value == "Chauffe") {
-        $('.classTerrariumMode#uid#').show();
+        $('#idMode#uid#').show();
       }
       else {
-        $('.classTerrariumMode#uid#').hide();
+        $('#idMode#uid#').hide();
       }
     }
     jeedom.cmd.update['#idMode#']({ display_value: '#mode#' });
 
     jeedom.cmd.update['#idMode_hum#'] = function (_options) {
       if (_options.display_value == "Humidifie") {
-        $('.classTerrariumModeHum#uid#').show();
+        $('#idModeHum#uid#').show();
       }
       else {
-        $('.classTerrariumModeHum#uid#').hide();
+        $('#idModeHum#uid#').hide();
       }
     }
     jeedom.cmd.update['#idMode_hum#']({ display_value: '#mode_hum#' });
 
-    $('#idTerrariumMoins#uid#').on('click', function () {
+    $('#idMoins#uid#').on('click', function () {
       var min = ('#minValue#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne#');
       var stepConsigne = (isNaN(parseFloat('#stepConsigne#'))) ? 0.5 : parseFloat('#stepConsigne#');
-      if (parseFloat($('#idTerrariumConsigne#uid#').html()) >= min + stepConsigne) {
-        jeedom.cmd.update['#idConsigne#']({ display_value: parseFloat($('#idTerrariumConsigne#uid#').html()) - stepConsigne });
+      if (parseFloat($('#idConsigne#uid#').html()) >= min + stepConsigne) {
+        jeedom.cmd.update['#idConsigne#']({ display_value: parseFloat($('#idConsigne#uid#').html()) - stepConsigne });
         jeedom.cmd.execute({
           id: '#idThermostat#', value:
-            { slider: $('#idTerrariumConsigne#uid#').html().replace("°", "").replace(" ", "") }
+            { slider: $('#idConsigne#uid#').html().replace("°", "").replace(" ", "") }
         });
-      } else if (parseFloat($('#idTerrariumConsigne#uid#').html()) > min) {
+      } else if (parseFloat($('#idConsigne#uid#').html()) > min) {
         jeedom.cmd.update['#idConsigne#']({ display_value: min });
         jeedom.cmd.execute({
           id: '#idThermostat#', value:
-            { slider: $('#idTerrariumConsigne#uid#').html().replace("°", "").replace(" ", "") }
+            { slider: $('#idConsigne#uid#').html().replace("°", "").replace(" ", "") }
         });
       }
     });
 
-    $('#idTerrariumPlus#uid#').on('click', function () {
+    $('#idPlus#uid#').on('click', function () {
       var max = ('#maxConsigne#' == '') ? Number.MAX_VALUE : parseFloat('#maxConsigne#');
       var stepConsigne = (isNaN(parseFloat('#stepConsigne#'))) ? 0.5 : parseFloat('#stepConsigne#');
-      if (parseFloat($('#idTerrariumConsigne#uid#').html()) <= max - stepConsigne) {
-        jeedom.cmd.update['#idConsigne#']({ display_value: parseFloat($('#idTerrariumConsigne#uid#').html()) + stepConsigne });
+      if (parseFloat($('#idConsigne#uid#').html()) <= max - stepConsigne) {
+        jeedom.cmd.update['#idConsigne#']({ display_value: parseFloat($('#idConsigne#uid#').html()) + stepConsigne });
         jeedom.cmd.execute({
           id: '#idThermostat#', value:
-            { slider: $('#idTerrariumConsigne#uid#').html().replace("°", "").replace(" ", "") }
+            { slider: $('#idConsigne#uid#').html().replace("°", "").replace(" ", "") }
         });
-      } else if (parseFloat($('#idTerrariumConsigne#uid#').html()) < max) {
+      } else if (parseFloat($('#idConsigne#uid#').html()) < max) {
         jeedom.cmd.update['#idConsigne#']({ display_value: max });
         jeedom.cmd.execute({
           id: '#idThermostat#', value:
-            { slider: $('#idTerrariumConsigne#uid#').html().replace("°", "").replace(" ", "") }
+            { slider: $('#idConsigne#uid#').html().replace("°", "").replace(" ", "") }
         });
       }
     });
 
-    $('#idTerrariumMoinsHum#uid#').on('click', function () {
+    $('#idMoinsHum#uid#').on('click', function () {
       var min = ('#minConsigne_hum#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne_hum#');
       var stepConsigne = (isNaN(parseFloat('#stepConsigne_hum#'))) ? 1 : parseFloat('#stepConsigne_hum#');
-      if (parseFloat($('#idTerrariumConsigneHum#uid#').html()) >= min + stepConsigne) {
-        jeedom.cmd.update['#idConsigne_hum#']({ display_value: parseFloat($('#idTerrariumConsigneHum#uid#').html()) - stepConsigne });
+      if (parseFloat($('#idConsigneHum#uid#').html()) >= min + stepConsigne) {
+        jeedom.cmd.update['#idConsigne_hum#']({ display_value: parseFloat($('#idConsigneHum#uid#').html()) - stepConsigne });
         jeedom.cmd.execute({
           id: '#idThermostat_hum#', value:
-            { slider: $('#idTerrariumConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
+            { slider: $('#idConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
         });
-      } else if (parseFloat($('#idTerrariumConsigneHum#uid#').html()) > min) {
+      } else if (parseFloat($('#idConsigneHum#uid#').html()) > min) {
         jeedom.cmd.update['#idConsigne_hum#']({ display_value: min });
         jeedom.cmd.execute({
           id: '#idThermostat_hum#', value:
-            { slider: $('#idTerrariumConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
+            { slider: $('#idConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
         });
       }
     });
 
-    $('#idTerrariumPlusHum#uid#').on('click', function () {
+    $('#idPlusHum#uid#').on('click', function () {
       var max = ('#maxConsigne_hum#' == '') ? Number.MAX_VALUE : parseFloat('#maxConsigne_hum#');
       var stepConsigne = (isNaN(parseFloat('#stepConsigne_hum#'))) ? 0.5 : parseFloat('#stepConsigne_hum#');
-      if (parseFloat($('#idTerrariumConsigneHum#uid#').html()) <= max - stepConsigne) {
-        jeedom.cmd.update['#idConsigne_hum#']({ display_value: parseFloat($('#idTerrariumConsigneHum#uid#').html()) + stepConsigne });
+      if (parseFloat($('#idConsigneHum#uid#').html()) <= max - stepConsigne) {
+        jeedom.cmd.update['#idConsigne_hum#']({ display_value: parseFloat($('#idConsigneHum#uid#').html()) + stepConsigne });
         jeedom.cmd.execute({
           id: '#idThermostat_hum#', value:
-            { slider: $('#idTerrariumConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
+            { slider: $('#idConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
         });
-      } else if (parseFloat($('#idTerrariumConsigneHum#uid#').html()) < max) {
+      } else if (parseFloat($('#idConsigneHum#uid#').html()) < max) {
         jeedom.cmd.update['#idConsigne_hum#']({ display_value: max });
         jeedom.cmd.execute({
           id: '#idThermostat_hum#', value:
-            { slider: $('#idTerrariumConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
+            { slider: $('#idConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
         });
       }
     });
 
     jeedom.cmd.update['#idEtatVerrouConsignes#'] = function (_options) {
       if (_options.display_value == "1") {
-        $('.classTerrariumLockCsg#uid#').show();
-        $('.classTerrariumUnlockCsg#uid#').hide();
+        $('#idLockCsg#uid#').show();
+        $('#idUnlockCsg#uid#').hide();
       }
       else {
-        $('.classTerrariumLockCsg#uid#').hide();
-        $('.classTerrariumUnlockCsg#uid#').show();
+        $('#idLockCsg#uid#').hide();
+        $('#idUnlockCsg#uid#').show();
       }
     }
     jeedom.cmd.update['#idEtatVerrouConsignes#']({ display_value: '#etatVerrouConsignes#' });
 
-    $('.classTerrariumLockCsg#uid#').on('click', function () {
+    $('#idLockCsg#uid#').on('click', function () {
       jeedom.cmd.execute({
         id: '#idOffVerrouConsignes#'
       });
     });
 
-    $('.classTerrariumUnlockCsg#uid#').on('click', function () {
+    $('#idUnlockCsg#uid#').on('click', function () {
       jeedom.cmd.execute({
         id: '#idOnVerrouConsignes#'
       });
@@ -718,83 +537,52 @@
 
     jeedom.cmd.update['#idEtatVerrouEclairage#'] = function (_options) {
       if (_options.display_value == "1") {
-        $('.classTerrariumLockEcl#uid#').show();
-        $('.classTerrariumUnlockEcl#uid#').hide();
+        $('#idLockEcl#uid#').show();
+        $('#idUnlockEcl#uid#').hide();
       }
       else {
-        $('.classTerrariumLockEcl#uid#').hide();
-        $('.classTerrariumUnlockEcl#uid#').show();
+        $('#idLockEcl#uid#').hide();
+        $('#idUnlockEcl#uid#').show();
       }
     }
     jeedom.cmd.update['#idEtatVerrouEclairage#']({ display_value: '#etatVerrouEclairage#' });
 
-    $('.classTerrariumLockEcl#uid#').on('click', function () {
+    $('#idLockEcl#uid#').on('click', function () {
       jeedom.cmd.execute({
         id: '#idOffVerrouEclairage#'
       });
     });
 
-    $('.classTerrariumUnlockEcl#uid#').on('click', function () {
+    $('#idUnlockEcl#uid#').on('click', function () {
       jeedom.cmd.execute({
         id: '#idOnVerrouEclairage#'
       });
     });
 
-    $('.classTerrariumStatutJour#uid#').on('click', function () {
+    $('#idStatutJour#uid#').on('click', function () {
       jeedom.cmd.execute({
         id: '#idStatutNuit#'
       });
     });
 
-    $('.classTerrariumStatutNuit#uid#').on('click', function () {
+    $('#idStatutNuit#uid#').on('click', function () {
       jeedom.cmd.execute({
         id: '#idStatutJour#'
       });
     });
 
-    function genererCompteur#uid#(valeur, type)
-    {
-      let val = Math.trunc(valeur * 10 + 0.5);
-      let mille = Math.trunc(val / 10000);
-      val = val - mille * 10000;
-      let cent = Math.trunc(val / 1000);
-      val = val - cent * 1000;
-      let dix = Math.trunc(val / 100);
-      val = val - dix * 100;
-      let un = Math.trunc(val / 10);
-      val = val - un * 10;
-      let dixieme = val;
-
-      return genererChiffre#uid#(mille) +
-        genererChiffre#uid#(cent) +
-          genererChiffre#uid#(dix) +
-            genererChiffre#uid#(un) +
-              genererDecimale#uid#(dixieme);
-
-    }
-
-    function genererChiffre#uid#(chiffre)
-    {
-      return '<span class="classConsosChiffre#uid#">' + chiffre + '</span>';
-    }
-
-    function genererDecimale#uid#(chiffre)
-    {
-      return '<span class="classConsosDecimale#uid#">' + chiffre + '</span>';
-    }
-
-    $('.classTerrariumHisto#uid#').on('click', function () {
-      $('.classTerrariumContenu#uid#').hide();
-      $('.classConsosValeurs#uid#').show();
+    $('.classHisto#uid#').on('click', function () {
+      $('#idResume#uid#').hide();
+      $('#idConsommations#uid#').show();
     });
 
-    $('.classTerrariumPrecedent#uid#').on('click', function () {
-      $('.classTerrariumContenu#uid#').show();
-      $('.classConsosValeurs#uid#').hide();
+    $('.classPrecedent#uid#').on('click', function () {
+      $('#idResume#uid#').show();
+      $('#idConsommations#uid#').hide();
     });
-    $('.classTerrariumContenu#uid#').show();
-    $('.classConsosValeurs#uid#').hide();
-
+    $('#idResume').show();
+    $('#idConsommations#uid#').hide();
+ 
   }
 
 </script>
