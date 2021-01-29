@@ -440,7 +440,7 @@
     jeedom.cmd.update['#idMode_hum#']({ display_value: '#mode_hum#' });
 
     $('#idMoins#uid#').on('click', function () {
-      var min = ('#minValue#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne#');
+      var min = ('#minConsigne#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne#');
       var stepConsigne = (isNaN(parseFloat('#stepConsigne#'))) ? 0.5 : parseFloat('#stepConsigne#');
       if (parseFloat($('#idConsigne#uid#').html()) >= min + stepConsigne) {
         jeedom.cmd.update['#idConsigne#']({ display_value: parseFloat($('#idConsigne#uid#').html()) - stepConsigne });
