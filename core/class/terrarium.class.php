@@ -1156,7 +1156,14 @@
       //
       public function toHtml($_version = 'dashboard')
       {
-          $replace = $this->preToHtml($_version);
+
+        $isWidgetPlugin = $this->getConfiguration('isWidgetPlugin');
+
+        if (!$isWidgetPlugin) {
+            return eqLogic::toHtml($_version);
+        }
+
+        $replace = $this->preToHtml($_version);
           if (!is_array($replace)) {
               return $replace;
           }

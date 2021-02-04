@@ -15,3 +15,7 @@
 # 28-01-2021
 
     Refonte du widget
+
+# 03-02-2021
+
+    Utilisation ou pas du Widget du Plugin 

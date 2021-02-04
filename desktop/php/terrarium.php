@@ -65,9 +65,9 @@
           {{Consignes}}</a></li>
       <li role="presentation"><a href="#eclairagetab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
           {{Eclairage}}</a></li>
-          <li role="presentation"><a href="#chauffagetab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
+      <li role="presentation"><a href="#chauffagetab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
           {{Chauffage}}</a></li>
-          <li role="presentation"><a href="#humiditetab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
+      <li role="presentation"><a href="#humiditetab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
           {{Humidité}}</a></li>
       <li role="presentation"><a href="#consommationtab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
           {{Consommation}}</a></li>
@@ -79,17 +79,18 @@
         <br />
         <form class="form-horizontal">
           <fieldset>
+            <legend><i class="fas fa-wrench"></i> {{Général}}</legend>
             <div class="form-group">
-              <label class="col-sm-2 control-label">{{Nom de l'équipement}}</label>
-              <div class="col-sm-2">
+              <label class="col-sm-3 control-label">{{Nom de l'équipement}}</label>
+              <div class="col-sm-3">
                 <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
                 <input type="text" class="eqLogicAttr form-control" data-l1key="name"
                   placeholder="{{Nom de l'équipement}}" />
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">{{Objet parent}}</label>
-              <div class="col-sm-2">
+              <label class="col-sm-3 control-label">{{Objet parent}}</label>
+              <div class="col-sm-3">
                 <select id="sel_object" class="eqLogicAttr form-control" data-l1key="object_id">
                   <option value="">{{Aucun}}</option>
                   <?php
@@ -101,7 +102,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">{{Catégorie}}</label>
+              <label class="col-sm-3 control-label">{{Catégorie}}</label>
               <div class="col-sm-9">
                 <?php
                   foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
@@ -113,12 +114,22 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label"></label>
+              <label class="col-sm-3 control-label"></label>
               <div class="col-sm-9">
                 <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable"
                     checked />{{Activer}}</label>
                 <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible"
                     checked />{{Visible}}</label>
+              </div>
+
+            </div>
+
+            <legend><i class="fas fa-cogs"></i> {{Paramètres}}</legend>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">{{Utiliser le widget du plugin}}</label>
+              <div class="col-sm-3 form-check-input">
+                <input type="checkbox" required class="eqLogicAttr" data-l1key="configuration"
+                  data-l2key="isWidgetPlugin" checked /></label>
               </div>
             </div>
 
@@ -509,8 +520,8 @@
               <div class="col-sm-4 input-group">
                 <input class="eqLogicAttr form-control input-sm" data-l1key="configuration"
                   data-l2key="cmdConsommation"></input>
-                <a class="btn btn-default listCmdInfo cursor btn-sm input-group-addon"
-                  data-input="cmdConsommation"><i class="fas fa-list-alt"></i></a>
+                <a class="btn btn-default listCmdInfo cursor btn-sm input-group-addon" data-input="cmdConsommation"><i
+                    class="fas fa-list-alt"></i></a>
               </div>
             </div>
 
