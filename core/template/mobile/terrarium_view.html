@@ -297,72 +297,16 @@
     height: 20px;
     left: 5px;
     top: 3px;
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
   }
 
   .classPrecedent#uid#:hover {
-    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
   }
 
 </style>
 
 <script type="text/javascript">
-
-  $(document).change(function (e) {
-    if (e.target.dataset.eqlogic_uid === "#uid#") {
-      initDisplay#uid#();
-    }
-  });
-
-  $(document).ready(function () {
-    initDisplay#uid#();
-  });
-
-  function initDisplay#uid#()
-  {
-
-    $('body').on('cmd::update', function (_event, _options) {
-      $(_options).each(function () {
-        switch (this.cmd_id) {
-          case "#idTemperature#":
-            jeedom.cmd.update['#idTemperature#']({ display_value: this.value });
-            break;
-          case "#idHumidite#":
-            jeedom.cmd.update['#idHumidite#']({ display_value: this.value });
-            break;
-          case "#idConsigne#":
-            jeedom.cmd.update['#idConsigne#']({ display_value: this.value });
-            break;
-          case "#idStatut#":
-            jeedom.cmd.update['#idStatut#']({ display_value: this.value });
-            break;
-          case "#idMode#":
-            jeedom.cmd.update['#idMode#']({ display_value: this.value });
-            break;
-          case "#idMode_hum#":
-            jeedom.cmd.update['#idMode_hum#']({ display_value: this.value });
-            break;
-          case "#idEtatVerrouEclairage#":
-            jeedom.cmd.update['#idEtatVerrouEclairage#']({ display_value: this.value });
-            break;
-          case "#idEtatVerrouConsignes#":
-            jeedom.cmd.update['#idEtatVerrouConsignes#']({ display_value: this.value });
-            break;
-          case "#idConsoJour#":
-            jeedom.cmd.update['#idConsoJour#']({ display_value: this.value });
-            break;
-          case "#idConsoSemaine#":
-            jeedom.cmd.update['#idConsoSemaine#']({ display_value: this.value });
-            break;
-          case "#idConsoMois#":
-            jeedom.cmd.update['#idConsoMois#']({ display_value: this.value });
-            break;
-          case "#idConsoAnnee#":
-            jeedom.cmd.update['#idConsoAnnee#']({ display_value: this.value });
-            break;
-        }
-      });
-    });
 
     jeedom.cmd.update['#idStatut#'] = function (_options) {
 
@@ -440,7 +384,7 @@
     jeedom.cmd.update['#idMode_hum#']({ display_value: '#mode_hum#' });
 
     $('#idMoins#uid#').on('click', function () {
-      var min = ('#minValue#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne#');
+      var min = ('#minConsigne#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne#');
       var stepConsigne = (isNaN(parseFloat('#stepConsigne#'))) ? 0.5 : parseFloat('#stepConsigne#');
       if (parseFloat($('#idConsigne#uid#').html()) >= min + stepConsigne) {
         jeedom.cmd.update['#idConsigne#']({ display_value: parseFloat($('#idConsigne#uid#').html()) - stepConsigne });
@@ -583,6 +527,4 @@
     $('#idResume').show();
     $('#idConsommations#uid#').hide();
  
-  }
-
 </script>
