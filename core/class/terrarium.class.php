@@ -1257,7 +1257,7 @@
           $obj = $this->getCmd(null, 'histoAnnee');
           $replace["#idHistoAnnee#"] = $obj->getId();
     
-          return template_replace($replace, getTemplate('core', $version, 'terrarium_view', 'terrarium'));
+          return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'terrarium_view', 'terrarium')));
       }
   }
 

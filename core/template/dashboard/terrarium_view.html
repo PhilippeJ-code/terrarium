@@ -308,62 +308,6 @@
 
 <script type="text/javascript">
 
-  $(document).change(function (e) {
-    if (e.target.dataset.eqlogic_uid === "#uid#") {
-      initDisplay#uid#();
-    }
-  });
-
-  $(document).ready(function () {
-    initDisplay#uid#();
-  });
-
-  function initDisplay#uid#()
-  {
-
-    $('body').on('cmd::update', function (_event, _options) {
-      $(_options).each(function () {
-        switch (this.cmd_id) {
-          case "#idTemperature#":
-            jeedom.cmd.update['#idTemperature#']({ display_value: this.value });
-            break;
-          case "#idHumidite#":
-            jeedom.cmd.update['#idHumidite#']({ display_value: this.value });
-            break;
-          case "#idConsigne#":
-            jeedom.cmd.update['#idConsigne#']({ display_value: this.value });
-            break;
-          case "#idStatut#":
-            jeedom.cmd.update['#idStatut#']({ display_value: this.value });
-            break;
-          case "#idMode#":
-            jeedom.cmd.update['#idMode#']({ display_value: this.value });
-            break;
-          case "#idMode_hum#":
-            jeedom.cmd.update['#idMode_hum#']({ display_value: this.value });
-            break;
-          case "#idEtatVerrouEclairage#":
-            jeedom.cmd.update['#idEtatVerrouEclairage#']({ display_value: this.value });
-            break;
-          case "#idEtatVerrouConsignes#":
-            jeedom.cmd.update['#idEtatVerrouConsignes#']({ display_value: this.value });
-            break;
-          case "#idConsoJour#":
-            jeedom.cmd.update['#idConsoJour#']({ display_value: this.value });
-            break;
-          case "#idConsoSemaine#":
-            jeedom.cmd.update['#idConsoSemaine#']({ display_value: this.value });
-            break;
-          case "#idConsoMois#":
-            jeedom.cmd.update['#idConsoMois#']({ display_value: this.value });
-            break;
-          case "#idConsoAnnee#":
-            jeedom.cmd.update['#idConsoAnnee#']({ display_value: this.value });
-            break;
-        }
-      });
-    });
-
     jeedom.cmd.update['#idStatut#'] = function (_options) {
 
       if (_options.display_value == "Jour") {
@@ -583,6 +527,4 @@
     $('#idResume').show();
     $('#idConsommations#uid#').hide();
  
-  }
-
 </script>
