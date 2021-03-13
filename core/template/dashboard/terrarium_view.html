@@ -71,242 +71,239 @@
     </br></br>
     <span class="classTitre#uid#">Consommations (KwH)</span></br></br>
 
-    <span class="classSousTitre#uid#">Jour</span><span class="classValeur#uid# history cursor"
-      id="idConsoJour#uid#" data-cmd_id="#idHistoJour#"></span></br>
+    <span class="classSousTitre#uid#">Jour</span><span class="classValeur#uid# history cursor" id="idConsoJour#uid#"
+      data-cmd_id="#idHistoJour#"></span></br>
 
     <span class="classSousTitre#uid#">Semaine</span><span class="classValeur#uid# history cursor"
       id="idConsoSemaine#uid#" data-cmd_id="#idHistoSemaine#"></span></br>
 
-    <span class="classSousTitre#uid#">Mois</span><span class="classValeur#uid# history cursor"
-      id="idConsoMois#uid#" data-cmd_id="#idHistoMois#"></span></br>
+    <span class="classSousTitre#uid#">Mois</span><span class="classValeur#uid# history cursor" id="idConsoMois#uid#"
+      data-cmd_id="#idHistoMois#"></span></br>
 
-    <span class="classSousTitre#uid#">Année</span><span class="classValeur#uid# history cursor"
-      id="idConsoAnnee#uid#" data-cmd_id="#idHistoAnnee#"></span>
+    <span class="classSousTitre#uid#">Année</span><span class="classValeur#uid# history cursor" id="idConsoAnnee#uid#"
+      data-cmd_id="#idHistoAnnee#"></span>
 
     <img class="classPrecedent#uid# cursor" src="plugins/terrarium/resources/previous.svg">
 
   </div>
 
-</div>
+  <style>
+    .classContenant#uid# {
+      width: 100%;
+      height: 100%;
+      background-color: #ffffff;
+      border: 1px solid #000000;
+      border-radius: 8px;
+      color: #000000;
+    }
 
-<style>
-  .classContenant#uid# {
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    border: 1px solid #000000;
-    border-radius: 8px;
-    color: #000000;
-  }
+    .classFlex#uid# {
+      display: flex;
+      justify-content: space-around;
+    }
 
-  .classFlex#uid# {
-    display: flex;
-    justify-content: space-around;
-  }
+    .classTuile#uid# {
+      width: 96%;
+      height: 40px;
+      position: relative;
+      margin-top: 8px;
+      background-color: #FFFFFF;
+      border: 1px solid #808080;
+      border-radius: 8px;
+      color: #000000;
+    }
 
-  .classTuile#uid# {
-    width: 96%;
-    height: 40px;
-    position: relative;
-    margin-top: 8px;
-    background-color: #FFFFFF;
-    border: 1px solid #808080;
-    border-radius: 8px;
-    color: #000000;
-  }
+    .classDemiTuile#uid# {
+      width: 46%;
+      height: 150px;
+      margin-top: 8px;
+      position: relative;
+      background-color: #FFFFFF;
+      border: 1px solid #808080;
+      border-radius: 8px;
+      color: #000000;
+    }
 
-  .classDemiTuile#uid# {
-    width: 46%;
-    height: 150px;
-    margin-top: 8px;
-    position: relative;
-    background-color: #FFFFFF;
-    border: 1px solid #808080;
-    border-radius: 8px;
-    color: #000000;
-  }
+    .classLibelleTuile#uid# {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      color: #808080;
+      bottom: 5px;
+    }
 
-  .classLibelleTuile#uid# {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    font-size: 14px;
-    color: #808080;
-    bottom: 5px;
-  }
+    #idStatutActuel#uid# {
+      position: absolute;
+      width: 70%;
+      top: 10px;
+      left: 30px;
+      text-align: center;
+      font-size: 14px;
+    }
 
-  #idStatutActuel#uid# {
-    position: absolute;
-    width: 70%;
-    top: 10px;
-    left: 30px;
-    text-align: center;
-    font-size: 14px;
-  }
+    .classStatut#uid# {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 3px;
+      top: 3px;
+      filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+    }
 
-  .classStatut#uid# {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    left: 3px;
-    top: 3px;
-    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
-  }
+    .classStatut#uid#:hover {
+      filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+    }
 
-  .classStatut#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
+    .classMode#uid# {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 3px;
+      top: 3px;
+      filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+    }
 
-  .classMode#uid# {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    left: 3px;
-    top: 3px;
-    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
-  }
+    .classModeHum#uid# {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 3px;
+      top: 3px;
+      filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+    }
 
-  .classModeHum#uid# {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    left: 3px;
-    top: 3px;
-    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
-  }
+    .classTemperature#uid# {
+      position: absolute;
+      height: 30px;
+      top: 5px;
+      right: 5px;
+      text-align: right;
+      font-size: 18px;
+      color: #808080;
+    }
 
-  .classTemperature#uid# {
-    position: absolute;
-    height: 30px;
-    top: 5px;
-    right: 5px;
-    text-align: right;
-    font-size: 18px;
-    color: #808080;
-  }
+    .classHumidite#uid# {
+      position: absolute;
+      height: 30px;
+      top: 5px;
+      right: 5px;
+      text-align: right;
+      font-size: 18px;
+      color: #808080;
+    }
 
-  .classHumidite#uid# {
-    position: absolute;
-    height: 30px;
-    top: 5px;
-    right: 5px;
-    text-align: right;
-    font-size: 18px;
-    color: #808080;
-  }
+    .classCsg#uid# {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 3px;
+      right: 3px;
+      filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+    }
 
-  .classCsg#uid# {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    top: 3px;
-    right: 3px;
-    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
-  }
+    .classCsg#uid#:hover {
+      filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+    }
 
-  .classCsg#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
+    .classConsigne#uid# {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 130px;
+      top: 5px;
+    }
 
-  .classConsigne#uid# {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 130px;
-    top: 5px;
-  }
+    .classFleches#uid# {
+      width: 50px;
+      height: 50px;
+      filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+    }
 
-  .classFleches#uid# {
-    width: 50px;
-    height: 50px;
-    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
-  }
+    .classFleches#uid#:hover {
+      filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+    }
 
-  .classFleches#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
+    .classValeurConsigne#uid# {
+      width: 100%;
+      height: 30px;
+      text-align: center;
+      font-size: 30px;
+      margin-top: -8px;
+    }
 
-  .classValeurConsigne#uid# {
-    width: 100%;
-    height: 30px;
-    text-align: center;
-    font-size: 30px;
-    margin-top: -8px;
-  }
+    .classEcl#uid# {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 3px;
+      right: 26px;
+      filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+    }
 
-  .classEcl#uid# {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    top: 3px;
-    right: 26px;
-    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
-  }
+    .classEcl#uid#:hover {
+      filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+    }
 
-  .classEcl#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
+    .classHisto#uid# {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      right: 3px;
+      bottom: 3px;
+      filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+    }
 
-  .classHisto#uid# {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    right: 3px;
-    bottom: 3px;
-    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
-  }
+    .classHisto#uid#:hover {
+      filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+    }
 
-  .classHisto#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
+    .classTitre#uid# {
+      position: absolute;
+      width: 96%;
+      left: 2%;
+      text-align: left;
+      font-size: 14px;
+      background-color: #E0E0E0;
+      color: #808080;
+    }
 
-  .classTitre#uid# {
-    position: absolute;
-    width: 96%;
-    left: 2%;
-    text-align: left;
-    font-size: 14px;
-    background-color: #E0E0E0;
-    color: #808080;
-  }
+    .classSousTitre#uid# {
+      position: absolute;
+      width: 100%;
+      left: 20px;
+      text-align: left;
+      font-size: 14px;
+      color: #000000;
+    }
 
-  .classSousTitre#uid# {
-    position: absolute;
-    width: 100%;
-    left: 20px;
-    text-align: left;
-    font-size: 14px;
-    color: #000000;
-  }
+    .classValeur#uid# {
+      position: absolute;
+      width: 100%;
+      right: 10px;
+      text-align: right;
+      font-size: 14px;
+      color: #808080;
+    }
 
-  .classValeur#uid# {
-    position: absolute;
-    width: 100%;
-    right: 10px;
-    text-align: right;
-    font-size: 14px;
-    color: #808080;
-  }
+    .classPrecedent#uid# {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 5px;
+      top: 3px;
+      filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+    }
 
-  .classPrecedent#uid# {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    left: 5px;
-    top: 3px;
-    filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
-  }
+    .classPrecedent#uid#:hover {
+      filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
+    }
+  </style>
 
-  .classPrecedent#uid#:hover {
-    filter: invert(29%) sepia(99%) saturate(1522%) hue-rotate(346deg) brightness(102%) contrast(96%);
-  }
-
-</style>
-
-<script type="text/javascript">
+  <script type="text/javascript">
 
     jeedom.cmd.update['#idStatut#'] = function (_options) {
 
@@ -526,5 +523,7 @@
     });
     $('#idResume').show();
     $('#idConsommations#uid#').hide();
- 
-</script>
+
+  </script>
+
+</div>
