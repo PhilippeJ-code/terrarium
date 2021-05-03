@@ -8,6 +8,17 @@
     <div class="classFlex#uid#">
 
       <div class="classTuile#uid#">
+
+        <a href="#eqLink#" <span id="idNomObjet#uid#" class="cursor">#name_display#</span></a>
+        <img class="classHisto#uid#" src="plugins/terrarium/resources/histo.svg">
+
+      </div>
+
+    </div>
+
+    <div class="classFlex#uid#">
+
+      <div class="classTuile#uid#">
         <img class="classStatut#uid# cursor" id="idStatutJour#uid#" src="plugins/terrarium/resources/jour.svg">
         <img class="classStatut#uid# cursor" id="idStatutNuit#uid#" src="plugins/terrarium/resources/nuit.svg">
 
@@ -26,6 +37,7 @@
 
       <div class="classDemiTuile#uid#">
         <img class="classMode#uid#" id="idMode#uid#" src="plugins/terrarium/resources/flamme.svg">
+        <img class="classModeVen#uid#" id="idModeVen#uid#" src="plugins/terrarium/resources/fan.svg">
 
         <div class="classTemperature#uid#" data-cmd_id="#idTemperature#">
           <span id="idTemperature#uid#"></span>
@@ -61,8 +73,6 @@
       </div>
 
     </div>
-
-    <img class="classHisto#uid#" src="plugins/terrarium/resources/histo.svg">
 
   </div>
 
@@ -142,6 +152,16 @@
       font-size: 14px;
     }
 
+    #idNomObjet#uid# {
+      position: absolute;
+      width: 65%;
+      top: 10px;
+      left: 50px;
+      text-align: center;
+      font-size: 14px;
+      color: #808080 !important;
+    }
+
     .classStatut#uid# {
       position: absolute;
       width: 20px;
@@ -160,6 +180,15 @@
       width: 20px;
       height: 20px;
       left: 3px;
+      top: 3px;
+      filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+    }
+
+    .classModeVen#uid# {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 26px;
       top: 3px;
       filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
     }
@@ -252,8 +281,8 @@
       position: absolute;
       width: 20px;
       height: 20px;
-      right: 3px;
-      bottom: 3px;
+      left: 3px;
+      top: 3px;
       filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
     }
 
@@ -379,6 +408,16 @@
       }
     }
     jeedom.cmd.update['#idMode_hum#']({ display_value: '#mode_hum#' });
+
+    jeedom.cmd.update['#idMode_ven#'] = function (_options) {
+      if (_options.display_value == "Ventile") {
+        $('#idModeVen#uid#').show();
+      }
+      else {
+        $('#idModeVen#uid#').hide();
+      }
+    }
+    jeedom.cmd.update['#idMode_ven#']({ display_value: '#mode_ven#' });
 
     $('#idMoins#uid#').on('click', function () {
       var min = ('#minConsigne#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne#');

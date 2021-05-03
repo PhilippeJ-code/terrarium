@@ -66,7 +66,7 @@
 
       public static function daemon()
       {
-        foreach (terrarium::byType('terrarium', true) as $terrarium) {
+          foreach (terrarium::byType('terrarium', true) as $terrarium) {
               if ($terrarium->getIsEnable() == 1) {
                   $tempsRestant = $terrarium->getCache('tempsRestant', 10);
                   if ($tempsRestant > 0) {
@@ -124,7 +124,7 @@
                                       $minute = intval($elms[1], '0');
                                       $cronCoucher = $minute . ' ' . $heure . ' * * *';
                                       $terrarium->setConfiguration('cron_nuit', $cronCoucher);
-                                   }
+                                  }
                               }
                               if ($leverSoleil || $coucherSoleil) {
                                   $terrarium->save();
@@ -230,13 +230,21 @@
                           $c = new Cron\CronExpression(checkAndFixCron($terrarium->getConfiguration('cron_repetition_chauffage')), new Cron\FieldFactory);
                           if ($c->isDue()) {
                               switch ($terrarium->getCmd(null, 'mode')->execCmd()) {
-                          case __('Chauffe', __FILE__):
-                          $terrarium->actionsChauffage();
-                          break;
-                          case __('Stoppé', __FILE__):
-                          $terrarium->actionsPasDeChauffage();
-                          break;
-                      }
+                                    case __('Chauffe', __FILE__):
+                                        $terrarium->actionsChauffage();
+                                        break;
+                                    case __('Stoppé', __FILE__):
+                                        $terrarium->actionsPasDeChauffage();
+                                        break;
+                                }
+                              switch ($terrarium->getCmd(null, 'mode_ven')->execCmd()) {
+                                    case __('Ventile', __FILE__):
+                                        $terrarium->actionsVentile();
+                                        break;
+                                    case __('Stoppé', __FILE__):
+                                        $terrarium->actionsPasVentile();
+                                        break;
+                                }
                           }
                       } catch (Exception $e) {
                           log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
@@ -250,13 +258,13 @@
                           $c = new Cron\CronExpression(checkAndFixCron($terrarium->getConfiguration('cron_repetition_humidite')), new Cron\FieldFactory);
                           if ($c->isDue()) {
                               switch ($terrarium->getCmd(null, 'mode_hum')->execCmd()) {
-                        case __('Humidifie', __FILE__):
-                        $terrarium->actionsHumidite();
-                        break;
-                        case __('Stoppé', __FILE__):
-                        $terrarium->actionsPasHumidite();
-                        break;
-                    }
+                                case __('Humidifie', __FILE__):
+                                    $terrarium->actionsHumidite();
+                                    break;
+                                case __('Stoppé', __FILE__):
+                                    $terrarium->actionsPasHumidite();
+                                    break;
+                            }
                           }
                       } catch (Exception $e) {
                           log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
@@ -315,6 +323,9 @@
           $this->getCmd(null, 'status')->event(__('Jour', __FILE__));
           $this->actionsEclairageJour();
           $this->actionsConsignesJour();
+          if ($this->getCmd(null, 'mode_ven')->execCmd() === 'Ventile') {
+              $this->pasVentile();
+          }
       }
 
       // On exécute les actions d'éclairage jour
@@ -372,6 +383,7 @@
           $this->getCmd(null, 'status')->event(__('Nuit', __FILE__));
           $this->actionsEclairageNuit();
           $this->actionsConsignesNuit();
+          $this->ventile();
       }
 
       // On éxécute les actions d'éclairage nuit
@@ -457,13 +469,6 @@
           $consigne_min = $consigne - $this->getConfiguration('hysteresis_min', 1);
           $consigne_max = $consigne + $this->getConfiguration('hysteresis_max', 1);
 
-          $mode = $this->getCache('mode', '');
-          if ($mode === 'chauffe') {
-              $diff = $temperature - $consigne_max;
-              if ($diff > 0) {
-              }
-          }
-          
           $oldTemperature = $this->getCache('oldTemperature', -99);
           $this->setCache('oldTemperature', $temperature);
           $oldNow = $this->getCache('oldNow', 0);
@@ -501,6 +506,12 @@
               $this->chauffe();
           } elseif ($temperature >= $consigne_max - $moyenneHausse / 2) {
               $this->pasDeChauffe();
+          }
+
+          if ($this->getCmd(null, 'mode_ven')->execCmd() === 'Ventile') {
+              if ($temperature <= $consigne_max + $moyenneBaisse / 2) {
+                  $this->pasVentile();
+              }
           }
       }
 
@@ -645,6 +656,64 @@
       public function actionsPasHumidite()
       {
           foreach ($this->getConfiguration('hum_non_conf') as $action) {
+              try {
+                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                  if (!is_object($cmd)) {
+                      continue;
+                  }
+                  $options = array();
+                  if (isset($action['options'])) {
+                      $options = $action['options'];
+                  }
+                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
+              } catch (Exception $e) {
+                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
+              }
+          }
+      }
+
+      // On ventile
+      //
+      public function ventile()
+      {
+          $this->getCmd(null, 'mode_ven')->event(__('Ventile', __FILE__));
+          $this->actionsVentile();
+      }
+
+      // On exécute les actions ventilation
+      //
+      public function actionsVentile()
+      {
+          foreach ($this->getConfiguration('ven_oui_conf') as $action) {
+              try {
+                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                  if (!is_object($cmd)) {
+                      continue;
+                  }
+                  $options = array();
+                  if (isset($action['options'])) {
+                      $options = $action['options'];
+                  }
+                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
+              } catch (Exception $e) {
+                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
+              }
+          }
+      }
+
+      // On ne ventile plus
+      //
+      public function pasVentile()
+      {
+          $this->getCmd(null, 'mode_ven')->event(__('Stoppé', __FILE__));
+          $this->actionsPasVentile();
+      }
+
+      // On exécute les actions pas ventilation
+      //
+      public function actionsPasVentile()
+      {
+          foreach ($this->getConfiguration('ven_non_conf') as $action) {
               try {
                   $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
                   if (!is_object($cmd)) {
@@ -1012,6 +1081,23 @@
           $mode_hum->setOrder(11);
           $mode_hum->save();
 
+          // Mode ventilation
+          //
+          $mode_ven = $this->getCmd(null, 'mode_ven');
+          if (!is_object($mode_ven)) {
+              $mode_ven = new terrariumCmd();
+              $mode_ven->setIsVisible(1);
+              $mode_ven->setName(__('Mode Ventilation', __FILE__));
+              $mode_ven->setIsVisible(1);
+              $mode_ven->setIsHistorized(0);
+          }
+          $mode_ven->setEqLogic_id($this->getId());
+          $mode_ven->setLogicalId('mode_ven');
+          $mode_ven->setType('info');
+          $mode_ven->setSubType('string');
+          $mode_ven->setOrder(11);
+          $mode_ven->save();
+
           $consigne = $this->getCmd(null, 'consigne');
           if (!is_object($consigne)) {
               $consigne = new terrariumCmd();
@@ -1346,6 +1432,10 @@
           $obj = $this->getCmd(null, 'mode_hum');
           $replace["#mode_hum#"] = $obj->execCmd();
           $replace["#idMode_hum#"] = $obj->getId();
+
+          $obj = $this->getCmd(null, 'mode_ven');
+          $replace["#mode_ven#"] = $obj->execCmd();
+          $replace["#idMode_ven#"] = $obj->getId();
 
           $obj = $this->getCmd(null, 'etat_verrou_eclairage');
           $replace["#etatVerrouEclairage#"] = $obj->execCmd();

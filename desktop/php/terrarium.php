@@ -443,6 +443,38 @@
               </fieldset>
             </form>
 
+            <form class="form-horizontal">
+              <fieldset>
+                <div>
+                  <legend>
+                    {{Actions démarrage ventilation ?}}
+                    <a class="btn btn-primary btn-xs pull-right addAction" data-type="ven_oui"
+                      style="position: relative; top : 5px;"><i class="fas fa-plus-circle"></i> {{Ajouter une
+                      action}}</a>
+                  </legend>
+                  <div id="div_ven_oui">
+
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+
+            <form class="form-horizontal">
+              <fieldset>
+                <div>
+                  <legend>
+                    {{Actions arrêt ventilation ?}}
+                    <a class="btn btn-primary btn-xs pull-right addAction" data-type="ven_non"
+                      style="position: relative; top : 5px;"><i class="fas fa-plus-circle"></i> {{Ajouter une
+                      action}}</a>
+                  </legend>
+                  <div id="div_ven_non">
+
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+
           </fieldset>
         </form>
       </div>

@@ -37,6 +37,7 @@
 
       <div class="classDemiTuile#uid#">
         <img class="classMode#uid#" id="idMode#uid#" src="plugins/terrarium/resources/flamme.svg">
+        <img class="classModeVen#uid#" id="idModeVen#uid#" src="plugins/terrarium/resources/fan.svg">
 
         <div class="classTemperature#uid#" data-cmd_id="#idTemperature#">
           <span id="idTemperature#uid#"></span>
@@ -179,6 +180,15 @@
       width: 20px;
       height: 20px;
       left: 3px;
+      top: 3px;
+      filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
+    }
+
+    .classModeVen#uid# {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 26px;
       top: 3px;
       filter: invert(56%) sepia(0%) saturate(299%) hue-rotate(144deg) brightness(89%) contrast(94%);
     }
@@ -398,6 +408,16 @@
       }
     }
     jeedom.cmd.update['#idMode_hum#']({ display_value: '#mode_hum#' });
+
+    jeedom.cmd.update['#idMode_ven#'] = function (_options) {
+      if (_options.display_value == "Ventile") {
+        $('#idModeVen#uid#').show();
+      }
+      else {
+        $('#idModeVen#uid#').hide();
+      }
+    }
+    jeedom.cmd.update['#idMode_ven#']({ display_value: '#mode_ven#' });
 
     $('#idMoins#uid#').on('click', function () {
       var min = ('#minConsigne#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne#');

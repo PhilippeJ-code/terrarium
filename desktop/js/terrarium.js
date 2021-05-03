@@ -25,6 +25,8 @@ $("#div_hum_oui").sortable({ axis: "y", cursor: "move", items: ".hum_oui", place
 $("#div_hum_non").sortable({ axis: "y", cursor: "move", items: ".hum_non", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
 $("#div_brume_on").sortable({ axis: "y", cursor: "move", items: ".brume_on", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
 $("#div_brume_off").sortable({ axis: "y", cursor: "move", items: ".brume_off", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
+$("#div_ven_oui").sortable({ axis: "y", cursor: "move", items: ".ven_oui", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
+$("#div_ven_non").sortable({ axis: "y", cursor: "move", items: ".ven_non", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
 
 $("#div_schedule_brume").sortable({ axis: "y", cursor: "move", items: ".schedule_brume", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
 
@@ -172,6 +174,8 @@ function addSchedule(_schedule, _type) {
     _eqLogic.configuration.hum_non_conf = $('#div_hum_non .hum_non').getValues('.expressionAttr');
     _eqLogic.configuration.brume_on_conf = $('#div_brume_on .brume_on').getValues('.expressionAttr');
     _eqLogic.configuration.brume_off_conf = $('#div_brume_off .brume_off').getValues('.expressionAttr');
+    _eqLogic.configuration.ven_oui_conf = $('#div_ven_oui .ven_oui').getValues('.expressionAttr');
+    _eqLogic.configuration.ven_non_conf = $('#div_ven_non .ven_non').getValues('.expressionAttr');
     _eqLogic.configuration.schedule_brume_conf = $('#div_schedule_brume .schedule_brume').getValues('.scheduleAttr');
     return _eqLogic;
 }
@@ -237,6 +241,16 @@ function printEqLogic(_eqLogic) {
         if (isset(_eqLogic.configuration.brume_off_conf)) {
             for (var i in _eqLogic.configuration.brume_off_conf) {
                 addAction(_eqLogic.configuration.brume_off_conf[i], 'brume_off');
+            }
+        }
+        if (isset(_eqLogic.configuration.ven_oui_conf)) {
+            for (var i in _eqLogic.configuration.ven_oui_conf) {
+                addAction(_eqLogic.configuration.ven_oui_conf[i], 'ven_oui');
+            }
+        }
+        if (isset(_eqLogic.configuration.ven_non_conf)) {
+            for (var i in _eqLogic.configuration.ven_non_conf) {
+                addAction(_eqLogic.configuration.ven_non_conf[i], 'ven_non');
             }
         }
         if (isset(_eqLogic.configuration.schedule_brume_conf)) {
