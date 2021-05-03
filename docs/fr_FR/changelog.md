@@ -19,3 +19,10 @@
 # 03-02-2021
 
     Utilisation ou pas du Widget du Plugin 
+
+# 03-05-2021
+
+    Ajout lever et coucher du soleil pour le passage jour nuit
+    Ajout de la brumisation
+    Ajout du nom de l'équipement sur le widget
+    

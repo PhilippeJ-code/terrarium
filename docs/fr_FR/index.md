@@ -13,7 +13,9 @@
 ## 2. Onglet "Horaire"
 
     Cet onglet permet de choisir les dates de "lever et coucher du soleil" dans le terrarium, ce sont les
-    déclencheurs qui permettent de passer en mode "Jour" et en mode "Nuit".
+    déclencheurs qui permettent de passer en mode "Jour" et en mode "Nuit". La latitude et la longitude doivent être introduits
+    si on désire utiliser les heures de lever et de coucher du soleil. Si la case lever ou coucher du soleil, le cron est calculé
+    automatiquement et remplacé dans la configuration. Ce calcul s'effectue à minuit.
 
 ![Horaire](../images/Horaire.png "Horaire")
 
@@ -37,17 +39,23 @@
 
 ## 5. Onglet "Chauffage"
 
-    Cet onglet permet de choisir les actions qui seront effectuées lors du du démarrage ou de l'arrêt du chauffage. Pour effectuer le contrôle du chauffage, nous avons besoin de la température intérieure du terrarium, des hysteresis min/max pour le déclenchement et l'arrêt du chauffage et d'un cron de répétition pour répèter les actions périodiquement en cas de problème de transmission par exemple.
+    Cet onglet permet de choisir les actions qui seront effectuées lors du démarrage ou de l'arrêt du chauffage. Pour effectuer le contrôle du chauffage, nous avons besoin de la température intérieure du terrarium, des hysteresis min/max pour le déclenchement et l'arrêt du chauffage et d'un cron de répétition pour répèter les actions périodiquement en cas de problème de transmission par exemple.
 
 ![Chauffage](../images/Chauffage.png "Chauffage")
 
 ## 6. Onglet "Humidité"
 
-    Cet onglet permet de choisir les actions qui seront effectuées lors du du démarrage ou de l'arrêt de la gestion de l'humidité. Pour effectuer le contrôle de l'humidité, nous avons besoin de l'humidité intérieure du terrarium, des hysteresis min/max et d'un cron de répétition pour répèter les actions périodiquement en cas de problème de transmission par exemple.
+    Cet onglet permet de choisir les actions qui seront effectuées lors du démarrage ou de l'arrêt de la gestion de l'humidité. Pour effectuer le contrôle de l'humidité, nous avons besoin de l'humidité intérieure du terrarium, des hysteresis min/max et d'un cron de répétition pour répèter les actions périodiquement en cas de problème de transmission par exemple.
 
 ![Humidite](../images/Humidite.png "Humidite")
 
-## 7. Onglet "Consommation"
+## 7. Onglet "Brumisation"
+
+    Cet onglet permet de choisir les actions qui seront effectuées lors du démarrage ou de l'arrêt de la gestion de la brumisation. Pour effectuer le contrôle de la brumisation, nous avons besoin d'une programmation horaire, des actions à effectuer et d'un temps de brumisation. 
+
+![Brumisation](../images/Brumisation.png "Brumisation")
+
+## 8. Onglet "Consommation"
 
     Si le chauffage du terrarium est commandé par un matériel qui remonte la consommation en KwH, on peut utiliser cette information pour historiser les consommations ( jour, semaine, mois et année ) du terrarium.
 
@@ -55,7 +63,7 @@
 
 ![Consommation](../images/Consommation.png "Consommation")
 
-## 8. Et le widget
+## 9. Et le widget
 
     Le plugin a son propre widget, en voici la première version
 

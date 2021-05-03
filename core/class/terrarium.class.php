@@ -22,6 +22,65 @@
   //
   class terrarium extends eqLogic
   {
+      public static function deamon_info()
+      {
+          $return = array();
+          $return['log'] = '';
+          $return['state'] = 'nok';
+          $cron = cron::byClassAndFunction(__CLASS__, 'daemon');
+          if (is_object($cron) && $cron->running()) {
+              $return['state'] = 'ok';
+          }
+          $return['launchable'] = 'ok';
+          return $return;
+      }
+
+      public static function deamon_start()
+      {
+          self::deamon_stop();
+          $deamon_info = self::deamon_info();
+          if ($deamon_info['launchable'] != 'ok') {
+              throw new Exception(__('Veuillez vérifier la configuration', __FILE__));
+          }
+          $cron = cron::byClassAndFunction(__CLASS__, 'daemon');
+          if (!is_object($cron)) {
+              $cron = new cron();
+              $cron->setClass(__CLASS__);
+              $cron->setFunction('daemon');
+              $cron->setEnable(1);
+              $cron->setDeamon(1);
+              $cron->setTimeout(1440);
+              $cron->setSchedule('* * * * *');
+              $cron->save();
+          }
+          $cron->run();
+      }
+
+      public static function deamon_stop()
+      {
+          $cron = cron::byClassAndFunction(__CLASS__, 'daemon');
+          if (is_object($cron)) {
+              $cron->halt();
+          }
+      }
+
+      public static function daemon()
+      {
+        foreach (terrarium::byType('terrarium', true) as $terrarium) {
+              if ($terrarium->getIsEnable() == 1) {
+                  $tempsRestant = $terrarium->getCache('tempsRestant', 10);
+                  if ($tempsRestant > 0) {
+                      $tempsRestant--;
+                      if ($tempsRestant == 0) {
+                          $terrarium->actionsBrumisationOff();
+                      }
+                      $terrarium->setCache('tempsRestant', $tempsRestant);
+                  }
+              }
+          }
+          sleep(1);
+      }
+
       // Fonction exécutée toutes les minutes
       //
       public static function cron()
@@ -30,65 +89,127 @@
           // Pour chacun des équipements
           //
           foreach (terrarium::byType('terrarium', true) as $terrarium) {
-              if (!$terrarium->getIsEnable() == 1) {
-                  return;
-              }
+              if ($terrarium->getIsEnable() == 1) {
 
-              // Première utilisation ou redémarrage on initialise
-              //
-              $statut = $terrarium->getCmd(null, 'status')->execCmd();
-              if (($statut != __('Jour', __FILE__)) && ($statut !=  __('Nuit', __FILE__))) {
-                  log::add('terrarium', 'debug', 'Initialisation du terrarium');
-                  $terrarium->getCmd(null, 'etat_verrou_eclairage')->event(0);
-                  $terrarium->getCmd(null, 'etat_verrou_consignes')->event(0);
+              // Calcul heure lever et coucher du soleil pour changement crons si nécessaire
+                  //
+                  $longitude = $terrarium->getConfiguration('longitude', 0);
+                  $latitude = $terrarium->getConfiguration('latitude', 0);
+                  $leverSoleil = $terrarium->getConfiguration('lever_soleil');
+                  $coucherSoleil = $terrarium->getConfiguration('coucher_soleil');
 
                   $now = time();
-                  $heure = date("H", $now);
-
-                  if (($heure > 21) || ($heure < 6)) {
-                      $terrarium->nuit();
-                  } else {
-                      $terrarium->jour();
+                  $jour = date("d", $now);
+                  $oldJour = $terrarium->getCache('oldJour', -1);
+                  if ($oldJour != $jour) {
+                      if ((is_numeric($longitude)) && (is_numeric($latitude))) {
+                          $longitude = floatval($longitude);
+                          $latitude = floatval($latitude);
+                          if (($longitude != 0) && ($latitude != 0)) {
+                              if ($leverSoleil) {
+                                  $dateLever =  date_sunrise($now, 1, $latitude, $longitude, 90+35/60, date("Z", $now)/3600);
+                                  $elms = explode(':', $dateLever);
+                                  if (count($elms) == 2) {
+                                      $heure = intval($elms[0], '0');
+                                      $minute = intval($elms[1], '0');
+                                      $cronLever = $minute . ' ' . $heure . ' * * *';
+                                      $terrarium->setConfiguration('cron_jour', $cronLever);
+                                  }
+                              }
+                              if ($coucherSoleil) {
+                                  $dateCoucher =  date_sunset($now, 1, $latitude, $longitude, 90+35/60, date("Z", $now)/3600);
+                                  $elms = explode(':', $dateCoucher);
+                                  if (count($elms) == 2) {
+                                      $heure = intval($elms[0], '0');
+                                      $minute = intval($elms[1], '0');
+                                      $cronCoucher = $minute . ' ' . $heure . ' * * *';
+                                      $terrarium->setConfiguration('cron_nuit', $cronCoucher);
+                                   }
+                              }
+                              if ($leverSoleil || $coucherSoleil) {
+                                  $terrarium->save();
+                              }
+                          }
+                      }
+                      $terrarium->setCache('oldJour', $jour);
                   }
 
-                  $terrarium->temperature();
-                  $terrarium->humidite();
-                  $terrarium->save();
-              }
+                  // Brumisation
+                  //
+                  $tempsBrume = $terrarium->getConfiguration('temps_brume', 15);
+                  if (!is_numeric($tempsBrume)) {
+                      $tempsBrume = 15;
+                  }
+                  $tempsBrume = intval($tempsBrume);
+                  foreach ($terrarium->getConfiguration('schedule_brume_conf') as $schedule) {
+                      $cron = $schedule['cmd'];
+                
+                      try {
+                          $c = new Cron\CronExpression(checkAndFixCron($cron), new Cron\FieldFactory);
+                          if ($c->isDue()) {
+                              $terrarium->actionsBrumisationOn();
+                              $terrarium->setCache('tempsRestant', $tempsBrume);
+                          }
+                      } catch (Exception $e) {
+                          log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
+                      }
+                  }
 
-              // Est-il temps de passer en mode jour ?
-              //
-              if ($terrarium->getConfiguration('cron_jour') != '') {
-                  try {
-                      $c = new Cron\CronExpression(checkAndFixCron($terrarium->getConfiguration('cron_jour')), new Cron\FieldFactory);
-                      if ($c->isDue()) {
+                  // Première utilisation ou redémarrage on initialise
+                  //
+                  $statut = $terrarium->getCmd(null, 'status')->execCmd();
+                  if (($statut != __('Jour', __FILE__)) && ($statut !=  __('Nuit', __FILE__))) {
+                      log::add('terrarium', 'debug', 'Initialisation du terrarium');
+                      $terrarium->getCmd(null, 'etat_verrou_eclairage')->event(0);
+                      $terrarium->getCmd(null, 'etat_verrou_consignes')->event(0);
+
+                      $now = time();
+                      $heure = date("H", $now);
+
+                      if (($heure > 21) || ($heure < 6)) {
+                          $terrarium->nuit();
+                      } else {
                           $terrarium->jour();
                       }
-                  } catch (Exception $e) {
-                      log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
-                  }
-              }
 
-              // Est-il temps de passer en mode nuit ?
-              //
-              if ($terrarium->getConfiguration('cron_nuit') != '') {
-                  try {
-                      $c = new Cron\CronExpression(checkAndFixCron($terrarium->getConfiguration('cron_nuit')), new Cron\FieldFactory);
-                      if ($c->isDue()) {
-                          $terrarium->nuit();
+                      $terrarium->temperature();
+                      $terrarium->humidite();
+                      $terrarium->save();
+                  }
+
+                  // Est-il temps de passer en mode jour ?
+                  //
+                  if ($terrarium->getConfiguration('cron_jour') != '') {
+                      try {
+                          $c = new Cron\CronExpression(checkAndFixCron($terrarium->getConfiguration('cron_jour')), new Cron\FieldFactory);
+                          if ($c->isDue()) {
+                              $terrarium->jour();
+                          }
+                      } catch (Exception $e) {
+                          log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
                       }
-                  } catch (Exception $e) {
-                      log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
                   }
-              }
 
-              // Est-il temps de répéter les actions d'éclairage ?
-              //
-              if ($terrarium->getConfiguration('cron_repetition_eclairage') != '') {
-                  try {
-                      $c = new Cron\CronExpression(checkAndFixCron($terrarium->getConfiguration('cron_repetition_eclairage')), new Cron\FieldFactory);
-                      if ($c->isDue()) {
-                          switch ($terrarium->getCmd(null, 'status')->execCmd()) {
+                  // Est-il temps de passer en mode nuit ?
+                  //
+                  if ($terrarium->getConfiguration('cron_nuit') != '') {
+                      try {
+                          $c = new Cron\CronExpression(checkAndFixCron($terrarium->getConfiguration('cron_nuit')), new Cron\FieldFactory);
+                          if ($c->isDue()) {
+                              $terrarium->nuit();
+                          }
+                      } catch (Exception $e) {
+                          log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
+                      }
+                  }
+
+                  // Est-il temps de répéter les actions d'éclairage ?
+                  //
+                  if ($terrarium->getConfiguration('cron_repetition_eclairage') != '') {
+                      try {
+                          $c = new Cron\CronExpression(checkAndFixCron($terrarium->getConfiguration('cron_repetition_eclairage')), new Cron\FieldFactory);
+                          if ($c->isDue()) {
+                              switch ($terrarium->getCmd(null, 'status')->execCmd()) {
                             case __('Jour', __FILE__):
                             $terrarium->actionsEclairageJour();
                             break;
@@ -96,19 +217,19 @@
                             $terrarium->actionsEclairageNuit();
                             break;
                         }
+                          }
+                      } catch (Exception $e) {
+                          log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
                       }
-                  } catch (Exception $e) {
-                      log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
                   }
-              }
 
-              // Est-il temps de répéter les actions de chauffage ?
-              //
-              if ($terrarium->getConfiguration('cron_repetition_chauffage') != '') {
-                  try {
-                      $c = new Cron\CronExpression(checkAndFixCron($terrarium->getConfiguration('cron_repetition_chauffage')), new Cron\FieldFactory);
-                      if ($c->isDue()) {
-                          switch ($terrarium->getCmd(null, 'mode')->execCmd()) {
+                  // Est-il temps de répéter les actions de chauffage ?
+                  //
+                  if ($terrarium->getConfiguration('cron_repetition_chauffage') != '') {
+                      try {
+                          $c = new Cron\CronExpression(checkAndFixCron($terrarium->getConfiguration('cron_repetition_chauffage')), new Cron\FieldFactory);
+                          if ($c->isDue()) {
+                              switch ($terrarium->getCmd(null, 'mode')->execCmd()) {
                           case __('Chauffe', __FILE__):
                           $terrarium->actionsChauffage();
                           break;
@@ -116,19 +237,19 @@
                           $terrarium->actionsPasDeChauffage();
                           break;
                       }
+                          }
+                      } catch (Exception $e) {
+                          log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
                       }
-                  } catch (Exception $e) {
-                      log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
                   }
-              }
 
-              // Est-il temps de répéter les actions d'humidité ?
-              //
-              if ($terrarium->getConfiguration('cron_repetition_humidite') != '') {
-                  try {
-                      $c = new Cron\CronExpression(checkAndFixCron($terrarium->getConfiguration('cron_repetition_humidite')), new Cron\FieldFactory);
-                      if ($c->isDue()) {
-                          switch ($terrarium->getCmd(null, 'mode_hum')->execCmd()) {
+                  // Est-il temps de répéter les actions d'humidité ?
+                  //
+                  if ($terrarium->getConfiguration('cron_repetition_humidite') != '') {
+                      try {
+                          $c = new Cron\CronExpression(checkAndFixCron($terrarium->getConfiguration('cron_repetition_humidite')), new Cron\FieldFactory);
+                          if ($c->isDue()) {
+                              switch ($terrarium->getCmd(null, 'mode_hum')->execCmd()) {
                         case __('Humidifie', __FILE__):
                         $terrarium->actionsHumidite();
                         break;
@@ -136,14 +257,57 @@
                         $terrarium->actionsPasHumidite();
                         break;
                     }
+                          }
+                      } catch (Exception $e) {
+                          log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
                       }
-                  } catch (Exception $e) {
-                      log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
                   }
               }
           }
       }
    
+      // On exécute les actions brumisation On
+      //
+      public function actionsBrumisationOn()
+      {
+          foreach ($this->getConfiguration('brume_on_conf') as $action) {
+              try {
+                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                  if (!is_object($cmd)) {
+                      continue;
+                  }
+                  $options = array();
+                  if (isset($action['options'])) {
+                      $options = $action['options'];
+                  }
+                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
+              } catch (Exception $e) {
+                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
+              }
+          }
+      }
+
+      // On exécute les actions brumisation Off
+      //
+      public function actionsBrumisationOff()
+      {
+          foreach ($this->getConfiguration('brume_off_conf') as $action) {
+              try {
+                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                  if (!is_object($cmd)) {
+                      continue;
+                  }
+                  $options = array();
+                  if (isset($action['options'])) {
+                      $options = $action['options'];
+                  }
+                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
+              } catch (Exception $e) {
+                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
+              }
+          }
+      }
+
       // On passe en jour
       //
       public function jour()
@@ -297,7 +461,6 @@
           if ($mode === 'chauffe') {
               $diff = $temperature - $consigne_max;
               if ($diff > 0) {
-                  log::add('terrarium', 'debug', 'Inertie Max : ' . $diff);
               }
           }
           
@@ -312,7 +475,6 @@
                   $nombreBaisses = $this->getCache('nombreBaisses', 0) + 1;
                   $totalBaisses = $this->getCache('totalBaisses', 0) + $deltaBaisseMinute;
                   if ($nombreBaisses > 100) {
-                      log::add('terrarium', 'debug', 'Moyenne Baisse : ' . $totalBaisses/$nombreBaisses);
                       $this->setCache('moyenneBaisse', $totalBaisses/$nombreBaisses);
                       $nombreBaisses = 0;
                       $totalBaisses = 0;
@@ -324,7 +486,6 @@
                   $nombreHausses = $this->getCache('nombreHausses', 0) + 1;
                   $totalHausses = $this->getCache('totalHausses', 0) + $deltaHausseMinute;
                   if ($nombreHausses > 100) {
-                      log::add('terrarium', 'debug', 'Moyenne Hausse : ' . $totalHausses/$nombreHausses);
                       $this->setCache('moyenneHausse', $totalHausses/$nombreHausses);
                       $nombreHausses = 0;
                       $totalHausses = 0;
@@ -639,37 +800,37 @@
       //
       public function preSave()
       {
-        if ($this->getConfiguration('consigne_min') === '') {
-            $this->setConfiguration('consigne_min', 20);
-        }
-        if ($this->getConfiguration('consigne_max') === '') {
-            $this->setConfiguration('consigne_max', 30);
-        }
-        if ($this->getConfiguration('consigne_min') > $this->getConfiguration('consigne_max')) {
-            throw new Exception(__('La température de consigne minimale ne peut être supérieure à la consigne maximale', __FILE__));
-        }
-        if ($this->getConfiguration('consigne_hum_min') === '') {
-            $this->setConfiguration('consigne_hum_min', 0);
-        }
-        if ($this->getConfiguration('consigne_hum_max') === '') {
-            $this->setConfiguration('consigne_hum_max', 100);
-        }
-        if ($this->getConfiguration('consigne_hum_min') > $this->getConfiguration('consigne_hum_max')) {
-            throw new Exception(__('Humidité de consigne minimale ne peut être supérieure à la consigne maximale', __FILE__));
-        }
-        if ($this->getConfiguration('hysteresis_min') === '') {
-            $this->setConfiguration('hysteresis_min', 0.5);
-        }
-        if ($this->getConfiguration('hysteresis_max') === '') {
-            $this->setConfiguration('hysteresis_max', 1);
-        }
-        if ($this->getConfiguration('hysteresis_hum_min') === '') {
-            $this->setConfiguration('hysteresis_hum_min', 1);
-        }
-        if ($this->getConfiguration('hysteresis_hum_max') === '') {
-            $this->setConfiguration('hysteresis_hum_max', 1);
-        }
-  }
+          if ($this->getConfiguration('consigne_min') === '') {
+              $this->setConfiguration('consigne_min', 20);
+          }
+          if ($this->getConfiguration('consigne_max') === '') {
+              $this->setConfiguration('consigne_max', 30);
+          }
+          if ($this->getConfiguration('consigne_min') > $this->getConfiguration('consigne_max')) {
+              throw new Exception(__('La température de consigne minimale ne peut être supérieure à la consigne maximale', __FILE__));
+          }
+          if ($this->getConfiguration('consigne_hum_min') === '') {
+              $this->setConfiguration('consigne_hum_min', 0);
+          }
+          if ($this->getConfiguration('consigne_hum_max') === '') {
+              $this->setConfiguration('consigne_hum_max', 100);
+          }
+          if ($this->getConfiguration('consigne_hum_min') > $this->getConfiguration('consigne_hum_max')) {
+              throw new Exception(__('Humidité de consigne minimale ne peut être supérieure à la consigne maximale', __FILE__));
+          }
+          if ($this->getConfiguration('hysteresis_min') === '') {
+              $this->setConfiguration('hysteresis_min', 0.5);
+          }
+          if ($this->getConfiguration('hysteresis_max') === '') {
+              $this->setConfiguration('hysteresis_max', 1);
+          }
+          if ($this->getConfiguration('hysteresis_hum_min') === '') {
+              $this->setConfiguration('hysteresis_hum_min', 1);
+          }
+          if ($this->getConfiguration('hysteresis_hum_max') === '') {
+              $this->setConfiguration('hysteresis_hum_max', 1);
+          }
+      }
 
       // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
       //
@@ -1156,14 +1317,13 @@
       //
       public function toHtml($_version = 'dashboard')
       {
+          $isWidgetPlugin = $this->getConfiguration('isWidgetPlugin');
 
-        $isWidgetPlugin = $this->getConfiguration('isWidgetPlugin');
+          if (!$isWidgetPlugin) {
+              return eqLogic::toHtml($_version);
+          }
 
-        if (!$isWidgetPlugin) {
-            return eqLogic::toHtml($_version);
-        }
-
-        $replace = $this->preToHtml($_version);
+          $replace = $this->preToHtml($_version);
           if (!is_array($replace)) {
               return $replace;
           }
@@ -1305,4 +1465,3 @@
           }
       }
   }
-  

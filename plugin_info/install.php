@@ -22,18 +22,47 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 //
 function terrarium_install() 
 {
+	$cron = cron::byClassAndFunction('terrarium', 'daemon');
+	if (!is_object($cron)) {
+		$cron = new cron();
+		$cron->setClass('terrarium');
+		$cron->setFunction('daemon');
+		$cron->setEnable(1);
+		$cron->setDeamon(1);
+		$cron->setTimeout(1440);
+		$cron->setSchedule('* * * * *');
+		$cron->save();
+	}
+	$cron->start();
 }
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
 //
 function terrarium_update() 
 {
+	$cron = cron::byClassAndFunction('terrarium', 'daemon');
+	if (!is_object($cron)) {
+		$cron = new cron();
+		$cron->setClass('terrarium');
+		$cron->setFunction('daemon');
+		$cron->setEnable(1);
+		$cron->setDeamon(1);
+		$cron->setDeamonSleepTime(1);
+		$cron->setSchedule('* * * * *');
+		$cron->setTimeout(1440);
+		$cron->save();
+	}
+	$cron->start();
 }
 
 // Fonction exécutée automatiquement après la suppression du plugin
 //
 function terrarium_remove() 
 {
+	$cron = cron::byClassAndFunction('terrarium', 'daemon');
+	if (is_object($cron)) {
+		$cron->remove();
+	}
 }
 
 ?>

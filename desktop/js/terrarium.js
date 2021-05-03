@@ -23,6 +23,10 @@ $("#div_chf_oui").sortable({ axis: "y", cursor: "move", items: ".chf_oui", place
 $("#div_chf_non").sortable({ axis: "y", cursor: "move", items: ".chf_non", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
 $("#div_hum_oui").sortable({ axis: "y", cursor: "move", items: ".hum_oui", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
 $("#div_hum_non").sortable({ axis: "y", cursor: "move", items: ".hum_non", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
+$("#div_brume_on").sortable({ axis: "y", cursor: "move", items: ".brume_on", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
+$("#div_brume_off").sortable({ axis: "y", cursor: "move", items: ".brume_off", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
+
+$("#div_schedule_brume").sortable({ axis: "y", cursor: "move", items: ".schedule_brume", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
 
 $("#table_cmd").sortable({ axis: "y", cursor: "move", items: ".cmd", placeholder: "ui-state-highlight", tolerance: "intersect", forcePlaceholderSize: true });
 /*
@@ -34,6 +38,15 @@ $('.addAction').off('click').on('click', function () {
 });
 
 $("body").off('click', '.bt_removeAction').on('click', '.bt_removeAction', function () {
+    var type = $(this).attr('data-type');
+    $(this).closest('.' + type).remove();
+});
+
+$('.addSchedule').off('click').on('click', function () {
+    addSchedule('', $(this).attr('data-type'));
+});
+
+$("body").off('click', '.bt_removeSchedule').on('click', '.bt_removeSchedule', function () {
     var type = $(this).attr('data-type');
     $(this).closest('.' + type).remove();
 });
@@ -120,7 +133,32 @@ function addAction(_action, _type) {
     $('#div_' + _type + ' .' + _type + '').last().setValues(_action, '.expressionAttr');
 }
 
-function saveEqLogic(_eqLogic) {
+function addSchedule(_schedule, _type) {
+
+    var div = '<div class="' + _type + '">';
+    div += '<div class="form-group ">';
+    div += '<label class="col-sm-1 control-label">Programmation</label>';
+    div += '<div class="col-sm-4">';
+    div += '<div class="input-group">';
+    div += '<span class="input-group-btn">';
+    div += '<a class="btn btn-default bt_removeSchedule roundedLeft" data-type="' + _type + '"><i class="fas fa-minus-circle"></i></a>';
+    div += '</span>';
+    div += '<input class="scheduleAttr form-control" data-l1key="cmd" data-type="' + _type + '" />';
+    div += '<span class="input-group-btn">';
+    div += '<a class="btn btn-default cursor jeeHelper roundedRight" data-helper="cron"><i class="fas fa-question-circle"></i></a>'
+    div += '</span>';
+    div += '</div>';
+    div += '</div>';
+    div += '<div class="col-sm-4 actionOptions">';
+    div += jeedom.cmd.displayActionOption(init(_schedule.cmd, ''), _schedule.options);
+    div += '</div>';
+    div += '</div>';
+    $('#div_' + _type).append(div);
+    $('#div_' + _type + ' .' + _type + '').last().setValues(_schedule, '.scheduleAttr');
+
+  }
+  
+  function saveEqLogic(_eqLogic) {
     if (!isset(_eqLogic.configuration)) {
         _eqLogic.configuration = {};
     }
@@ -132,6 +170,9 @@ function saveEqLogic(_eqLogic) {
     _eqLogic.configuration.chf_non_conf = $('#div_chf_non .chf_non').getValues('.expressionAttr');
     _eqLogic.configuration.hum_oui_conf = $('#div_hum_oui .hum_oui').getValues('.expressionAttr');
     _eqLogic.configuration.hum_non_conf = $('#div_hum_non .hum_non').getValues('.expressionAttr');
+    _eqLogic.configuration.brume_on_conf = $('#div_brume_on .brume_on').getValues('.expressionAttr');
+    _eqLogic.configuration.brume_off_conf = $('#div_brume_off .brume_off').getValues('.expressionAttr');
+    _eqLogic.configuration.schedule_brume_conf = $('#div_schedule_brume .schedule_brume').getValues('.scheduleAttr');
     return _eqLogic;
 }
 
@@ -144,6 +185,9 @@ function printEqLogic(_eqLogic) {
     $('#div_chf_non').empty();
     $('#div_hum_oui').empty();
     $('#div_hum_non').empty();
+    $('#div_brume_on').empty();
+    $('#div_brume_off').empty();
+    $('#div_schedule_brume').empty();
     if (isset(_eqLogic.configuration)) {
         if (isset(_eqLogic.configuration.ecl_jour_conf)) {
             for (var i in _eqLogic.configuration.ecl_jour_conf) {
@@ -183,6 +227,21 @@ function printEqLogic(_eqLogic) {
         if (isset(_eqLogic.configuration.hum_non_conf)) {
             for (var i in _eqLogic.configuration.hum_non_conf) {
                 addAction(_eqLogic.configuration.hum_non_conf[i], 'hum_non');
+            }
+        }
+        if (isset(_eqLogic.configuration.brume_on_conf)) {
+            for (var i in _eqLogic.configuration.brume_on_conf) {
+                addAction(_eqLogic.configuration.brume_on_conf[i], 'brume_on');
+            }
+        }
+        if (isset(_eqLogic.configuration.brume_off_conf)) {
+            for (var i in _eqLogic.configuration.brume_off_conf) {
+                addAction(_eqLogic.configuration.brume_off_conf[i], 'brume_off');
+            }
+        }
+        if (isset(_eqLogic.configuration.schedule_brume_conf)) {
+            for (var i in _eqLogic.configuration.schedule_brume_conf) {
+                addSchedule(_eqLogic.configuration.schedule_brume_conf[i], 'schedule_brume');
             }
         }
     }

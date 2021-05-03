@@ -69,6 +69,8 @@
           {{Chauffage}}</a></li>
       <li role="presentation"><a href="#humiditetab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
           {{Humidité}}</a></li>
+      <li role="presentation"><a href="#brumisationtab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
+          {{Brumisation}}</a></li>
       <li role="presentation"><a href="#consommationtab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
           {{Consommation}}</a></li>
       <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i
@@ -148,6 +150,30 @@
             <br /><br />
 
             <div class="form-group">
+              <label class="col-sm-2 control-label">{{Latitude}}</label>
+              <div class="col-sm-2">
+                <input type="text" class="eqLogicAttr form-control tooltips" data-l1key="configuration"
+                  data-l2key="latitude" placeholder="0" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label">{{Longitude}}</label>
+              <div class="col-sm-2">
+                <input type="text" class="eqLogicAttr form-control tooltips" data-l1key="configuration"
+                  data-l2key="longitude" placeholder="0" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label">{{Au lever du soleil}}</label>
+              <div class="col-sm-2 form-check-input">
+                <input type="checkbox" required class="eqLogicAttr" data-l1key="configuration" data-l2key="lever_soleil"
+                  unchecked /></label>
+              </div>
+            </div>
+
+            <div class="form-group">
               <label class="col-sm-2 control-label">{{Cron début du jour}}
                 <sup><i class="fas fa-question-circle tooltips" title="{{Lever du soleil dans le terrarium}}"></i></sup>
               </label>
@@ -156,10 +182,18 @@
                   <input type="text" class="eqLogicAttr form-control" data-l1key="configuration"
                     data-l2key="cron_jour" />
                   <span class="input-group-btn">
-                    <a class="btn btn-default btn-sm cursor jeeHelper" data-helper="cron"><i
+                    <a class="btn btn-default cursor jeeHelper" data-helper="cron"><i
                         class="fas fa-question-circle"></i></a>
                   </span>
                 </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label">{{Au coucher du soleil}}</label>
+              <div class="col-sm-2 form-check-input">
+                <input type="checkbox" required class="eqLogicAttr" data-l1key="configuration"
+                  data-l2key="coucher_soleil" unchecked /></label>
               </div>
             </div>
 
@@ -173,7 +207,7 @@
                   <input type="text" class="eqLogicAttr form-control" data-l1key="configuration"
                     data-l2key="cron_nuit" />
                   <span class="input-group-btn">
-                    <a class="btn btn-default btn-sm cursor jeeHelper" data-helper="cron"><i
+                    <a class="btn btn-default cursor jeeHelper" data-helper="cron"><i
                         class="fas fa-question-circle"></i></a>
                   </span>
                 </div>
@@ -281,7 +315,7 @@
                   <input type="text" class="eqLogicAttr form-control" data-l1key="configuration"
                     data-l2key="cron_repetition_eclairage" />
                   <span class="input-group-btn">
-                    <a class="btn btn-default btn-sm cursor jeeHelper" data-helper="cron"><i
+                    <a class="btn btn-default cursor jeeHelper" data-helper="cron"><i
                         class="fas fa-question-circle"></i></a>
                   </span>
                 </div>
@@ -370,7 +404,7 @@
                   <input type="text" class="eqLogicAttr form-control" data-l1key="configuration"
                     data-l2key="cron_repetition_chauffage" />
                   <span class="input-group-btn">
-                    <a class="btn btn-default btn-sm cursor jeeHelper" data-helper="cron"><i
+                    <a class="btn btn-default cursor jeeHelper" data-helper="cron"><i
                         class="fas fa-question-circle"></i></a>
                   </span>
                 </div>
@@ -462,7 +496,7 @@
                   <input type="text" class="eqLogicAttr form-control" data-l1key="configuration"
                     data-l2key="cron_repetition_humidite" />
                   <span class="input-group-btn">
-                    <a class="btn btn-default btn-sm cursor jeeHelper" data-helper="cron"><i
+                    <a class="btn btn-default cursor jeeHelper" data-helper="cron"><i
                         class="fas fa-question-circle"></i></a>
                   </span>
                 </div>
@@ -495,6 +529,75 @@
                       action}}</a>
                   </legend>
                   <div id="div_hum_non">
+
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+
+          </fieldset>
+        </form>
+      </div>
+
+      <!--
+
+        Onglet Brumisation
+
+      -->
+      <div role="tabpanel" class="tab-pane" id="brumisationtab">
+        <form class="form-horizontal">
+          <fieldset>
+            <br /><br />
+
+            <div class="form-group">
+              <label class="col-sm-2 control-label">{{Temps de brumisation (sec)}}</label>
+              <div class="col-sm-2">
+                <input type="text" class="eqLogicAttr form-control tooltips" data-l1key="configuration"
+                  data-l2key="temps_brume" placeholder="15" />
+              </div>
+            </div>
+
+            <form class="form-horizontal">
+              <fieldset>
+                <legend>
+                  {{Déclenchement ?}}
+                  <a class="btn btn-primary btn-xs pull-right addSchedule" data-type="schedule_brume"
+                    style="position: relative; top : 5px;"><i class="fas fa-plus-circle"></i> {{Ajouter une
+                    programmation}}</a>
+                </legend>
+                <div id="div_schedule_brume">
+
+                </div>
+
+              </fieldset>
+            </form>
+
+            <form class="form-horizontal">
+              <fieldset>
+                <div>
+                  <legend>
+                    {{Actions brumisation ?}}
+                    <a class="btn btn-primary btn-xs pull-right addAction" data-type="brume_on"
+                      style="position: relative; top : 5px;"><i class="fas fa-plus-circle"></i> {{Ajouter une
+                      action}}</a>
+                  </legend>
+                  <div id="div_brume_on">
+
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+
+            <form class="form-horizontal">
+              <fieldset>
+                <div>
+                  <legend>
+                    {{Actions fin de brumisation ?}}
+                    <a class="btn btn-primary btn-xs pull-right addAction" data-type="brume_off"
+                      style="position: relative; top : 5px;"><i class="fas fa-plus-circle"></i> {{Ajouter une
+                      action}}</a>
+                  </legend>
+                  <div id="div_brume_off">
 
                   </div>
                 </div>
