@@ -323,9 +323,6 @@
           $this->getCmd(null, 'status')->event(__('Jour', __FILE__));
           $this->actionsEclairageJour();
           $this->actionsConsignesJour();
-          if ($this->getCmd(null, 'mode_ven')->execCmd() === 'Ventile') {
-              $this->pasVentile();
-          }
       }
 
       // On exécute les actions d'éclairage jour
@@ -383,7 +380,6 @@
           $this->getCmd(null, 'status')->event(__('Nuit', __FILE__));
           $this->actionsEclairageNuit();
           $this->actionsConsignesNuit();
-          $this->ventile();
       }
 
       // On éxécute les actions d'éclairage nuit
@@ -468,6 +464,7 @@
         
           $consigne_min = $consigne - $this->getConfiguration('hysteresis_min', 1);
           $consigne_max = $consigne + $this->getConfiguration('hysteresis_max', 1);
+          $consigne_maxmax = $consigne + $this->getConfiguration('hysteresis_max', 1)*2;
 
           $oldTemperature = $this->getCache('oldTemperature', -99);
           $this->setCache('oldTemperature', $temperature);
@@ -508,10 +505,10 @@
               $this->pasDeChauffe();
           }
 
-          if ($this->getCmd(null, 'mode_ven')->execCmd() === 'Ventile') {
-              if ($temperature <= $consigne_max + $moyenneBaisse / 2) {
-                  $this->pasVentile();
-              }
+          if ($temperature <= $consigne_max) {
+              $this->pasVentile();
+          } elseif ($temperature >= $consigne_maxmax) {
+              $this->ventile();
           }
       }
 

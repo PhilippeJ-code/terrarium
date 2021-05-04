@@ -63,10 +63,10 @@
           {{Horaire}}</a></li>
       <li role="presentation"><a href="#consignestab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
           {{Consignes}}</a></li>
-      <li role="presentation"><a href="#eclairagetab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
-          {{Eclairage}}</a></li>
       <li role="presentation"><a href="#chauffagetab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
           {{Chauffage}}</a></li>
+      <li role="presentation"><a href="#eclairagetab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
+          {{Eclairage}}</a></li>
       <li role="presentation"><a href="#humiditetab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
           {{Humidité}}</a></li>
       <li role="presentation"><a href="#brumisationtab" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i>
