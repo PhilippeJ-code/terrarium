@@ -22,26 +22,32 @@
 ## 3. Onglet "Consignes"
 
     Cet onglet permet de choisir les températures mini et maxi de la consigne, ainsi que les actions qui seront effectuées
-    lors du passage en mode jour ou en mode nuit.
+    lors du passage en mode jour ou en mode nuit. 
+
+    La première action à effectuer est évidemment le changement de la consigne de température, on utilisera pour cela la commande 
+    Thermostat du plugin comme sur l'image qui suit.
 
      NB Le plugin permet de bloquer les actions de consigne. Si le Gecko reçoit des amis pour la nuit, on peut bloquer la consigne
      sans que le plugin n'interfère.
 
 ![Consignes](../images/Consignes.png "Consignes")
 
-## 4. Onglet "Eclairage"
+## 4. Onglet "Chauffage"
+
+    Cet onglet permet de choisir les actions qui seront effectuées lors du démarrage ou de l'arrêt du chauffage. Pour effectuer le contrôle du chauffage, nous avons besoin de la température intérieure du terrarium, des hysteresis min/max pour le déclenchement et l'arrêt du chauffage et d'un cron de répétition pour répèter les actions périodiquement en cas de problème de transmission par exemple.
+
+    En cas de surchauffe ( température >= consigne + hysteresis max * 2 ), on peut enclencher des actions qui permettront d'enclencher la
+    ventilation du terrarium. Cette ventilation prendra fin quand la température reviendra dans une fourchette normale.
+
+![Chauffage](../images/Chauffage.png "Chauffage")
+
+## 5. Onglet "Eclairage"
 
     Cet onglet permet de choisir les actions d'éclairage qui seront effectuées lors du passage en mode jour ou en mode nuit. Ces actions pourront être répètées périodiquement grâce à un cron de répétition. 
     
       NB Le plugin permet de bloquer les actions d'éclairage
 
 ![Eclairage](../images/Eclairage.png "Eclairage")
-
-## 5. Onglet "Chauffage"
-
-    Cet onglet permet de choisir les actions qui seront effectuées lors du démarrage ou de l'arrêt du chauffage. Pour effectuer le contrôle du chauffage, nous avons besoin de la température intérieure du terrarium, des hysteresis min/max pour le déclenchement et l'arrêt du chauffage et d'un cron de répétition pour répèter les actions périodiquement en cas de problème de transmission par exemple.
-
-![Chauffage](../images/Chauffage.png "Chauffage")
 
 ## 6. Onglet "Humidité"
 
@@ -69,19 +75,21 @@
 
 ![Widget](../images/Widget.png "Widget")
 
+    Dans la première tuile, on rretrouve le nom de l'équipement une icone qui permet d'afficher les consommations instantanées de chauffe.
+
     On peut voir un soleil en haut à droite pour le mode "Jour", une lune pour le mode "Nuit".
     Une ampoule barrée ou non qui empêche ou pas les changements d'éclairage par le plugin.
     Un cadenas qui empêche ou pas les changements de consigne par le plugin.
 
     Un pavé sous-titré "Chauffage" qui donne la consigne d'humidité, l'humidité actuelle,
-    une icone "flamme" pour indiquer que la chauffe est active.
+    une icone "flamme" pour indiquer que la chauffe est active et une icone "ventilateur" pour indiquer
+    que la ventilation est active.
 
     Un pavé sous-titré "Humidité" qui donne la consigne de température, la température actuelle,
     une icone "nuage" pour indiquer que l'humidification est active.
     
     Les consignes sont modifiables au moyen des flêches.
 
-    Et en bas à droite, une icone qui permet d'afficher les consommations instantanées de chauffe.
 
 ![WidgetConsos](../images/WidgetConsos.png "WidgetConsos")
 

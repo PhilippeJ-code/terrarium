@@ -25,4 +25,5 @@
     Ajout lever et coucher du soleil pour le passage jour nuit
     Ajout de la brumisation
     Ajout du nom de l'équipement sur le widget
+    Ajout de la ventilation
     
