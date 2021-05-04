@@ -84,7 +84,7 @@
 
 ![Widget](../images/Widget.png "Widget")
 
-    Dans la première tuile, on rretrouve le nom de l'équipement une icone qui permet d'afficher les consommations 
+    Dans la première tuile, on retrouve le nom de l'équipement une icone qui permet d'afficher les consommations 
     instantanées de chauffe.
 
     On peut voir un soleil en haut à droite pour le mode "Jour", une lune pour le mode "Nuit".
