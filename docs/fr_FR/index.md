@@ -1,7 +1,7 @@
 # Plugin terrarium pour Jeedom
 
     Ce plugin permet de domotiser un terrarium.
-      Eclairage, chauffage et historisation des consommations ( jour, semaine, mois et année ).
+      Chauffage, ventilation, éclairage, brumisation et historisation des consommations ( jour, semaine, mois et année ).
 
     On pourrait faire la même chose en utilisant des scénarios, le plugin thermostat et le plugin agenda ou autres mais 
     ça me semblait un bon exercice pour faire connaissane avec la programmation d'un plugin.
@@ -35,10 +35,14 @@
 
 ## 4. Onglet "Chauffage"
 
-    Cet onglet permet de choisir les actions qui seront effectuées lors du démarrage ou de l'arrêt du chauffage. Pour effectuer le contrôle du chauffage, nous avons besoin de la température intérieure du terrarium, des hysteresis min/max pour le déclenchement et l'arrêt du chauffage et d'un cron de répétition pour répèter les actions périodiquement en cas de problème de transmission par exemple.
+    Cet onglet permet de choisir les actions qui seront effectuées lors du démarrage ou de l'arrêt du chauffage. 
+    Pour effectuer le contrôle du chauffage, nous avons besoin de la température intérieure du terrarium, des hysteresis 
+    min/max pour le déclenchement et l'arrêt du chauffage et d'un cron de répétition pour répèter les actions 
+    périodiquement en cas de problème de transmission par exemple.
 
-    En cas de surchauffe ( température >= consigne + hysteresis max * 2 ), on peut enclencher des actions qui permettront d'enclencher la
-    ventilation du terrarium. Cette ventilation prendra fin quand la température reviendra dans une fourchette normale.
+    En cas de surchauffe ( température >= consigne + hysteresis max * 2 ), on peut enclencher des actions qui permettront 
+    d'enclencher la ventilation du terrarium. Cette ventilation prendra fin quand la température reviendra dans une fourchette 
+    normale.
 
 ![Chauffage](../images/Chauffage.png "Chauffage")
 
@@ -69,12 +73,13 @@
 
 ## 8. Onglet "Consommation"
 
-    Si le chauffage du terrarium est commandé par un matériel qui remonte la consommation en KwH, on peut utiliser cette information pour historiser les consommations ( jour, semaine, mois et année ) du terrarium.
+    Si le chauffage du terrarium est commandé par un matériel qui remonte la consommation en KwH, 
+    on peut utiliser cette information pour historiser les consommations ( jour, semaine, mois et année ) du terrarium.
 
-        NB J'ai pris soin de la base de données de Jeedom en gérant l'historisation de façon à n'avoir qu'une seule donnée historisée
-        par jour, semaine, mois et année. Ceci explique les commandes consoJour, consoSemaine, consoMois, consoAnnee qui mémorisent 
-        les consommations instantanées et les commandes histoJour, histoSemaine, histoMois et histoAnnee qui permettent l'historisation
-        "optimisée".
+        NB J'ai pris soin de la base de données de Jeedom en gérant l'historisation de façon à n'avoir qu'une seule donnée 
+        historisée par jour, semaine, mois et année. Ceci explique les commandes consoJour, consoSemaine, consoMois, consoAnnee 
+        qui mémorisent les consommations instantanées et les commandes histoJour, histoSemaine, histoMois et histoAnnee qui 
+        permettent l'historisation "optimisée".
 
 ![Consommation](../images/Consommation.png "Consommation")
 
