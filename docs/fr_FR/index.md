@@ -3,7 +3,8 @@
     Ce plugin permet de domotiser un terrarium.
       Eclairage, chauffage et historisation des consommations ( jour, semaine, mois et année ).
 
-    On pourrait faire la même chose en utilisant des scénarios, le plugin thermostat et le plugin agenda ou autres mais ça me semblait un bon exercice pour faire connaissane avec la programmation d'un plugin et pour que ce soit didactique j'ai ajouté un max de commentaires dans la programmation.
+    On pourrait faire la même chose en utilisant des scénarios, le plugin thermostat et le plugin agenda ou autres mais 
+    ça me semblait un bon exercice pour faire connaissane avec la programmation d'un plugin.
 
 ## 1. Configuration du plugin
 
@@ -14,8 +15,8 @@
 
     Cet onglet permet de choisir les dates de "lever et coucher du soleil" dans le terrarium, ce sont les
     déclencheurs qui permettent de passer en mode "Jour" et en mode "Nuit". La latitude et la longitude doivent être introduits
-    si on désire utiliser les heures de lever et de coucher du soleil. Si la case lever ou coucher du soleil, le cron est calculé
-    automatiquement et remplacé dans la configuration. Ce calcul s'effectue à minuit.
+    si on désire utiliser les heures de lever et de coucher du soleil. Si la case lever ou coucher du soleil est cochée, 
+    le cron est calculé automatiquement et remplacé dans la configuration. Ce calcul s'effectue à minuit.
 
 ![Horaire](../images/Horaire.png "Horaire")
 
@@ -43,7 +44,8 @@
 
 ## 5. Onglet "Eclairage"
 
-    Cet onglet permet de choisir les actions d'éclairage qui seront effectuées lors du passage en mode jour ou en mode nuit. Ces actions pourront être répètées périodiquement grâce à un cron de répétition. 
+    Cet onglet permet de choisir les actions d'éclairage qui seront effectuées lors du passage en mode jour ou en mode nuit. 
+    Ces actions pourront être répètées périodiquement grâce à un cron de répétition. 
     
       NB Le plugin permet de bloquer les actions d'éclairage
 
@@ -51,13 +53,17 @@
 
 ## 6. Onglet "Humidité"
 
-    Cet onglet permet de choisir les actions qui seront effectuées lors du démarrage ou de l'arrêt de la gestion de l'humidité. Pour effectuer le contrôle de l'humidité, nous avons besoin de l'humidité intérieure du terrarium, des hysteresis min/max et d'un cron de répétition pour répèter les actions périodiquement en cas de problème de transmission par exemple.
+    Cet onglet permet de choisir les actions qui seront effectuées lors du démarrage ou de l'arrêt de la gestion de l'humidité. 
+    Pour effectuer le contrôle de l'humidité, nous avons besoin de l'humidité intérieure du terrarium, des hysteresis min/max 
+    et d'un cron de répétition pour répèter les actions périodiquement en cas de problème de transmission par exemple.
 
 ![Humidite](../images/Humidite.png "Humidite")
 
 ## 7. Onglet "Brumisation"
 
-    Cet onglet permet de choisir les actions qui seront effectuées lors du démarrage ou de l'arrêt de la gestion de la brumisation. Pour effectuer le contrôle de la brumisation, nous avons besoin d'une programmation horaire, des actions à effectuer et d'un temps de brumisation. 
+    Cet onglet permet de choisir les actions qui seront effectuées lors du démarrage ou de l'arrêt de la gestion de la brumisation.
+    Pour effectuer le contrôle de la brumisation, nous avons besoin d'une programmation horaire, des actions à effectuer et d'un
+    temps de brumisation. 
 
 ![Brumisation](../images/Brumisation.png "Brumisation")
 
@@ -65,7 +71,10 @@
 
     Si le chauffage du terrarium est commandé par un matériel qui remonte la consommation en KwH, on peut utiliser cette information pour historiser les consommations ( jour, semaine, mois et année ) du terrarium.
 
-        NB J'ai pris soin de la base de données de Jeedom en gérant l'historisation de façon à n'avoir qu'une seule donnée historisée par jour, semaine, mois et année. Ceci explique les commandes consoJour, consoSemaine, consoMois, consoAnnee qui mémorisent les consommations instantanées et les commandes histoJour, histoSemaine, histoMois et histoAnnee qui permettent l'historisation "optimisée".
+        NB J'ai pris soin de la base de données de Jeedom en gérant l'historisation de façon à n'avoir qu'une seule donnée historisée
+        par jour, semaine, mois et année. Ceci explique les commandes consoJour, consoSemaine, consoMois, consoAnnee qui mémorisent 
+        les consommations instantanées et les commandes histoJour, histoSemaine, histoMois et histoAnnee qui permettent l'historisation
+        "optimisée".
 
 ![Consommation](../images/Consommation.png "Consommation")
 
@@ -75,7 +84,8 @@
 
 ![Widget](../images/Widget.png "Widget")
 
-    Dans la première tuile, on rretrouve le nom de l'équipement une icone qui permet d'afficher les consommations instantanées de chauffe.
+    Dans la première tuile, on rretrouve le nom de l'équipement une icone qui permet d'afficher les consommations 
+    instantanées de chauffe.
 
     On peut voir un soleil en haut à droite pour le mode "Jour", une lune pour le mode "Nuit".
     Une ampoule barrée ou non qui empêche ou pas les changements d'éclairage par le plugin.
