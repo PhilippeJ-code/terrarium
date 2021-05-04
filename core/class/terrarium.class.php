@@ -162,6 +162,7 @@
                       log::add('terrarium', 'debug', 'Initialisation du terrarium');
                       $terrarium->getCmd(null, 'etat_verrou_eclairage')->event(0);
                       $terrarium->getCmd(null, 'etat_verrou_consignes')->event(0);
+                      $terrarium->getCmd(null, 'etat_verrou_ventile')->event(0);
 
                       $now = time();
                       $heure = date("H", $now);
@@ -505,10 +506,12 @@
               $this->pasDeChauffe();
           }
 
-          if ($temperature <= $consigne_max) {
-              $this->pasVentile();
-          } elseif ($temperature >= $consigne_maxmax) {
-              $this->ventile();
+          if ($this->getCmd(null, 'etat_verrou_ventile')->execCmd() == 0) {
+              if ($temperature <= $consigne_max) {
+                  $this->pasVentile();
+              } elseif ($temperature >= $consigne_maxmax) {
+                  $this->ventile();
+              }
           }
       }
 
@@ -1044,6 +1047,54 @@
           $unlock->setOrder(9);
           $unlock->save();
   
+          // Gestion ventilation verrouillé ou pas
+          //
+          //   L'état, le on et le off
+          //
+          $etatVerrouVentile = $this->getCmd(null, 'etat_verrou_ventile');
+          if (!is_object($etatVerrouVentile)) {
+              $etatVerrouVentile = new terrariumCmd();
+              $etatVerrouVentile->setName(__('Verrou Ventilation', __FILE__));
+              $etatVerrouVentile->setIsVisible(1);
+              $etatVerrouVentile->setIsHistorized(0);
+          }
+          $etatVerrouVentile->setEqLogic_id($this->getId());
+          $etatVerrouVentile->setType('info');
+          $etatVerrouVentile->setSubType('binary');
+          $etatVerrouVentile->setLogicalId('etat_verrou_ventile');
+          $etatVerrouVentile->setOrder(4);
+          $etatVerrouVentile->save();
+  
+          $lock = $this->getCmd(null, 'on_verrou_ventile');
+          if (!is_object($lock)) {
+              $lock = new terrariumCmd();
+              $lock->setName('Verrou Ventilation On');
+              $lock->setIsVisible(1);
+              $lock->setIsHistorized(0);
+          }
+          $lock->setEqLogic_id($this->getId());
+          $lock->setType('action');
+          $lock->setSubType('other');
+          $lock->setLogicalId('on_verrou_ventile');
+          $lock->setValue($etatVerrouVentile->getId());
+          $lock->setOrder(5);
+          $lock->save();
+  
+          $unlock = $this->getCmd(null, 'off_verrou_ventile');
+          if (!is_object($unlock)) {
+              $unlock = new terrariumCmd();
+              $unlock->setName('Verrou Ventilation Off');
+              $unlock->setIsVisible(1);
+              $unlock->setIsHistorized(0);
+          }
+          $unlock->setEqLogic_id($this->getId());
+          $unlock->setType('action');
+          $unlock->setSubType('other');
+          $unlock->setLogicalId('off_verrou_ventile');
+          $unlock->setValue($etatVerrouVentile->getId());
+          $unlock->setOrder(6);
+          $unlock->save();
+  
           // Mode chauffage
           //
           $mode = $this->getCmd(null, 'mode');
@@ -1454,6 +1505,16 @@
           $obj = $this->getCmd(null, 'off_verrou_consignes');
           $replace["#idOffVerrouConsignes#"] = $obj->getId();
 
+          $obj = $this->getCmd(null, 'etat_verrou_ventile');
+          $replace["#etatVerrouVentile#"] = $obj->execCmd();
+          $replace["#idEtatVerrouVentile#"] = $obj->getId();
+           
+          $obj = $this->getCmd(null, 'on_verrou_ventile');
+          $replace["#idOnVerrouVentile#"] = $obj->getId();
+
+          $obj = $this->getCmd(null, 'off_verrou_ventile');
+          $replace["#idOffVerrouVentile#"] = $obj->getId();
+
           $obj = $this->getCmd(null, 'temperature');
           $replace["#temperature#"] = $obj->execCmd();
           $replace["#idTemperature#"] = $obj->getId();
@@ -1530,6 +1591,13 @@
               $etatVerrouConsignes->event(1);
           } elseif ($this->getLogicalId() == 'off_verrou_consignes') {
               $etatVerrouConsignes->event(0);
+          }
+
+          $etatVerrouVentile = $eqLogic->getCmd(null, 'etat_verrou_ventile');
+          if ($this->getLogicalId() == 'on_verrou_ventile') {
+              $etatVerrouVentile->event(1);
+          } elseif ($this->getLogicalId() == 'off_verrou_ventile') {
+              $etatVerrouVentile->event(0);
           }
 
           if ($this->getLogicalId() == 'statut_jour') {
