@@ -44,6 +44,8 @@
     d'enclencher la ventilation du terrarium. Cette ventilation prendra fin quand la température reviendra dans une fourchette 
     normale.
 
+    NB Le plugin permet de bloquer les actions de ventilation
+
 ![Chauffage](../images/Chauffage.png "Chauffage")
 
 ## 5. Onglet "Eclairage"
@@ -93,8 +95,9 @@
     instantanées de chauffe.
 
     On peut voir un soleil en haut à droite pour le mode "Jour", une lune pour le mode "Nuit".
-    Une ampoule barrée ou non qui empêche ou pas les changements d'éclairage par le plugin.
-    Un cadenas qui empêche ou pas les changements de consigne par le plugin.
+    Une hélice qui permet d'empêcher ou pas la ventilation.
+    Une ampoule barrée ou non qui permet d'empêcher ou pas les changements d'éclairage par le plugin.
+    Un cadenas qui permet d'empêcher ou pas les changements de consigne par le plugin.
 
     Un pavé sous-titré "Chauffage" qui donne la consigne d'humidité, l'humidité actuelle,
     une icone "flamme" pour indiquer que la chauffe est active et une icone "ventilateur" pour indiquer
