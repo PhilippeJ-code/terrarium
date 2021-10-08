@@ -107,24 +107,24 @@
                           $latitude = floatval($latitude);
                           if (($longitude != 0) && ($latitude != 0)) {
                               if ($leverSoleil) {
-                                  $dateLever =  date_sunrise($now, 1, $latitude, $longitude, 90+35/60, date("Z", $now)/3600);
+                                  $dateLever =  date_sunrise($now, SUNFUNCS_RET_STRING, $latitude, $longitude, 90+35/60, date("Z", $now)/3600);
                                   $elms = explode(':', $dateLever);
                                   if (count($elms) == 2) {
-                                      $heure = intval($elms[0], '0');
-                                      $minute = intval($elms[1], '0');
+                                      $heure = intval($elms[0]);
+                                      $minute = intval($elms[1]);
                                       $cronLever = $minute . ' ' . $heure . ' * * *';
                                       $terrarium->setConfiguration('cron_jour', $cronLever);
-                                  }
+                                    }
                               }
                               if ($coucherSoleil) {
-                                  $dateCoucher =  date_sunset($now, 1, $latitude, $longitude, 90+35/60, date("Z", $now)/3600);
+                                  $dateCoucher =  date_sunset($now, SUNFUNCS_RET_STRING, $latitude, $longitude, 90+35/60, date("Z", $now)/3600);
                                   $elms = explode(':', $dateCoucher);
                                   if (count($elms) == 2) {
-                                      $heure = intval($elms[0], '0');
-                                      $minute = intval($elms[1], '0');
+                                      $heure = intval($elms[0]);
+                                      $minute = intval($elms[1]);
                                       $cronCoucher = $minute . ' ' . $heure . ' * * *';
                                       $terrarium->setConfiguration('cron_nuit', $cronCoucher);
-                                  }
+                                    }
                               }
                               if ($leverSoleil || $coucherSoleil) {
                                   $terrarium->save();
@@ -1544,16 +1544,16 @@
           $replace["#idThermostat_hum#"] = $obj->getId();
 
           $obj = $this->getCmd(null, 'consoJour');
-          $replace["#consoJour#"] = round($obj->execCmd(), 2);
+          $replace["#consoJour#"] = $obj->execCmd();
           $replace["#idConsoJour#"] = $obj->getId();
           $obj = $this->getCmd(null, 'consoSemaine');
-          $replace["#consoSemaine#"] = round($obj->execCmd(), 2);
+          $replace["#consoSemaine#"] = $obj->execCmd();
           $replace["#idConsoSemaine#"] = $obj->getId();
           $obj = $this->getCmd(null, 'consoMois');
-          $replace["#consoMois#"] = round($obj->execCmd(), 2);
+          $replace["#consoMois#"] = $obj->execCmd();
           $replace["#idConsoMois#"] = $obj->getId();
           $obj = $this->getCmd(null, 'consoAnnee');
-          $replace["#consoAnnee#"] = round($obj->execCmd(), 2);
+          $replace["#consoAnnee#"] = $obj->execCmd();
           $replace["#idConsoAnnee#"] = $obj->getId();
     
           $obj = $this->getCmd(null, 'histoJour');

@@ -386,22 +386,22 @@
     jeedom.cmd.update['#idConsigne_hum#']({ display_value: '#consigne_hum#' });
 
     jeedom.cmd.update['#idConsoJour#'] = function (_options) {
-      $('#idConsoJour#uid#').html(_options.display_value);
+      $('#idConsoJour#uid#').html(Math.round(_options.display_value * 100) / 100);
     }
     jeedom.cmd.update['#idConsoJour#']({ display_value: '#consoJour#' });
 
     jeedom.cmd.update['#idConsoSemaine#'] = function (_options) {
-      $('#idConsoSemaine#uid#').html(_options.display_value);
+      $('#idConsoSemaine#uid#').html(Math.round(_options.display_value * 100) / 100);
     }
     jeedom.cmd.update['#idConsoSemaine#']({ display_value: '#consoSemaine#' });
 
     jeedom.cmd.update['#idConsoMois#'] = function (_options) {
-      $('#idConsoMois#uid#').html(_options.display_value);
+      $('#idConsoMois#uid#').html(Math.round(_options.display_value * 100) / 100);
     }
     jeedom.cmd.update['#idConsoMois#']({ display_value: '#consoMois#' });
 
     jeedom.cmd.update['#idConsoAnnee#'] = function (_options) {
-      $('#idConsoAnnee#uid#').html(_options.display_value);
+      $('#idConsoAnnee#uid#').html(Math.round(_options.display_value * 100) / 100);
     }
     jeedom.cmd.update['#idConsoAnnee#']({ display_value: '#consoAnnee#' });
 
