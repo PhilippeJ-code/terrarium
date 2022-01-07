@@ -26,4 +26,9 @@
     Ajout de la brumisation
     Ajout du nom de l'équipement sur le widget
     Ajout de la ventilation
+
+# 07-01-2022
+
+    Ajout d'un thème dans la configuration de l'équipement
+    
     

@@ -114,7 +114,7 @@
                                       $minute = intval($elms[1]);
                                       $cronLever = $minute . ' ' . $heure . ' * * *';
                                       $terrarium->setConfiguration('cron_jour', $cronLever);
-                                    }
+                                  }
                               }
                               if ($coucherSoleil) {
                                   $dateCoucher =  date_sunset($now, SUNFUNCS_RET_STRING, $latitude, $longitude, 90+35/60, date("Z", $now)/3600);
@@ -124,7 +124,7 @@
                                       $minute = intval($elms[1]);
                                       $cronCoucher = $minute . ' ' . $heure . ' * * *';
                                       $terrarium->setConfiguration('cron_nuit', $cronCoucher);
-                                    }
+                                  }
                               }
                               if ($leverSoleil || $coucherSoleil) {
                                   $terrarium->save();
@@ -1452,6 +1452,7 @@
       public function toHtml($_version = 'dashboard')
       {
           $isWidgetPlugin = $this->getConfiguration('isWidgetPlugin');
+          $theme = $this->getConfiguration('theme');
 
           if (!$isWidgetPlugin) {
               return eqLogic::toHtml($_version);
@@ -1462,6 +1463,14 @@
               return $replace;
           }
           $version = jeedom::versionAlias($_version);
+
+          if ($theme == 'noir') {
+              $replace["#couleurFond#"] = '#000000';
+              $replace['#couleur#'] = '#ffffff';
+          } else {
+              $replace["#couleurFond#"] = '#ffffff';
+              $replace['#couleur#'] = '#000000';
+          }
  
           $obj = $this->getCmd(null, 'status');
           $replace["#statut#"] = $obj->execCmd();

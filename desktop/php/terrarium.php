@@ -127,11 +127,23 @@
             </div>
 
             <legend><i class="fas fa-cogs"></i> {{Paramètres}}</legend>
+
             <div class="form-group">
               <label class="col-sm-3 control-label">{{Utiliser le widget du plugin}}</label>
               <div class="col-sm-3 form-check-input">
                 <input type="checkbox" required class="eqLogicAttr" data-l1key="configuration"
                   data-l2key="isWidgetPlugin" checked /></label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">{{Thème}}</label>
+              <div class="col-sm-3">
+                <select required class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="theme">
+                  <option value="" disabled selected>{{Sélectionnez le thème}}</option>
+                  <option value="blanc">Blanc( défaut )</option>
+                  <option value="noir">Noir</option>
+                </select>
               </div>
             </div>
 
