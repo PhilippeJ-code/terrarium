@@ -367,7 +367,7 @@
         }
       }
     }
-    Update#uid#idStatut({ cmd_id: '#idStatut#', value: '#statut#', display_value: '#statut#' });
+    Update#uid#idStatut({ display_value: '#statut#' });
 
     // Refresh Température
     //
@@ -377,7 +377,7 @@
         cmd.innerHTML = Math.round(_options.display_value * 10) / 10 + '°';
       }
     };
-    Update#uid#idTemperature({ cmd_id: '#idTemperature#', value: '#temperature#', display_value: '#temperature#' });
+    Update#uid#idTemperature({ display_value: '#temperature#' });
 
     // Refresh Humidité
     //
@@ -387,7 +387,7 @@
         cmd.innerHTML = Math.round(_options.display_value * 10) / 10 + '%';
       }
     }
-    Update#uid#idHumidite({ cmd_id: '#idHumidite#', value: '#humidite#', display_value: '#humidite#' });
+    Update#uid#idHumidite({ display_value: '#humidite#' });
 
     // Refresh Consigne
     //
@@ -397,7 +397,7 @@
         cmd.innerHTML = Math.round(_options.display_value * 10) / 10 + '°';
       }
     }
-    Update#uid#idConsigne({ cmd_id: '#idConsigne#', value: '#consigne#', display_value: '#consigne#' });
+    Update#uid#idConsigne({ display_value: '#consigne#' });
 
     // Refresh consigne humidité
     //
@@ -407,7 +407,7 @@
         cmd.innerHTML = Math.round(_options.display_value * 10) / 10 + '%';
       }
     }
-    Update#uid#idConsigne_hum({ cmd_id: '#idConsigne_hum#', value: '#consigne_hum#', display_value: '#consigne_hum#' });
+    Update#uid#idConsigne_hum({ display_value: '#consigne_hum#' });
 
     // Refresh consommation jour
     //
@@ -417,7 +417,7 @@
         cmd.innerHTML = Math.round(_options.display_value * 100) / 100;
       }
     }
-    Update#uid#idConsoJour({ cmd_id: '#idConsoJour#', value: '#consoJour#', display_value: '#consoJour#' });
+    Update#uid#idConsoJour({ display_value: '#consoJour#' });
 
     // Refresh consommation Semaine
     //
@@ -427,7 +427,7 @@
         cmd.innerHTML = Math.round(_options.display_value * 100) / 100;
       }
     }
-    Update#uid#idConsoSemaine({ cmd_id: '#idConsoSemaine#', value: '#consoSemaine#', display_value: '#consoSemaine#' });
+    Update#uid#idConsoSemaine({ display_value: '#consoSemaine#' });
 
     // Refresh consommation Mois
     //
@@ -437,7 +437,7 @@
         cmd.innerHTML = Math.round(_options.display_value * 100) / 100;
       }
     }
-    Update#uid#idConsoMois({ cmd_id: '#idConsoMois#', value: '#consoMois#', display_value: '#consoMois#' });
+    Update#uid#idConsoMois({ display_value: '#consoMois#' });
 
     // Refresh Consommation année
     //
@@ -447,7 +447,7 @@
         cmd.innerHTML = Math.round(_options.display_value * 100) / 100;
       }
     }
-    Update#uid#idConsoAnnee({ cmd_id: '#idConsoAnnee#', value: '#consoAnnee#', display_value: '#consoAnnee#' });
+    Update#uid#idConsoAnnee({ display_value: '#consoAnnee#' });
 
     // Refresh mode
     //
@@ -462,7 +462,7 @@
         }
       }
     }
-    Update#uid#idMode({ cmd_id: '#idMode#', value: '#mode#', display_value: '#mode#' });
+    Update#uid#idMode({ display_value: '#mode#' });
 
     // Refresh mode humidité
     //
@@ -477,7 +477,7 @@
         }
       }
     }
-    Update#uid#idMode_hum({ cmd_id: '#idMode_hum#', value: '#mode_hum#', display_value: '#mode_hum#' });
+    Update#uid#idMode_hum({ display_value: '#mode_hum#' });
 
     // Refresh mode ventilation
     //
@@ -492,7 +492,7 @@
         }
       }
     }
-    Update#uid#idMode_ven({ cmd_id: '#idMode_ven#', value: '#mode_ven#', display_value: '#mode_ven#' });
+    Update#uid#idMode_ven({ display_value: '#mode_ven#' });
 
     // Moins-Plus consigne température
     //
@@ -501,13 +501,13 @@
         var min = ('#minConsigne#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne#');
         var stepConsigne = (isNaN(parseFloat('#stepConsigne#'))) ? 0.5 : parseFloat('#stepConsigne#');
         if (parseFloat(cmd.innerHTML) >= min + stepConsigne) {
-          Update#uid#idConsigne({ cmd_id: '#idConsigne#', value: parseFloat(cmd.innerHTML) - stepConsigne, display_value: parseFloat(cmd.innerHTML) - stepConsigne });
+          Update#uid#idConsigne({ display_value: parseFloat(cmd.innerHTML) - stepConsigne });
           jeedom.cmd.execute({
             id: '#idThermostat#', value:
               { slider: cmd.innerHTML.replace("°", "").replace(" ", "") }
           });
         } else if (parseFloat(cmd.innerHTML) > min) {
-          Update#uid#idConsigne({ cmd_id: '#idConsigne#', value: min, display_value: min });
+          Update#uid#idConsigne({ display_value: min });
           jeedom.cmd.execute({
             id: '#idThermostat#', value:
               { slider: cmd.innerHTML.replace("°", "").replace(" ", "") }
@@ -521,13 +521,13 @@
         var max = ('#maxConsigne#' == '') ? Number.MAX_VALUE : parseFloat('#maxConsigne#');
         var stepConsigne = (isNaN(parseFloat('#stepConsigne#'))) ? 0.5 : parseFloat('#stepConsigne#');
         if (parseFloat(cmd.innerHTML) <= max - stepConsigne) {
-          Update#uid#idConsigne({ cmd_id: '#idConsigne#', value: parseFloat(cmd.innerHTML) + stepConsigne, display_value: parseFloat(cmd.innerHTML) + stepConsigne });
+          Update#uid#idConsigne({ display_value: parseFloat(cmd.innerHTML) + stepConsigne });
           jeedom.cmd.execute({
             id: '#idThermostat#', value:
               { slider: cmd.innerHTML.replace("°", "").replace(" ", "") }
           });
         } else if (parseFloat(cmd.innerHTML) < max) {
-          Update#uid#idConsigne({ cmd_id: '#idConsigne#', value: max, display_value: max });
+          Update#uid#idConsigne({ display_value: max });
           jeedom.cmd.execute({
             id: '#idThermostat#', value:
               { slider: cmd.innerHTML.replace("°", "").replace(" ", "") }
@@ -543,13 +543,13 @@
         var min = ('#minConsigne_hum#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne_hum#');
         var stepConsigne = (isNaN(parseFloat('#stepConsigne_hum#'))) ? 1 : parseFloat('#stepConsigne_hum#');
         if (parseFloat(cmd.innerHTML) >= min + stepConsigne) {
-          Update#uid#idConsigne_hum({ cmd_id: '#idConsigne_hum#', value: parseFloat(cmd.innerHTML) - stepConsigne, display_value: parseFloat(cmd.innerHTML) - stepConsigne });
+          Update#uid#idConsigne_hum({ display_value: parseFloat(cmd.innerHTML) - stepConsigne });
           jeedom.cmd.execute({
             id: '#idThermostat_hum#', value:
               { slider: cmd.innerHTML.replace("%", "").replace(" ", "") }
           });
         } else if (parseFloat(cmd.innerHTML) > min) {
-          Update#uid#idConsigne_hum({ cmd_id: '#idConsigne_hum#', value: min, display_value: min });
+          Update#uid#idConsigne_hum({ display_value: min });
           jeedom.cmd.execute({
             id: '#idThermostat_hum#', value:
               { slider: cmd.innerHTML.replace("%", "").replace(" ", "") }
@@ -563,13 +563,13 @@
         var max = ('#maxConsigne_hum#' == '') ? Number.MAX_VALUE : parseFloat('#maxConsigne_hum#');
         var stepConsigne = (isNaN(parseFloat('#stepConsigne_hum#'))) ? 0.5 : parseFloat('#stepConsigne_hum#');
         if (parseFloat(cmd.innerHTML) <= max - stepConsigne) {
-          Update#uid#idConsigne_hum({ cmd_id: '#idConsigne_hum#', value: parseFloat(cmd.innerHTML) + stepConsigne, display_value: parseFloat(cmd.innerHTML) + stepConsigne });
+          Update#uid#idConsigne_hum({ display_value: parseFloat(cmd.innerHTML) + stepConsigne });
           jeedom.cmd.execute({
             id: '#idThermostat_hum#', value:
               { slider: cmd.innerHTML.replace("%", "").replace(" ", "") }
           });
         } else if (parseFloat(cmd.innerHTML) < max) {
-          Update#uid#idConsigne_hum({ cmd_id: '#idConsigne_hum#', value: max, display_value: max });
+          Update#uid#idConsigne_hum({ display_value: max });
           jeedom.cmd.execute({
             id: '#idThermostat_hum#', value:
               { slider: cmd.innerHTML.replace("%", "").replace(" ", "") }
@@ -598,7 +598,7 @@
         }
       }
     }
-    Update#uid#idEtatVerrouConsignes({ cmd_id: '#idEtatVerrouConsignes#', value: '#etatVerrouConsignes#', display_value: '#etatVerrouConsignes#' });
+    Update#uid#idEtatVerrouConsignes({ display_value: '#etatVerrouConsignes#' });
 
     document.getElementById("idLockCsg#uid#").onclick = function () { jeedom.cmd.execute({ id: '#idOffVerrouConsignes#' }); };
     document.getElementById("idUnlockCsg#uid#").onclick = function () { jeedom.cmd.execute({ id: '#idOnVerrouConsignes#' }); };
@@ -623,7 +623,7 @@
         }
       }
     }
-    Update#uid#idEtatVerrouEclairage({ cmd_id: '#idEtatVerrouEclairage#', value: '#etatVerrouEclairage#', display_value: '#etatVerrouEclairage#' });
+    Update#uid#idEtatVerrouEclairage({ display_value: '#etatVerrouEclairage#' });
 
     document.getElementById("idLockEcl#uid#").onclick = function () { jeedom.cmd.execute({ id: '#idOffVerrouEclairage#' }); };
     document.getElementById("idUnlockEcl#uid#").onclick = function () { jeedom.cmd.execute({ id: '#idOnVerrouEclairage#' }); };
@@ -648,7 +648,7 @@
         }
       }
     }
-    Update#uid#idEtatVerrouVentile({ cmd_id: '#idEtatVerrouVentile#', value: '#etatVerrouVentile#', display_value: '#etatVerrouVentile#' });
+    Update#uid#idEtatVerrouVentile({ display_value: '#etatVerrouVentile#' });
 
     document.getElementById("idLockVen#uid#").onclick = function () { jeedom.cmd.execute({ id: '#idOffVerrouVentile#' }); };
     document.getElementById("idUnlockVen#uid#").onclick = function () { jeedom.cmd.execute({ id: '#idOnVerrouVentile#' }); };
