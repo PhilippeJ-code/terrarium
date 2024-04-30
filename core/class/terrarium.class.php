@@ -141,17 +141,20 @@
                       $tempsBrume = 15;
                   }
                   $tempsBrume = intval($tempsBrume);
-                  foreach ($terrarium->getConfiguration('schedule_brume_conf') as $schedule) {
-                      $cron = $schedule['cmd'];
+
+                  if ($terrarium->getConfiguration('schedule_brume_conf')) {
+                      foreach ($terrarium->getConfiguration('schedule_brume_conf') as $schedule) {
+                          $cron = $schedule['cmd'];
                 
-                      try {
-                          $c = new Cron\CronExpression(checkAndFixCron($cron), new Cron\FieldFactory);
-                          if ($c->isDue()) {
-                              $terrarium->actionsBrumisationOn();
-                              $terrarium->setCache('tempsRestant', $tempsBrume);
+                          try {
+                              $c = new Cron\CronExpression(checkAndFixCron($cron), new Cron\FieldFactory);
+                              if ($c->isDue()) {
+                                  $terrarium->actionsBrumisationOn();
+                                  $terrarium->setCache('tempsRestant', $tempsBrume);
+                              }
+                          } catch (Exception $e) {
+                              log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
                           }
-                      } catch (Exception $e) {
-                          log::add('terrarium', 'error', $terrarium->getHumanName() . ' : ' . $e->getMessage());
                       }
                   }
 
@@ -279,19 +282,21 @@
       //
       public function actionsBrumisationOn()
       {
-          foreach ($this->getConfiguration('brume_on_conf') as $action) {
-              try {
-                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
-                  if (!is_object($cmd)) {
-                      continue;
+          if ($this->getConfiguration('brume_on_conf')) {
+              foreach ($this->getConfiguration('brume_on_conf') as $action) {
+                  try {
+                      $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                      if (!is_object($cmd)) {
+                          continue;
+                      }
+                      $options = array();
+                      if (isset($action['options'])) {
+                          $options = $action['options'];
+                      }
+                      scenarioExpression::createAndExec('action', $action['cmd'], $options);
+                  } catch (Exception $e) {
+                      log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
                   }
-                  $options = array();
-                  if (isset($action['options'])) {
-                      $options = $action['options'];
-                  }
-                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
-              } catch (Exception $e) {
-                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
               }
           }
       }
@@ -300,19 +305,21 @@
       //
       public function actionsBrumisationOff()
       {
-          foreach ($this->getConfiguration('brume_off_conf') as $action) {
-              try {
-                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
-                  if (!is_object($cmd)) {
-                      continue;
+          if ($this->getConfiguration('brume_off_conf')) {
+              foreach ($this->getConfiguration('brume_off_conf') as $action) {
+                  try {
+                      $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                      if (!is_object($cmd)) {
+                          continue;
+                      }
+                      $options = array();
+                      if (isset($action['options'])) {
+                          $options = $action['options'];
+                      }
+                      scenarioExpression::createAndExec('action', $action['cmd'], $options);
+                  } catch (Exception $e) {
+                      log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
                   }
-                  $options = array();
-                  if (isset($action['options'])) {
-                      $options = $action['options'];
-                  }
-                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
-              } catch (Exception $e) {
-                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
               }
           }
       }
@@ -333,19 +340,21 @@
           if ($this->getCmd(null, 'etat_verrou_eclairage')->execCmd() == 1) {
               return;
           }
-          foreach ($this->getConfiguration('ecl_jour_conf') as $action) {
-              try {
-                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
-                  if (!is_object($cmd)) {
-                      continue;
+          if ($this->getConfiguration('ecl_jour_conf')) {
+              foreach ($this->getConfiguration('ecl_jour_conf') as $action) {
+                  try {
+                      $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                      if (!is_object($cmd)) {
+                          continue;
+                      }
+                      $options = array();
+                      if (isset($action['options'])) {
+                          $options = $action['options'];
+                      }
+                      scenarioExpression::createAndExec('action', $action['cmd'], $options);
+                  } catch (Exception $e) {
+                      log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
                   }
-                  $options = array();
-                  if (isset($action['options'])) {
-                      $options = $action['options'];
-                  }
-                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
-              } catch (Exception $e) {
-                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
               }
           }
       }
@@ -357,19 +366,21 @@
           if ($this->getCmd(null, 'etat_verrou_consignes')->execCmd() == 1) {
               return;
           }
-          foreach ($this->getConfiguration('csg_jour_conf') as $action) {
-              try {
-                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
-                  if (!is_object($cmd)) {
-                      continue;
+          if ($this->getConfiguration('csg_jour_conf')) {
+              foreach ($this->getConfiguration('csg_jour_conf') as $action) {
+                  try {
+                      $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                      if (!is_object($cmd)) {
+                          continue;
+                      }
+                      $options = array();
+                      if (isset($action['options'])) {
+                          $options = $action['options'];
+                      }
+                      scenarioExpression::createAndExec('action', $action['cmd'], $options);
+                  } catch (Exception $e) {
+                      log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
                   }
-                  $options = array();
-                  if (isset($action['options'])) {
-                      $options = $action['options'];
-                  }
-                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
-              } catch (Exception $e) {
-                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
               }
           }
       }
@@ -391,19 +402,21 @@
               return;
           }
       
-          foreach ($this->getConfiguration('ecl_nuit_conf') as $action) {
-              try {
-                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
-                  if (!is_object($cmd)) {
-                      continue;
+          if ($this->getConfiguration('ecl_nuit_conf')) {
+              foreach ($this->getConfiguration('ecl_nuit_conf') as $action) {
+                  try {
+                      $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                      if (!is_object($cmd)) {
+                          continue;
+                      }
+                      $options = array();
+                      if (isset($action['options'])) {
+                          $options = $action['options'];
+                      }
+                      scenarioExpression::createAndExec('action', $action['cmd'], $options);
+                  } catch (Exception $e) {
+                      log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
                   }
-                  $options = array();
-                  if (isset($action['options'])) {
-                      $options = $action['options'];
-                  }
-                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
-              } catch (Exception $e) {
-                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
               }
           }
       }
@@ -415,19 +428,21 @@
           if ($this->getCmd(null, 'etat_verrou_consignes')->execCmd() == 1) {
               return;
           }
-          foreach ($this->getConfiguration('csg_nuit_conf') as $action) {
-              try {
-                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
-                  if (!is_object($cmd)) {
-                      continue;
+          if ($this->getConfiguration('csg_nuit_conf')) {
+              foreach ($this->getConfiguration('csg_nuit_conf') as $action) {
+                  try {
+                      $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                      if (!is_object($cmd)) {
+                          continue;
+                      }
+                      $options = array();
+                      if (isset($action['options'])) {
+                          $options = $action['options'];
+                      }
+                      scenarioExpression::createAndExec('action', $action['cmd'], $options);
+                  } catch (Exception $e) {
+                      log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
                   }
-                  $options = array();
-                  if (isset($action['options'])) {
-                      $options = $action['options'];
-                  }
-                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
-              } catch (Exception $e) {
-                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
               }
           }
       }
@@ -527,19 +542,21 @@
       //
       public function actionsChauffage()
       {
-          foreach ($this->getConfiguration('chf_oui_conf') as $action) {
-              try {
-                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
-                  if (!is_object($cmd)) {
-                      continue;
+          if ($this->getConfiguration('chf_oui_conf')) {
+              foreach ($this->getConfiguration('chf_oui_conf') as $action) {
+                  try {
+                      $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                      if (!is_object($cmd)) {
+                          continue;
+                      }
+                      $options = array();
+                      if (isset($action['options'])) {
+                          $options = $action['options'];
+                      }
+                      scenarioExpression::createAndExec('action', $action['cmd'], $options);
+                  } catch (Exception $e) {
+                      log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
                   }
-                  $options = array();
-                  if (isset($action['options'])) {
-                      $options = $action['options'];
-                  }
-                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
-              } catch (Exception $e) {
-                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
               }
           }
       }
@@ -556,19 +573,21 @@
       //
       public function actionsPasDeChauffage()
       {
-          foreach ($this->getConfiguration('chf_non_conf') as $action) {
-              try {
-                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
-                  if (!is_object($cmd)) {
-                      continue;
+          if ($this->getConfiguration('chf_non_conf')) {
+              foreach ($this->getConfiguration('chf_non_conf') as $action) {
+                  try {
+                      $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                      if (!is_object($cmd)) {
+                          continue;
+                      }
+                      $options = array();
+                      if (isset($action['options'])) {
+                          $options = $action['options'];
+                      }
+                      scenarioExpression::createAndExec('action', $action['cmd'], $options);
+                  } catch (Exception $e) {
+                      log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
                   }
-                  $options = array();
-                  if (isset($action['options'])) {
-                      $options = $action['options'];
-                  }
-                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
-              } catch (Exception $e) {
-                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
               }
           }
       }
@@ -626,19 +645,21 @@
       //
       public function actionsHumidite()
       {
-          foreach ($this->getConfiguration('hum_oui_conf') as $action) {
-              try {
-                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
-                  if (!is_object($cmd)) {
-                      continue;
+          if ($this->getConfiguration('hum_oui_conf')) {
+              foreach ($this->getConfiguration('hum_oui_conf') as $action) {
+                  try {
+                      $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                      if (!is_object($cmd)) {
+                          continue;
+                      }
+                      $options = array();
+                      if (isset($action['options'])) {
+                          $options = $action['options'];
+                      }
+                      scenarioExpression::createAndExec('action', $action['cmd'], $options);
+                  } catch (Exception $e) {
+                      log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
                   }
-                  $options = array();
-                  if (isset($action['options'])) {
-                      $options = $action['options'];
-                  }
-                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
-              } catch (Exception $e) {
-                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
               }
           }
       }
@@ -655,19 +676,21 @@
       //
       public function actionsPasHumidite()
       {
-          foreach ($this->getConfiguration('hum_non_conf') as $action) {
-              try {
-                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
-                  if (!is_object($cmd)) {
-                      continue;
+          if ($this->getConfiguration('hum_non_conf')) {
+              foreach ($this->getConfiguration('hum_non_conf') as $action) {
+                  try {
+                      $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                      if (!is_object($cmd)) {
+                          continue;
+                      }
+                      $options = array();
+                      if (isset($action['options'])) {
+                          $options = $action['options'];
+                      }
+                      scenarioExpression::createAndExec('action', $action['cmd'], $options);
+                  } catch (Exception $e) {
+                      log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
                   }
-                  $options = array();
-                  if (isset($action['options'])) {
-                      $options = $action['options'];
-                  }
-                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
-              } catch (Exception $e) {
-                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
               }
           }
       }
@@ -684,19 +707,21 @@
       //
       public function actionsVentile()
       {
-          foreach ($this->getConfiguration('ven_oui_conf') as $action) {
-              try {
-                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
-                  if (!is_object($cmd)) {
-                      continue;
+          if ($this->getConfiguration('ven_oui_conf')) {
+              foreach ($this->getConfiguration('ven_oui_conf') as $action) {
+                  try {
+                      $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                      if (!is_object($cmd)) {
+                          continue;
+                      }
+                      $options = array();
+                      if (isset($action['options'])) {
+                          $options = $action['options'];
+                      }
+                      scenarioExpression::createAndExec('action', $action['cmd'], $options);
+                  } catch (Exception $e) {
+                      log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
                   }
-                  $options = array();
-                  if (isset($action['options'])) {
-                      $options = $action['options'];
-                  }
-                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
-              } catch (Exception $e) {
-                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
               }
           }
       }
@@ -713,19 +738,21 @@
       //
       public function actionsPasVentile()
       {
-          foreach ($this->getConfiguration('ven_non_conf') as $action) {
-              try {
-                  $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
-                  if (!is_object($cmd)) {
-                      continue;
+          if ($this->getConfiguration('ven_non_conf')) {
+              foreach ($this->getConfiguration('ven_non_conf') as $action) {
+                  try {
+                      $cmd = cmd::byId(str_replace('#', '', $action['cmd']));
+                      if (!is_object($cmd)) {
+                          continue;
+                      }
+                      $options = array();
+                      if (isset($action['options'])) {
+                          $options = $action['options'];
+                      }
+                      scenarioExpression::createAndExec('action', $action['cmd'], $options);
+                  } catch (Exception $e) {
+                      log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
                   }
-                  $options = array();
-                  if (isset($action['options'])) {
-                      $options = $action['options'];
-                  }
-                  scenarioExpression::createAndExec('action', $action['cmd'], $options);
-              } catch (Exception $e) {
-                  log::add('terrarium', 'error', $this->getHumanName() . __(' : Erreur lors de l\'éxecution de ', __FILE__) . $action['cmd'] . __('. Détails : ', __FILE__) . $e->getMessage());
               }
           }
       }

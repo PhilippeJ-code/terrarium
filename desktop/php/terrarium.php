@@ -379,7 +379,7 @@
 
             <div class="form-group">
               <label class="col-sm-2 control-label">{{Température terrarium}}</label>
-              <div class="col-sm-4">
+              <div class="col-sm-3">
                 <div class="input-group">
                   <input type="text" class="eqLogicAttr form-control tooltips roundedLeft" data-l1key="configuration"
                     data-l2key="temperature_terrarium" data-concat="1" />
@@ -682,9 +682,11 @@
         <table id="table_cmd" class="table table-bordered table-condensed">
           <thead>
             <tr>
+              <th>{{Id}}</th>
               <th>{{Nom}}</th>
               <th>{{Type}}</th>
               <th>{{Paramètres}}</th>
+              <th>{{Etat}}</th>
               <th>{{Action}}</th>
             </tr>
           </thead>

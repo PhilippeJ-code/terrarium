@@ -10,7 +10,7 @@
       <div class="classTuile#uid#">
 
         <a href="#eqLink#" <span id="idNomObjet#uid#" class="cursor">#name_display#</span></a>
-        <img class="classHisto#uid#" src="plugins/terrarium/core/img/histo.svg">
+        <img id="idHisto#uid#" class="classHisto#uid#" src="plugins/terrarium/core/img/histo.svg">
 
       </div>
 
@@ -41,11 +41,9 @@
       <div class="classDemiTuile#uid#">
         <img class="classMode#uid#" id="idMode#uid#" src="plugins/terrarium/core/img/flamme.svg">
         <img class="classModeVen#uid#" id="idModeVen#uid#" src="plugins/terrarium/core/img/fan.svg">
-
-        <div class="classTemperature#uid#" data-cmd_id="#idTemperature#">
-          <span id="idTemperature#uid#"></span>
-        </div>
-
+        
+        <span id="idTemperature#uid#" class="classTemperature#uid# history cursor" data-cmd_id="#idTemperature#"></span>
+      
         <div class="classConsigne#uid#">
 
           <img id="idPlus#uid#" class="classFleches#uid#" src="plugins/terrarium/core/img/plus.svg">
@@ -61,13 +59,11 @@
       <div class="classDemiTuile#uid#">
         <img class="classModeHum#uid#" id="idModeHum#uid#" src="plugins/terrarium/core/img/humidite.svg">
 
-        <div class="classHumidite#uid#" data-cmd_id="#idHumidite#">
-          <span id="idHumidite#uid#"></span>
-        </div>
+        <span id="idHumidite#uid#" class="classHumidite#uid# history cursor" data-cmd_id="#idHumidite#"></span>
 
         <div class="classConsigne#uid#">
-          <img id="idPlusHum#uid#" class="classFleches#uid# cursor" src="plugins/terrarium/core/img/plus.svg">
-          <span id="idConsigneHum#uid#" class="classValeurConsigne#uid#"></span>
+          <img id="idPlusHum#uid#" class="classFleches#uid#" src="plugins/terrarium/core/img/plus.svg">
+          <span id="idConsigneHum#uid#" class="classValeurConsigne#uid# cursor"></span>
           <img id="idMoinsHum#uid#" class="classFleches#uid# cursor" src="plugins/terrarium/core/img/moins.svg">
         </div>
 
@@ -96,7 +92,7 @@
     <span class="classSousTitre#uid#">Année</span><span class="classValeur#uid# history cursor" id="idConsoAnnee#uid#"
       data-cmd_id="#idHistoAnnee#"></span>
 
-    <img class="classPrecedent#uid# cursor" src="plugins/terrarium/core/img/previous.svg">
+    <img id="idPrecedent#uid#" class="classPrecedent#uid# cursor" src="plugins/terrarium/core/img/previous.svg">
 
   </div>
 
@@ -126,7 +122,7 @@
 
     .classDemiTuile#uid# {
       width: 46%;
-      height: 150px;
+      height: 160px;
       margin-top: 8px;
       position: relative;
       border: 1px solid #808080;
@@ -241,8 +237,8 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      height: 130px;
-      top: 5px;
+      height: 115px;
+      top: 20px;
     }
 
     .classFleches#uid# {
@@ -345,258 +341,349 @@
 
   <script type="text/javascript">
 
-    jeedom.cmd.update['#idStatut#'] = function (_options) {
-
+    // Refresh Statut
+    //
+    jeedom.cmd.addUpdateFunction('#idStatut#', Update#uid#idStatut);
+    function Update#uid#idStatut(_options) {
       if (_options.display_value == "Jour") {
-        $('#idStatutJour#uid#').show();
-        $('#idStatutNuit#uid#').hide();
-        $('#idStatutActuel#uid#').html('Mode jour');
-      }
-      else {
-        $('#idStatutJour#uid#').hide();
-        $('#idStatutNuit#uid#').show();
-        $('#idStatutActuel#uid#').html('Mode nuit');
-      }
-    }
-    jeedom.cmd.update['#idStatut#']({ display_value: '#statut#' });
-
-    jeedom.cmd.update['#idTemperature#'] = function (_options) {
-      $('#idTemperature#uid#').html(Math.round(_options.display_value * 10) / 10 + '°');
-    }
-    jeedom.cmd.update['#idTemperature#']({ display_value: '#temperature#' });
-
-    jeedom.cmd.update['#idHumidite#'] = function (_options) {
-      $('#idHumidite#uid#').html(Math.round(_options.display_value * 10) / 10 + '%');
-    }
-    jeedom.cmd.update['#idHumidite#']({ display_value: '#humidite#' });
-
-    jeedom.cmd.update['#idConsigne#'] = function (_options) {
-      $('#idConsigne#uid#').html(Math.round(_options.display_value * 10) / 10 + '°');
-    }
-    jeedom.cmd.update['#idConsigne#']({ display_value: '#consigne#' });
-
-    jeedom.cmd.update['#idConsigne_hum#'] = function (_options) {
-      $('#idConsigneHum#uid#').html(Math.round(_options.display_value * 10) / 10 + '%');
-    }
-    jeedom.cmd.update['#idConsigne_hum#']({ display_value: '#consigne_hum#' });
-
-    jeedom.cmd.update['#idConsoJour#'] = function (_options) {
-      $('#idConsoJour#uid#').html(Math.round(_options.display_value * 100) / 100);
-    }
-    jeedom.cmd.update['#idConsoJour#']({ display_value: '#consoJour#' });
-
-    jeedom.cmd.update['#idConsoSemaine#'] = function (_options) {
-      $('#idConsoSemaine#uid#').html(Math.round(_options.display_value * 100) / 100);
-    }
-    jeedom.cmd.update['#idConsoSemaine#']({ display_value: '#consoSemaine#' });
-
-    jeedom.cmd.update['#idConsoMois#'] = function (_options) {
-      $('#idConsoMois#uid#').html(Math.round(_options.display_value * 100) / 100);
-    }
-    jeedom.cmd.update['#idConsoMois#']({ display_value: '#consoMois#' });
-
-    jeedom.cmd.update['#idConsoAnnee#'] = function (_options) {
-      $('#idConsoAnnee#uid#').html(Math.round(_options.display_value * 100) / 100);
-    }
-    jeedom.cmd.update['#idConsoAnnee#']({ display_value: '#consoAnnee#' });
-
-    jeedom.cmd.update['#idMode#'] = function (_options) {
-      if (_options.display_value == "Chauffe") {
-        $('#idMode#uid#').show();
-      }
-      else {
-        $('#idMode#uid#').hide();
+        if (is_object(cmd = document.querySelector('#idStatutJour#uid#'))) {
+          cmd.style.display = 'block';
+        }
+        if (is_object(cmd = document.querySelector('#idStatutNuit#uid#'))) {
+          cmd.style.display = 'none';
+        }
+        if (is_object(cmd = document.querySelector('#idStatutActuel#uid#'))) {
+          cmd.innerHTML = 'Mode jour';
+        }
+      } else {
+        if (is_object(cmd = document.querySelector('#idStatutJour#uid#'))) {
+          cmd.style.display = 'none';
+        }
+        if (is_object(cmd = document.querySelector('#idStatutNuit#uid#'))) {
+          cmd.style.display = 'block';
+        }
+        if (is_object(cmd = document.querySelector('#idStatutActuel#uid#'))) {
+          cmd.innerHTML = 'Mode nuit';
+        }
       }
     }
-    jeedom.cmd.update['#idMode#']({ display_value: '#mode#' });
+    Update#uid#idStatut({ cmd_id: '#idStatut#', value: '#statut#', display_value: '#statut#' });
 
-    jeedom.cmd.update['#idMode_hum#'] = function (_options) {
-      if (_options.display_value == "Humidifie") {
-        $('#idModeHum#uid#').show();
+    // Refresh Température
+    //
+    jeedom.cmd.addUpdateFunction('#idTemperature#', Update#uid#idTemperature);
+    function Update#uid#idTemperature(_options) {
+      if (is_object(cmd = document.querySelector('#idTemperature#uid#'))) {
+        cmd.innerHTML = Math.round(_options.display_value * 10) / 10 + '°';
       }
-      else {
-        $('#idModeHum#uid#').hide();
+    };
+    Update#uid#idTemperature({ cmd_id: '#idTemperature#', value: '#temperature#', display_value: '#temperature#' });
+
+    // Refresh Humidité
+    //
+    jeedom.cmd.addUpdateFunction('#idHumidite#', Update#uid#idHumidite);
+    function Update#uid#idHumidite(_options) {
+      if (is_object(cmd = document.querySelector('#idHumidite#uid#'))) {
+        cmd.innerHTML = Math.round(_options.display_value * 10) / 10 + '%';
       }
     }
-    jeedom.cmd.update['#idMode_hum#']({ display_value: '#mode_hum#' });
+    Update#uid#idHumidite({ cmd_id: '#idHumidite#', value: '#humidite#', display_value: '#humidite#' });
 
-    jeedom.cmd.update['#idMode_ven#'] = function (_options) {
-      if (_options.display_value == "Ventile") {
-        $('#idModeVen#uid#').show();
-      }
-      else {
-        $('#idModeVen#uid#').hide();
+    // Refresh Consigne
+    //
+    jeedom.cmd.addUpdateFunction('#idConsigne#', Update#uid#idConsigne);
+    function Update#uid#idConsigne(_options) {
+      if (is_object(cmd = document.querySelector('#idConsigne#uid#'))) {
+        cmd.innerHTML = Math.round(_options.display_value * 10) / 10 + '°';
       }
     }
-    jeedom.cmd.update['#idMode_ven#']({ display_value: '#mode_ven#' });
+    Update#uid#idConsigne({ cmd_id: '#idConsigne#', value: '#consigne#', display_value: '#consigne#' });
 
-    $('#idMoins#uid#').on('click', function () {
-      var min = ('#minConsigne#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne#');
-      var stepConsigne = (isNaN(parseFloat('#stepConsigne#'))) ? 0.5 : parseFloat('#stepConsigne#');
-      if (parseFloat($('#idConsigne#uid#').html()) >= min + stepConsigne) {
-        jeedom.cmd.update['#idConsigne#']({ display_value: parseFloat($('#idConsigne#uid#').html()) - stepConsigne });
-        jeedom.cmd.execute({
-          id: '#idThermostat#', value:
-            { slider: $('#idConsigne#uid#').html().replace("°", "").replace(" ", "") }
-        });
-      } else if (parseFloat($('#idConsigne#uid#').html()) > min) {
-        jeedom.cmd.update['#idConsigne#']({ display_value: min });
-        jeedom.cmd.execute({
-          id: '#idThermostat#', value:
-            { slider: $('#idConsigne#uid#').html().replace("°", "").replace(" ", "") }
-        });
+    // Refresh consigne humidité
+    //
+    jeedom.cmd.addUpdateFunction('#idConsigne_hum#', Update#uid#idConsigne_hum);
+    function Update#uid#idConsigne_hum(_options) {
+      if (is_object(cmd = document.querySelector('#idConsigneHum#uid#'))) {
+        cmd.innerHTML = Math.round(_options.display_value * 10) / 10 + '%';
       }
-    });
+    }
+    Update#uid#idConsigne_hum({ cmd_id: '#idConsigne_hum#', value: '#consigne_hum#', display_value: '#consigne_hum#' });
 
-    $('#idPlus#uid#').on('click', function () {
-      var max = ('#maxConsigne#' == '') ? Number.MAX_VALUE : parseFloat('#maxConsigne#');
-      var stepConsigne = (isNaN(parseFloat('#stepConsigne#'))) ? 0.5 : parseFloat('#stepConsigne#');
-      if (parseFloat($('#idConsigne#uid#').html()) <= max - stepConsigne) {
-        jeedom.cmd.update['#idConsigne#']({ display_value: parseFloat($('#idConsigne#uid#').html()) + stepConsigne });
-        jeedom.cmd.execute({
-          id: '#idThermostat#', value:
-            { slider: $('#idConsigne#uid#').html().replace("°", "").replace(" ", "") }
-        });
-      } else if (parseFloat($('#idConsigne#uid#').html()) < max) {
-        jeedom.cmd.update['#idConsigne#']({ display_value: max });
-        jeedom.cmd.execute({
-          id: '#idThermostat#', value:
-            { slider: $('#idConsigne#uid#').html().replace("°", "").replace(" ", "") }
-        });
+    // Refresh consommation jour
+    //
+    jeedom.cmd.addUpdateFunction('#idConsoJour#', Update#uid#idConsoJour);
+    function Update#uid#idConsoJour(_options) {
+      if (is_object(cmd = document.querySelector('#idConsoJour#uid#'))) {
+        cmd.innerHTML = Math.round(_options.display_value * 100) / 100;
       }
-    });
+    }
+    Update#uid#idConsoJour({ cmd_id: '#idConsoJour#', value: '#consoJour#', display_value: '#consoJour#' });
 
-    $('#idMoinsHum#uid#').on('click', function () {
-      var min = ('#minConsigne_hum#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne_hum#');
-      var stepConsigne = (isNaN(parseFloat('#stepConsigne_hum#'))) ? 1 : parseFloat('#stepConsigne_hum#');
-      if (parseFloat($('#idConsigneHum#uid#').html()) >= min + stepConsigne) {
-        jeedom.cmd.update['#idConsigne_hum#']({ display_value: parseFloat($('#idConsigneHum#uid#').html()) - stepConsigne });
-        jeedom.cmd.execute({
-          id: '#idThermostat_hum#', value:
-            { slider: $('#idConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
-        });
-      } else if (parseFloat($('#idConsigneHum#uid#').html()) > min) {
-        jeedom.cmd.update['#idConsigne_hum#']({ display_value: min });
-        jeedom.cmd.execute({
-          id: '#idThermostat_hum#', value:
-            { slider: $('#idConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
-        });
+    // Refresh consommation Semaine
+    //
+    jeedom.cmd.addUpdateFunction('#idConsoSemaine#', Update#uid#idConsoSemaine);
+    function Update#uid#idConsoSemaine(_options) {
+      if (is_object(cmd = document.querySelector('#idConsoSemaine#uid#'))) {
+        cmd.innerHTML = Math.round(_options.display_value * 100) / 100;
       }
-    });
+    }
+    Update#uid#idConsoSemaine({ cmd_id: '#idConsoSemaine#', value: '#consoSemaine#', display_value: '#consoSemaine#' });
 
-    $('#idPlusHum#uid#').on('click', function () {
-      var max = ('#maxConsigne_hum#' == '') ? Number.MAX_VALUE : parseFloat('#maxConsigne_hum#');
-      var stepConsigne = (isNaN(parseFloat('#stepConsigne_hum#'))) ? 0.5 : parseFloat('#stepConsigne_hum#');
-      if (parseFloat($('#idConsigneHum#uid#').html()) <= max - stepConsigne) {
-        jeedom.cmd.update['#idConsigne_hum#']({ display_value: parseFloat($('#idConsigneHum#uid#').html()) + stepConsigne });
-        jeedom.cmd.execute({
-          id: '#idThermostat_hum#', value:
-            { slider: $('#idConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
-        });
-      } else if (parseFloat($('#idConsigneHum#uid#').html()) < max) {
-        jeedom.cmd.update['#idConsigne_hum#']({ display_value: max });
-        jeedom.cmd.execute({
-          id: '#idThermostat_hum#', value:
-            { slider: $('#idConsigneHum#uid#').html().replace("%", "").replace(" ", "") }
-        });
+    // Refresh consommation Mois
+    //
+    jeedom.cmd.addUpdateFunction('#idConsoMois#', Update#uid#idConsoMois);
+    function Update#uid#idConsoMois(_options) {
+      if (is_object(cmd = document.querySelector('#idConsoMois#uid#'))) {
+        cmd.innerHTML = Math.round(_options.display_value * 100) / 100;
       }
-    });
+    }
+    Update#uid#idConsoMois({ cmd_id: '#idConsoMois#', value: '#consoMois#', display_value: '#consoMois#' });
 
-    jeedom.cmd.update['#idEtatVerrouConsignes#'] = function (_options) {
+    // Refresh Consommation année
+    //
+    jeedom.cmd.addUpdateFunction('#idConsoAnnee#', Update#uid#idConsoAnnee);
+    function Update#uid#idConsoAnnee(_options) {
+      if (is_object(cmd = document.querySelector('#idConsoAnnee#uid#'))) {
+        cmd.innerHTML = Math.round(_options.display_value * 100) / 100;
+      }
+    }
+    Update#uid#idConsoAnnee({ cmd_id: '#idConsoAnnee#', value: '#consoAnnee#', display_value: '#consoAnnee#' });
+
+    // Refresh mode
+    //
+    jeedom.cmd.addUpdateFunction('#idMode#', Update#uid#idMode);
+    function Update#uid#idMode(_options) {
+      if (is_object(cmd = document.querySelector('#idMode#uid#'))) {
+        if (_options.display_value == "Chauffe") {
+          cmd.style.display = 'block';
+        }
+        else {
+          cmd.style.display = 'none';
+        }
+      }
+    }
+    Update#uid#idMode({ cmd_id: '#idMode#', value: '#mode#', display_value: '#mode#' });
+
+    // Refresh mode humidité
+    //
+    jeedom.cmd.addUpdateFunction('#idMode_hum#', Update#uid#idMode_hum);
+    function Update#uid#idMode_hum(_options) {
+      if (is_object(cmd = document.querySelector('#idModeHum#uid#'))) {
+        if (_options.display_value == "Humidifie") {
+          cmd.style.display = 'block';
+        }
+        else {
+          cmd.style.display = 'none';
+        }
+      }
+    }
+    Update#uid#idMode_hum({ cmd_id: '#idMode_hum#', value: '#mode_hum#', display_value: '#mode_hum#' });
+
+    // Refresh mode ventilation
+    //
+    jeedom.cmd.addUpdateFunction('#idMode_ven#', Update#uid#idMode_ven);
+    function Update#uid#idMode_ven(_options) {
+      if (is_object(cmd = document.querySelector('#idModeVen#uid#'))) {
+        if (_options.display_value == "Ventile") {
+          cmd.style.display = 'block';
+        }
+        else {
+          cmd.style.display = 'none';
+        }
+      }
+    }
+    Update#uid#idMode_ven({ cmd_id: '#idMode_ven#', value: '#mode_ven#', display_value: '#mode_ven#' });
+
+    // Moins-Plus consigne température
+    //
+    document.getElementById("idMoins#uid#").onclick = function () {
+      if (is_object(cmd = document.querySelector('#idConsigne#uid#'))) {
+        var min = ('#minConsigne#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne#');
+        var stepConsigne = (isNaN(parseFloat('#stepConsigne#'))) ? 0.5 : parseFloat('#stepConsigne#');
+        if (parseFloat(cmd.innerHTML) >= min + stepConsigne) {
+          Update#uid#idConsigne({ cmd_id: '#idConsigne#', value: parseFloat(cmd.innerHTML) - stepConsigne, display_value: parseFloat(cmd.innerHTML) - stepConsigne });
+          jeedom.cmd.execute({
+            id: '#idThermostat#', value:
+              { slider: cmd.innerHTML.replace("°", "").replace(" ", "") }
+          });
+        } else if (parseFloat(cmd.innerHTML) > min) {
+          Update#uid#idConsigne({ cmd_id: '#idConsigne#', value: min, display_value: min });
+          jeedom.cmd.execute({
+            id: '#idThermostat#', value:
+              { slider: cmd.innerHTML.replace("°", "").replace(" ", "") }
+          });
+        }
+      }
+    };
+
+    document.getElementById("idPlus#uid#").onclick = function () {
+      if (is_object(cmd = document.querySelector('#idConsigne#uid#'))) {
+        var max = ('#maxConsigne#' == '') ? Number.MAX_VALUE : parseFloat('#maxConsigne#');
+        var stepConsigne = (isNaN(parseFloat('#stepConsigne#'))) ? 0.5 : parseFloat('#stepConsigne#');
+        if (parseFloat(cmd.innerHTML) <= max - stepConsigne) {
+          Update#uid#idConsigne({ cmd_id: '#idConsigne#', value: parseFloat(cmd.innerHTML) + stepConsigne, display_value: parseFloat(cmd.innerHTML) + stepConsigne });
+          jeedom.cmd.execute({
+            id: '#idThermostat#', value:
+              { slider: cmd.innerHTML.replace("°", "").replace(" ", "") }
+          });
+        } else if (parseFloat(cmd.innerHTML) < max) {
+          Update#uid#idConsigne({ cmd_id: '#idConsigne#', value: max, display_value: max });
+          jeedom.cmd.execute({
+            id: '#idThermostat#', value:
+              { slider: cmd.innerHTML.replace("°", "").replace(" ", "") }
+          });
+        }
+      }
+    };
+
+    // Moins-Plus consigne humidité
+    //
+    document.getElementById("idMoinsHum#uid#").onclick = function () {
+      if (is_object(cmd = document.querySelector('#idConsigneHum#uid#'))) {
+        var min = ('#minConsigne_hum#' == '') ? Number.MIN_VALUE : parseFloat('#minConsigne_hum#');
+        var stepConsigne = (isNaN(parseFloat('#stepConsigne_hum#'))) ? 1 : parseFloat('#stepConsigne_hum#');
+        if (parseFloat(cmd.innerHTML) >= min + stepConsigne) {
+          Update#uid#idConsigne_hum({ cmd_id: '#idConsigne_hum#', value: parseFloat(cmd.innerHTML) - stepConsigne, display_value: parseFloat(cmd.innerHTML) - stepConsigne });
+          jeedom.cmd.execute({
+            id: '#idThermostat_hum#', value:
+              { slider: cmd.innerHTML.replace("%", "").replace(" ", "") }
+          });
+        } else if (parseFloat(cmd.innerHTML) > min) {
+          Update#uid#idConsigne_hum({ cmd_id: '#idConsigne_hum#', value: min, display_value: min });
+          jeedom.cmd.execute({
+            id: '#idThermostat_hum#', value:
+              { slider: cmd.innerHTML.replace("%", "").replace(" ", "") }
+          });
+        }
+      }
+    };
+
+    document.getElementById("idPlusHum#uid#").onclick = function () {
+      if (is_object(cmd = document.querySelector('#idConsigneHum#uid#'))) {
+        var max = ('#maxConsigne_hum#' == '') ? Number.MAX_VALUE : parseFloat('#maxConsigne_hum#');
+        var stepConsigne = (isNaN(parseFloat('#stepConsigne_hum#'))) ? 0.5 : parseFloat('#stepConsigne_hum#');
+        if (parseFloat(cmd.innerHTML) <= max - stepConsigne) {
+          Update#uid#idConsigne_hum({ cmd_id: '#idConsigne_hum#', value: parseFloat(cmd.innerHTML) + stepConsigne, display_value: parseFloat(cmd.innerHTML) + stepConsigne });
+          jeedom.cmd.execute({
+            id: '#idThermostat_hum#', value:
+              { slider: cmd.innerHTML.replace("%", "").replace(" ", "") }
+          });
+        } else if (parseFloat(cmd.innerHTML) < max) {
+          Update#uid#idConsigne_hum({ cmd_id: '#idConsigne_hum#', value: max, display_value: max });
+          jeedom.cmd.execute({
+            id: '#idThermostat_hum#', value:
+              { slider: cmd.innerHTML.replace("%", "").replace(" ", "") }
+          });
+        }
+      }
+    };
+
+    // Refresh verrou consignes
+    //
+    jeedom.cmd.addUpdateFunction('#idEtatVerrouConsignes#', Update#uid#idEtatVerrouConsignes);
+    function Update#uid#idEtatVerrouConsignes(_options) {
       if (_options.display_value == "1") {
-        $('#idLockCsg#uid#').show();
-        $('#idUnlockCsg#uid#').hide();
-      }
-      else {
-        $('#idLockCsg#uid#').hide();
-        $('#idUnlockCsg#uid#').show();
+        if (is_object(cmd = document.querySelector('#idLockCsg#uid#'))) {
+          cmd.style.display = 'block';
+        }
+        if (is_object(cmd = document.querySelector('#idUnlockCsg#uid#'))) {
+          cmd.style.display = 'none';
+        }
+      } else {
+        if (is_object(cmd = document.querySelector('#idLockCsg#uid#'))) {
+          cmd.style.display = 'none';
+        }
+        if (is_object(cmd = document.querySelector('#idUnlockCsg#uid#'))) {
+          cmd.style.display = 'block';
+        }
       }
     }
-    jeedom.cmd.update['#idEtatVerrouConsignes#']({ display_value: '#etatVerrouConsignes#' });
+    Update#uid#idEtatVerrouConsignes({ cmd_id: '#idEtatVerrouConsignes#', value: '#etatVerrouConsignes#', display_value: '#etatVerrouConsignes#' });
 
-    $('#idLockCsg#uid#').on('click', function () {
-      jeedom.cmd.execute({
-        id: '#idOffVerrouConsignes#'
-      });
-    });
+    document.getElementById("idLockCsg#uid#").onclick = function () { jeedom.cmd.execute({ id: '#idOffVerrouConsignes#' }); };
+    document.getElementById("idUnlockCsg#uid#").onclick = function () { jeedom.cmd.execute({ id: '#idOnVerrouConsignes#' }); };
 
-    $('#idUnlockCsg#uid#').on('click', function () {
-      jeedom.cmd.execute({
-        id: '#idOnVerrouConsignes#'
-      });
-    });
-
-    jeedom.cmd.update['#idEtatVerrouEclairage#'] = function (_options) {
+    // Refresh verrou éclairage
+    //
+    jeedom.cmd.addUpdateFunction('#idEtatVerrouEclairage#', Update#uid#idEtatVerrouEclairage);
+    function Update#uid#idEtatVerrouEclairage(_options) {
       if (_options.display_value == "1") {
-        $('#idLockEcl#uid#').show();
-        $('#idUnlockEcl#uid#').hide();
-      }
-      else {
-        $('#idLockEcl#uid#').hide();
-        $('#idUnlockEcl#uid#').show();
+        if (is_object(cmd = document.querySelector('#idLockEcl#uid#'))) {
+          cmd.style.display = 'block';
+        }
+        if (is_object(cmd = document.querySelector('#idUnlockEcl#uid#'))) {
+          cmd.style.display = 'none';
+        }
+      } else {
+        if (is_object(cmd = document.querySelector('#idLockEcl#uid#'))) {
+          cmd.style.display = 'none';
+        }
+        if (is_object(cmd = document.querySelector('#idUnlockEcl#uid#'))) {
+          cmd.style.display = 'block';
+        }
       }
     }
-    jeedom.cmd.update['#idEtatVerrouEclairage#']({ display_value: '#etatVerrouEclairage#' });
+    Update#uid#idEtatVerrouEclairage({ cmd_id: '#idEtatVerrouEclairage#', value: '#etatVerrouEclairage#', display_value: '#etatVerrouEclairage#' });
 
-    $('#idLockEcl#uid#').on('click', function () {
-      jeedom.cmd.execute({
-        id: '#idOffVerrouEclairage#'
-      });
-    });
+    document.getElementById("idLockEcl#uid#").onclick = function () { jeedom.cmd.execute({ id: '#idOffVerrouEclairage#' }); };
+    document.getElementById("idUnlockEcl#uid#").onclick = function () { jeedom.cmd.execute({ id: '#idOnVerrouEclairage#' }); };
 
-    $('#idUnlockEcl#uid#').on('click', function () {
-      jeedom.cmd.execute({
-        id: '#idOnVerrouEclairage#'
-      });
-    });
-
-    jeedom.cmd.update['#idEtatVerrouVentile#'] = function (_options) {
+    // Refresh verrou ventilation
+    //
+    jeedom.cmd.addUpdateFunction('#idEtatVerrouVentile#', Update#uid#idEtatVerrouVentile);
+    function Update#uid#idEtatVerrouVentile(_options) {
       if (_options.display_value == "1") {
-        $('#idLockVen#uid#').show();
-        $('#idUnlockVen#uid#').hide();
-      }
-      else {
-        $('#idLockVen#uid#').hide();
-        $('#idUnlockVen#uid#').show();
+        if (is_object(cmd = document.querySelector('#idLockVen#uid#'))) {
+          cmd.style.display = 'block';
+        }
+        if (is_object(cmd = document.querySelector('#idUnlockVen#uid#'))) {
+          cmd.style.display = 'none';
+        }
+      } else {
+        if (is_object(cmd = document.querySelector('#idLockVen#uid#'))) {
+          cmd.style.display = 'none';
+        }
+        if (is_object(cmd = document.querySelector('#idUnlockVen#uid#'))) {
+          cmd.style.display = 'block';
+        }
       }
     }
-    jeedom.cmd.update['#idEtatVerrouVentile#']({ display_value: '#etatVerrouVentile#' });
+    Update#uid#idEtatVerrouVentile({ cmd_id: '#idEtatVerrouVentile#', value: '#etatVerrouVentile#', display_value: '#etatVerrouVentile#' });
 
-    $('#idLockVen#uid#').on('click', function () {
-      jeedom.cmd.execute({
-        id: '#idOffVerrouVentile#'
-      });
-    });
+    document.getElementById("idLockVen#uid#").onclick = function () { jeedom.cmd.execute({ id: '#idOffVerrouVentile#' }); };
+    document.getElementById("idUnlockVen#uid#").onclick = function () { jeedom.cmd.execute({ id: '#idOnVerrouVentile#' }); };
 
-    $('#idUnlockVen#uid#').on('click', function () {
-      jeedom.cmd.execute({
-        id: '#idOnVerrouVentile#'
-      });
-    });
+    // Statut jour nuit
+    //
+    document.getElementById("idStatutJour#uid#").onclick = function () { jeedom.cmd.execute({ id: '#idStatutNuit#' }); };
+    document.getElementById("idStatutNuit#uid#").onclick = function () { jeedom.cmd.execute({ id: '#idStatutJour#' }); };
 
-    $('#idStatutJour#uid#').on('click', function () {
-      jeedom.cmd.execute({
-        id: '#idStatutNuit#'
-      });
-    });
+    // Affichage résumé/consommations
+    //
+    document.getElementById("idHisto#uid#").onclick = function () {
+      if (is_object(cmd = document.querySelector('#idResume#uid#'))) {
+        cmd.style.display = 'none';
+      }
+      if (is_object(cmd = document.querySelector('#idConsommations#uid#'))) {
+        cmd.style.display = 'block';
+      }
+    };
 
-    $('#idStatutNuit#uid#').on('click', function () {
-      jeedom.cmd.execute({
-        id: '#idStatutJour#'
-      });
-    });
+    document.getElementById("idPrecedent#uid#").onclick = function () {
+      if (is_object(cmd = document.querySelector('#idResume#uid#'))) {
+        cmd.style.display = 'block';
+      }
+      if (is_object(cmd = document.querySelector('#idConsommations#uid#'))) {
+        cmd.style.display = 'none';
+      }
+    };
 
-    $('.classHisto#uid#').on('click', function () {
-      $('#idResume#uid#').hide();
-      $('#idConsommations#uid#').show();
-    });
-
-    $('.classPrecedent#uid#').on('click', function () {
-      $('#idResume#uid#').show();
-      $('#idConsommations#uid#').hide();
-    });
-    $('#idResume').show();
-    $('#idConsommations#uid#').hide();
+    if (is_object(cmd = document.querySelector('#idResume#uid#'))) {
+      cmd.style.display = 'block';
+    }
+    if (is_object(cmd = document.querySelector('#idConsommations#uid#'))) {
+      cmd.style.display = 'none';
+    }
 
   </script>
 

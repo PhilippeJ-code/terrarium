@@ -31,4 +31,6 @@
 
     Ajout d'un thème dans la configuration de l'équipement
     
-    
+# 14-04-2024
+
+    Jeedom v4.4
