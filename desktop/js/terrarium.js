@@ -39,8 +39,14 @@ function eventSelectAction()
         el.value = result.human;
         jeedom.cmd.displayActionOption(el.value, '', function (html) {
             el.closest('.' + type).querySelector('.actionOptions').innerHTML= html;
-        });
-   
+            let scripts = el.closest('.' + type).querySelector('.actionOptions').querySelectorAll('script');
+            scripts.forEach(script => {
+              let newScript = document.createElement('script');
+              newScript.text = script.text;
+              document.body.appendChild(newScript);
+              script.remove();
+            });
+        });   
     });
 }
 
@@ -183,8 +189,16 @@ function addCmdToTable(_cmd) {
 //
 function addAction(_action, _type) {
 
-    var div = '<div class="form-group">';
-    div += '<label class="col-sm-2 control-label">Action</label>';
+    if (!isset(_action)) {
+      _action = {}
+    }
+    if (!isset(_action.options)) {
+      _action.options = {}
+    }
+  
+    var div = '<div class="' + _type + '">'
+    div += '<div class="form-group">';
+    div += '<label class="col-sm-1 control-label">Action</label>';  
     div += '<div class="col-sm-3">';
     div += '<div class="input-group">';
     div += '<span class="input-group-btn">';
@@ -200,27 +214,35 @@ function addAction(_action, _type) {
     div += jeedom.cmd.displayActionOption(init(_action.cmd, ''), _action.options);
     div += '</div>';
     div += '</div>';
-
-    let newRow = document.createElement('div');
-    newRow.innerHTML = div;
-    newRow.addClass(_type);
-    document.getElementById('div_' + _type).appendChild(newRow);
+    div += '</div>';
+    
+    document.getElementById('div_' + _type).insertAdjacentHTML('beforeend', div);
+    let scripts = document.getElementById('div_' + _type).querySelectorAll('script');
+    scripts.forEach(script => {
+      let newScript = document.createElement('script');
+      newScript.text = script.text;
+      document.body.appendChild(newScript);
+      script.remove();
+    });
+  
+    var newRow = document.querySelectorAll('#div_' + _type + ' .' + _type + '').last();
+  
     newRow.setJeeValues(_action, '.expressionAttr');
-
+  
     let el = newRow.querySelector(".bt_removeAction");
     el.addEventListener('click', eventRemoveAction);
-
+  
     el = newRow.querySelector(".listCmdAction");
     el.addEventListener('click', eventSelectAction); 
-
-}
-
-// Add Schedule
+    
+  }
+  
+  // Add Schedule
 //
 function addSchedule(_schedule, _type) {
 
     var div = '<div class="form-group ">';
-    div += '<label class="col-sm-2 control-label">Programmation</label>';
+    div += '<label class="col-sm-1 control-label">Programmation</label>';
     div += '<div class="col-sm-3">';
     div += '<div class="input-group">';
     div += '<span class="input-group-btn">';
